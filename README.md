@@ -14,15 +14,15 @@ The main function of the UI is to display the list of open and passed proposals 
 In this regard, it needs to display simple information for each post like:
 
 
-⋅⋅* Post type (issue or proposal)
-⋅⋅* Post title
-⋅⋅* Post image (link to an image uploaded on the server when you create the post you can upload one)
-⋅⋅* Post description
-⋅⋅* Post tags
-⋅⋅* Post date
-⋅⋅* Username (author)
-⋅⋅* Countdown (til it expires)
-⋅⋅* Buttons to vote on the issue or proposal
+* Post type (issue or proposal)
+* Post title
+* Post image (link to an image uploaded on the server when you create the post you can upload one)
+* Post description
+* Post tags
+* Post date
+* Username (author)
+* Countdown (til it expires)
+* Buttons to vote on the issue or proposal
 
 
 
