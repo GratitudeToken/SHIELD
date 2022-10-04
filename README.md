@@ -45,7 +45,7 @@ The API will have the following methods:
 #### UPDATE
 
 
-**The JSON file**
+# The JSON file
 
 Every time a user posts an issue or a proposal, the first thing we do is to check with FS module if the a file named exactly as the username posting exists, if it does, we add to it, if it doesn't we create it.
 
