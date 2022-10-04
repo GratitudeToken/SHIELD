@@ -49,11 +49,9 @@ The API will have the following methods:
 
 Every time a user posts an issue or a proposal, the first thing we do is to check with FS module if the a file named exactly as the username posting exists, if it does, we add to it, if it doesn't we create it.
 
-We check on page reload if the issues/proposals of each user is older than 1 month.
+We check on page reload if the issues/proposals of each user is older than 1 month, then:
 
-We count the number of votes for each item in the user file and if any of them are older than 1 month we check the number of votes.
-
-We compare it against the total number of SHIELD members, if the votes are >= 50% +1 we set the status key to "passed", else we set it to "nope".
+We count the number of votes for each item in the user file, we compare it against the total number of SHIELD members from the item key "members", if the votes are >= 50% +1 we set the status key to "passed", else we set it to "nope".
 
 
 The json file data structure looks like this:
@@ -67,6 +65,7 @@ The json file data structure looks like this:
 "post-date": "Date format either the standard in JS or UNIX",
 "post-tags": "tag1, tag2, tag3",
 "votes": 4,
+"members": 6,
 "status": "passed"
 },
 {
@@ -76,6 +75,7 @@ The json file data structure looks like this:
 "post-date": "Date format either the standard in JS or UNIX",
 "post-tags": "tag1, tag2, tag3",
 "votes": 0,
+"members": 6,
 "status": "active",
 }
 ]
