@@ -5,7 +5,7 @@ A powerful open-source NPPoS (Non-Profit Proof of Stake) biosphere software for 
 v1.0 (BETA) SPECS:
 
 
-**THE UI**
+##THE UI
 
 Needs to be simple, github style perhaps.
 The main function of the UI is to display the list of open and passed proposals and issues.
@@ -14,19 +14,19 @@ The main function of the UI is to display the list of open and passed proposals 
 In this regard, it needs to display simple information for each post like:
 
 
-Post type (issue or proposal)
-Post title
-Post image (link to an image uploaded on the server when you create the post you can upload one)
-Post description
-Post tags
-Post date
-Username (author)
-Countdown (til it expires)
-Buttons to vote on the issue or proposal
+#####Post type (issue or proposal)
+#####Post title
+#####Post image (link to an image uploaded on the server when you create the post you can upload one)
+#####Post description
+#####Post tags
+#####Post date
+#####Username (author)
+#####Countdown (til it expires)
+#####Buttons to vote on the issue or proposal
 
 
 
-**THE API**
+##THE API
 
 The API and storage will be moved to a blockchain eventually, but not for now.
 We will not be using any database, for the versatility, longevity and flexibility of the project, to begin with we will instead use JSON files to store each issue or proposal and the results for each will be updated in each file.
@@ -40,9 +40,9 @@ We need to pay extra attention to security for this API, we will add 2 layers of
 The API will have the following methods:
 
 
-GET
-POST
-UPDATE
+###GET
+###POST
+###UPDATE
 
 
 **The JSON file**
