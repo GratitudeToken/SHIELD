@@ -66,7 +66,7 @@ The json file data structure looks like this:
 "post-description": "A very detailed description",
 "post-date": "Date format either the standard in JS or UNIX",
 "post-tags": "tag1, tag2, tag3",
-"votes": 0,
+"votes": 4,
 "status": "passed"
 },
 {
