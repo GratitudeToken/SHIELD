@@ -92,3 +92,10 @@ Every time a user sends the right amount of tokens to the SHIELD wallet, we chec
 We do this check on every page reload.
 
 After a membership expires we return all the tokens staked by the user to the user account.
+
+
+# Authentication
+
+Authentication will be done using the Proton web SDK, the user will use the mobile wallet to sign and authenticate.
+
+This system will be used for BiiP (Biospheric Identity Internet Protocol) as well.
