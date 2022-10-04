@@ -49,10 +49,21 @@ The API will have the following methods:
 
 Every time a user posts an issue or a proposal, the first thing we do is to check with FS module if the a file named exactly as the username posting exists, if it does, we add to it, if it doesn't we create it.
 
+We check on page reload if the issues/proposals of each user is older than 1 month, if any of them are older than 1 month we set the active key to false.
+
 
 The json file data structure looks like this:
 
 ```
+[
+{
+"post-title": "The post title",
+"post-image": "url-to-image",
+"post-description": "A very detailed description",
+"post-date": "Date format either the standard in JS or UNIX",
+"active": "true",
+"post-tags": "tag1, tag2, tag3"
+},
 {
 "post-title": "The post title",
 "post-image": "url-to-image",
@@ -61,6 +72,7 @@ The json file data structure looks like this:
 "active": "true",
 "post-tags": "tag1, tag2, tag3"
 }
+]
 ```
 
 # Memberships
