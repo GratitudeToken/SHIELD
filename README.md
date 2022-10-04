@@ -63,3 +63,16 @@ The json file data structure looks like this:
 }
 ```
 
+# Memberships
+
+For the membership system we will have a JSON file with all members with the following structure:
+
+```
+[
+{"user":"catalina", "staked": 100, "type":"visionary", "expiration": "date", "status":"active"},
+{"user":"maria", "staked": 1, "type":"guardian", "expiration": "date", "status":"expired"}
+]
+```
+
+
+Every time a user sends the right amount of tokens to the SHIELD wallet, we check their TX or last transaction received from their user to the SHIELD wallet and see if the amount is correct and if the current date is less than 6 months old for GUARDINS and 12 months for VISIONARY.
