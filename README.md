@@ -75,4 +75,4 @@ For the membership system we will have a JSON file with all members with the fol
 ```
 
 
-Every time a user sends the right amount of tokens to the SHIELD wallet, we check their TX or last transaction received from their user to the SHIELD wallet and see if the amount is correct and if the current date is less than 6 months old for GUARDINS and 12 months for VISIONARY.
+Every time a user sends the right amount of tokens to the SHIELD wallet, we check their TX or last transaction received from their user to the SHIELD wallet and see if the amount is correct and if the staking date is less than 6 months old for GUARDINS and 12 months for VISIONARY - compared to the current date (when a user reloads the page).
