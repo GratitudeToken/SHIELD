@@ -69,8 +69,8 @@ For the membership system we will have a JSON file with all members with the fol
 
 ```
 [
-{"user":"catalina", "staked": 100, "type":"visionary", "expiration": "date", "status":"active"},
-{"user":"maria", "staked": 1, "type":"guardian", "expiration": "date", "status":"expired"}
+{"user": "catalina", "staked": 100, "type": "visionary", "expiration": "date", "status": "active"},
+{"user": "maria", "staked": 1, "type": "guardian", "expiration": "date", "status": "expired"}
 ]
 ```
 
