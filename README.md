@@ -104,4 +104,4 @@ After a membership expires we return all the tokens staked by the user to the us
 
 Authentication will be done using the Proton web SDK, the user will use the mobile wallet to sign and authenticate.
 
-This system will be used for BiiP (Biospheric Identity Internet Protocol) as well.
+This authentication SDK will be used for BiiP (Biospheric Identity Internet Protocol) as well.
