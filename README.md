@@ -16,7 +16,7 @@ In this regard, it needs to display simple information for each post like:
 
 * Post type (issue, poll or proposal)
 * Post title
-* Post image (link to an image uploaded on the server when you create the post you can upload one)
+* Post image (link to an image uploaded on the server - when you create the post you can upload one)
 * Post description
 * Post tags
 * Post date
