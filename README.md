@@ -1,3 +1,4 @@
+![SHIELD](https://gratitudetoken.world/shield/img/SHIELD-logo-105.png "SHIELD logo")
 # SHIELD
 A powerful open-source NPPoS (Non-Profit Proof of Stake) biosphere software for vetting and voting.
 
