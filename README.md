@@ -99,7 +99,7 @@ If 1 month has passed for any item. We calculate this on front-end based on "pos
 
 Authentication will be done using the [Proton web SDK](https://github.com/ProtonProtocol/proton-web-sdk), the user will use the mobile wallet to authenticate.
 
-Documentation for it is available [here:](https://docs.protonchain.com/client-sdks/web.html)
+Documentation for it is available here: [https://docs.protonchain.com/client-sdks/web.html](https://docs.protonchain.com/client-sdks/web.html)
 
 This authentication SDK will be used for BiiP (Biospheric Identity Internet Protocol) as well.
 
