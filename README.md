@@ -97,7 +97,7 @@ If 1 month has passed for any item. We calculate this on front-end based on "pos
 
 # Authentication
 
-Authentication will be done using the [Proton web SDK](../ProtonProtocol/proton-web-sdk), the user will use the mobile wallet to sign and authenticate.
+Authentication will be done using the [Proton web SDK](https://github.com/ProtonProtocol/proton-web-sdk), the user will use the mobile wallet to authenticate.
 
 Documentation for it is available [here:](https://docs.protonchain.com/client-sdks/web.html)
 
