@@ -30,8 +30,9 @@ A button to show a form that will be used to post a proposal, poll or issue. Cli
 
 ## THE API
 
-The API and storage will be moved to a blockchain eventually, but not for now.
-We will not be using any database, for the versatility, longevity and flexibility of the project, to begin with we will instead use JSON files to store each issue or proposal and the results for each will be updated in each file.
+The API and storage will be moved to a blockchain eventually.
+
+At the moment, we will not be using any database, for the versatility, longevity and flexibility of the project, to begin with we will instead use JSON files to store each issue or proposal and the results for each will be updated in each file.
 We need to pay extra attention to security for this API, we will add 2 layers of validation for the input data:
 
 
