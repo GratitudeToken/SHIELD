@@ -94,6 +94,15 @@ If 1 month has passed for any item. We calculate this on front-end based on "pos
 - We can set it to "ended" after the month since posted expires, whichever option has the most votes wins.
 
 
+
+# Authentication
+
+Authentication will be done using the Proton web SDK, the user will use the mobile wallet to sign and authenticate.
+
+This authentication SDK will be used for BiiP (Biospheric Identity Internet Protocol) as well.
+
+
+
 # Memberships
 
 For the membership system we will have a JSON file with all members with the following structure:
@@ -111,10 +120,3 @@ Every time a user sends the right amount of tokens to the SHIELD wallet, we chec
 We do this check on every page reload.
 
 After a membership expires we return all the tokens staked by the user to the user account.
-
-
-# Authentication
-
-Authentication will be done using the Proton web SDK, the user will use the mobile wallet to sign and authenticate.
-
-This authentication SDK will be used for BiiP (Biospheric Identity Internet Protocol) as well.
