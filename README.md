@@ -25,7 +25,7 @@ In this regard, it needs to display simple information for each post like:
 * Buttons to vote on the issue or proposal
 
 
-A button to show a form that will be used to post a proposa, poll or issue. Clicking it will display a form with inputs to send all the necessary data to the backend.
+A button to show a form that will be used to post a proposal, poll or issue. Clicking it will display a form with inputs to send all the necessary data to the backend.
 
 
 ## THE API
