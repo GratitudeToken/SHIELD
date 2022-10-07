@@ -8,13 +8,13 @@ v1.0 (BETA) SPECS:
 ## THE UI
 
 Needs to be simple, github style perhaps.
-The main function of the UI is to display the list of open and passed proposals and issues.
+The main function of the UI is to display the list of open and passed proposals, polls and issues.
 
 
 In this regard, it needs to display simple information for each post like:
 
 
-* Post type (issue or proposal)
+* Post type (issue, poll or proposal)
 * Post title
 * Post image (link to an image uploaded on the server when you create the post you can upload one)
 * Post description
@@ -24,6 +24,8 @@ In this regard, it needs to display simple information for each post like:
 * Countdown (til it expires)
 * Buttons to vote on the issue or proposal
 
+
+A button to show a form that will be used to post a proposa, poll or issue. Clicking it will display a form with inputs to send all the necessary data to the backend.
 
 
 ## THE API
@@ -49,37 +51,46 @@ The API will have the following methods:
 
 Every time a user posts an issue or a proposal, the first thing we do is to check with FS module if the a file named exactly as the username posting exists, if it does, we add to it, if it doesn't we create it.
 
-We check on page reload if the issues/proposals of each user is older than 1 month, then:
-
-We count the number of votes for each item in the user file, we compare it against the total number of SHIELD members from the item key "members", if the votes are >= 50% +1 we set the status key to "passed", else we set it to "nope".
-
 
 The json file data structure looks like this:
 
 ```
 [
 {
-"post-title": "The post title",
-"post-image": "url-to-image",
+"post-title": "The post title", // if it's a poll, this will be an array with multiple titles
+"post-image": "url-to-image", // if it's a poll, this will be an array with multiple image URLs
 "post-description": "A very detailed description",
 "post-date": "Date format either the standard in JS or UNIX",
 "post-tags": "tag1, tag2, tag3",
-"votes": 4,
+"votes": [4,0],  // this is an array because it needs to cover the possibility of multiple choice voting
 "members": 6,
-"status": "passed"
+"status": "expired"
 },
 {
-"post-title": "The post title",
-"post-image": "url-to-image",
+"post-title": "The post title", // if it's a poll, this will be an array with multiple titles
+"post-image": "url-to-image", // if it's a poll, this will be an array with multiple image URLs
 "post-description": "A very detailed description",
 "post-date": "Date format either the standard in JS or UNIX",
 "post-tags": "tag1, tag2, tag3",
-"votes": 0,
+"votes": [0,0],  // this is an array because it needs to cover the possibility of multiple choice voting
 "members": 6,
 "status": "active",
 }
 ]
 ```
+
+
+We check on page reload if the issues/proposals of each user is older than 1 month, then:
+
+We count the number of votes for each item in the user file, we compare it against the total number of SHIELD members from the item key "members".
+
+If 1 month has passed for any item. We calculate this on front-end based on "post-date" - then, on any user page load we do an update and set the status key to "ended" for the respective item and do the math for the results on the front-end, based on the item data.
+
+**binary vote:**
+We can set it to "ended" or "nope" when the votes are >= 50% +1 for one option (only after the month since posted expires).
+
+Multiple options vote:
+We can set it to "ended" after the month since posted expires, whichever option has the most votes wins.
 
 # Memberships
 
