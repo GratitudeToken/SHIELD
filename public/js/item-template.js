@@ -50,7 +50,7 @@ export class HTML {
                         <div class="tags ${data.type}"><b>Tags:</b> ${tagsString}</div>
                     </div>
                 </div>
-                <div class="voting" id="voting"><button id="vote-for-post-` + data.id + `" class="vote-btn ${data.type}-bg">Vote</button><canvas class="myChart"></canvas></div>
+                <div class="voting" id="voting"><button id="vote-for-post-` + data.id + `" class="vote-btn ${data.type}-bg"></button><canvas class="myChart"></canvas></div>
             </div>
         </article>
         `;

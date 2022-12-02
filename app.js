@@ -15,9 +15,9 @@ let storage = multer.diskStorage({
     let extension = extArray[extArray.length - 1];
     cb(null, file.fieldname + '-' + Date.now() + '.' + extension)
   }
-})
+});
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
 
 const app = express();
 

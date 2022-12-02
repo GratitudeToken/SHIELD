@@ -21,6 +21,7 @@ export let makeChart = (posts) => {
             },
             options: {
                 aspectRatio: 1,
+                cutout: 90,
                 responsive: true,
                 width: 230,
                 height: 230,
