@@ -185,8 +185,7 @@
 }
 
 .tags {
-    border: 1px dotted #dadada;
-    background: #dadada;
+    border: 1px dotted #dadada50;
     padding: 10px;
     transition: 1s opacity;
     border-radius: 6px
@@ -274,11 +273,13 @@ canvas {
 .vote-btn {
     position: absolute;
     display: inline-block;
-    background: #0274f9;
-    border: 12px solid #ffffff !important;
+    background: var(--logo);
+    background-size: 64px 64px;
+    background-color: transparent !important;
+    border: 0;
     color: #ffffff;
-    width: 88px !important;
-    height: 88px !important;
+    width: 90px !important;
+    height: 90px !important;
     border-radius: 51%;
     font-size: 16px;
     transition: 0.23s transform
@@ -286,4 +287,22 @@ canvas {
 
 .vote-btn:hover {
     transform: scale(2)
+}
+
+@keyframes vote {
+    0% {
+        transform: scale(2);
+    }
+
+    23% {
+        transform: scale(3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.voted {
+    animation: vote 0.44s forwards
 }
