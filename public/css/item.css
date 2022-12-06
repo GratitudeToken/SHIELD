@@ -288,3 +288,21 @@ canvas {
 .vote-btn:hover {
     transform: scale(2)
 }
+
+@keyframes vote {
+    0% {
+        transform: scale(2);
+    }
+
+    23% {
+        transform: scale(3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.voted {
+    animation: vote 0.44s forwards
+}

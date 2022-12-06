@@ -71,12 +71,20 @@ const voteBTN = () => {
             }).then(response => {
                 return response.json();
             }).then(data => {
-                location.reload();
+                const snd = $("#vote-sound");
+                snd.play();
+                if (!snd.paused) {
+                    el.classList.remove('voted');
+                    el.classList.add('voted');
+                    el.disabled = true;
+                }
+
+                //location.reload();
                 // HOW DO YOU KNOW IF THE USER VOTED TO DISABLE VOTING FOR THIS POST FOR THAT USER?
                 // change file structure, create separate file for each users and add arrays to each user
                 // one array with the post ID for posts he created, one with posts he already voted on with 2 keys, post ID and option chosen
                 // etc
-            })
+            });
         });
     });
 }
