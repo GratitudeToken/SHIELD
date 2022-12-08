@@ -7,7 +7,8 @@ export class HTML {
     insertHTML(data) {
         // title
         let linkTitle = data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        linkTitle = url + '/?' + data.type + '=' + linkTitle;
+        let mainLinkTitle = url + '/?' + data.type + '=' + linkTitle;
+        let itemTitleLink = url + `/item/${linkTitle}`
 
         let pollHTML = '';
         const options = data.options;
@@ -22,7 +23,7 @@ export class HTML {
         const tags = data.tags.split(" ");
         let tagsString = '';
         tags.forEach(item => {
-            tagsString += '<a class="tag ' + data.type + '" href="' + url + '/?tag=' + item + '">#' + item + '</a>';
+            tagsString += `<a class="tag ${data.type}" href="${url}/tag/${item}">#${item}</a>`;
         });
 
         // check if we have an image
@@ -35,7 +36,7 @@ export class HTML {
         <article class="item" id="post-${data.id}">
             <div class="flex">
                 <div class="flex justify-start">
-                    <a class="main-image" href="${linkTitle}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.title}" /></a>
+                    <a class="main-image" href="${mainLinkTitle}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.title}" /></a>
 
                     <div class="content">
                         <div class="user_info">
@@ -45,7 +46,7 @@ export class HTML {
                                 <button id="delete-${data.id}" class="delete"></button>
                             </span>
                         </div>
-                        <a class="title ${data.type}" href="${linkTitle}"><h2>${data.title}</h2></a>
+                        <a class="title ${data.type}" href="${itemTitleLink}"><h2>${data.title}</h2></a>
                         <div class="description"><p>${data.description}</p> ${pollHTML}</div>
                         <div class="tags ${data.type}"><b>Tags:</b> ${tagsString}</div>
                     </div>
