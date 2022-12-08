@@ -7,7 +7,8 @@ export class HTML {
     insertHTML(data) {
         // title
         let linkTitle = data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        linkTitle = url + '/?' + data.type + '=' + linkTitle;
+        let mainLinkTitle = url + '/?' + data.type + '=' + linkTitle;
+        let itemTitleLink = url + `/item/${linkTitle}`
 
         let pollHTML = '';
         const options = data.options;
@@ -22,7 +23,7 @@ export class HTML {
         const tags = data.tags.split(" ");
         let tagsString = '';
         tags.forEach(item => {
-            tagsString += '<a class="tag ' + data.type + '" href="' + url + '/?tag=' + item + '">#' + item + '</a>';
+            tagsString += `<a class="tag ${data.type}" href="${url}/tag/${item}">#${item}</a>`;
         });
 
         // check if we have an image
