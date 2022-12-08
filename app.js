@@ -55,6 +55,25 @@ app.get('/items', (req, res) => {
   res.send(data);
 });
 
+app.get('/item/:itemName', (req, res) => {
+  const itemName = req.params.itemName
+  const data = JSON.parse(fs.readFileSync('data/items.json'));
+  let correctItem = data.filter(item => {
+    let fixedItemName = item.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
+    return fixedItemName === itemName
+  })
+  console.log(correctItem[0].title)
+  
+})
+
+app.get('/tag/:tagName', (req, res) => {
+  const tagName = req.params.tagName
+  const data = JSON.parse(fs.readFileSync('data/items.json'));
+  let correctTag = data.filter(item => item.tags.includes(tagName))
+  console.log(correctTag)
+  
+})
+
 // POSTs items to the items.json file
 // IF THERE IS NO AUTHENTICATED USER THE ADD BUTTON WILL NOT BE SHOWN !!!!!!!!!!!!!!!!
 app.post('/post', upload.single("image"), (req, res) => {
