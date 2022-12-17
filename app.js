@@ -90,8 +90,7 @@ app.post('/post', upload.single("image"), (req, res) => {
     options: Joi.array().required(),
     tags: Joi.string().required(),
     type: Joi.string().required(),
-    votes: Joi.array().required(),
-    vote: Joi.number().integer().max(9).precision(0)
+    votes: Joi.array().required()
   }
 
   const { error } = Joi.validate(req.body, schema)

@@ -48,15 +48,14 @@ const voteBTN = () => {
     $$('.vote-btn').forEach(el => {
         el.addEventListener('click', (e) => {
             let obj = {}
-            const arr = e.target.id.split('-');
-            const num = arr.at(-1);
-            obj.id = num;
+            obj.id = parseInt(e.target.dataset.id);
             obj.user = user;
 
             const snd = $("#vote-sound");
+            const checkedRadio = $('input[name="post-' + obj.id + '-options"]:checked') || null;
 
-            if ($('input[name="post-' + num + '-options"]').checked) {
-                obj.vote = $('input[name="post-' + num + '-options"]:checked').value;
+            if (checkedRadio) {
+                obj.vote = checkedRadio.value;
 
                 const stringifiedObj = JSON.stringify(obj);
 
@@ -134,6 +133,9 @@ $('#post-form').addEventListener('change', (event) => {
 // Add posts to the data array in posts.json
 $('#post-form').addEventListener('submit', (event) => {
     event.preventDefault();
+    // VERY IMPORTANT !!!!
+    // WE MUST CHECK IF THE USER IS VISIONARY by validating proton transactions that happened for this user
+    // otherwise he will get a message saying he does not have enough tokens staked to create a visionary post
 
     if (imageValid) {
         // get the number of options added and push 0 for each of them to the votes array
@@ -144,7 +146,6 @@ $('#post-form').addEventListener('submit', (event) => {
         }
 
         const formData = new FormData();
-
 
         formData.append("user", user);
         formData.append("title", $("#title").value);
@@ -212,16 +213,6 @@ const getPosts = () => {
 }
 
 getPosts();
-
-const vote = () => {
-    $$('#voting input').forEach(element => {
-        element.addEventListener('click', (event) => {
-            console.log(event.target)
-        });
-    });
-}
-
-vote();
 
 const deletePost = (id, user) => {
     // Fetches all data from posts.json

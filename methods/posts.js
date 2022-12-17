@@ -12,7 +12,7 @@ module.exports = class Post {
     this.tags = postData.tags;
     this.type = postData.type;
     this.votes = postData.votes?.map((vote) => parseInt(vote));
-    this.vote = postData.vote;
+    this.voted = false;
     this.members = 10;
   }
 
@@ -44,7 +44,6 @@ module.exports = class Post {
         posts.push(this);
 
         userFile.posts = posts;
-        console.log(userFile);
         fs.writeFile(`data/users/${this.user}.json`, JSON.stringify(userFile), err => {
           console.log(err);
         });
@@ -54,18 +53,32 @@ module.exports = class Post {
 
   static vote(obj) {
     fs.readFile('data/users/' + obj.user + '.json', (err, fileContent) => {
-      let posts = [];
+      let userFile = {};
       if (!err) {
-        posts = JSON.parse(fileContent);
+        userFile = JSON.parse(fileContent);
       }
-      console.log(posts)
-      // posts.filter((post, index) => {
-      //   post.id == obj.id
-      // });
-      // posts[obj.id - 1].votes[obj.vote] += 1;
-      // fs.writeFile(p, JSON.stringify(posts), err => {
-      //   console.log(err);
-      // });
+
+      let userPostIndex;
+
+      userFile.posts.map((el, index) => {
+        if (el.id == obj.id) {
+          userPostIndex = index;
+        }
+      });
+
+      userFile.posts[userPostIndex].votes[obj.vote] += 1;
+      userFile.posts[userPostIndex].voted = true;
+
+      let newVote = {}
+      newVote.id = obj.id;
+      newVote.option = obj.vote;
+      newVote.date = new Date();
+
+      userFile.voted.push(newVote);
+
+      fs.writeFile('data/users/' + obj.user + '.json', JSON.stringify(userFile), err => {
+        console.log(err);
+      });
     });
   }
 };
