@@ -1,5 +1,5 @@
 import { $, $$ } from '/js/selectors.js';
-import { HTML } from '/js/item-template.js';
+import { HTML } from '/js/post-template.js';
 import { user } from '/js/proton.js';
 import { url } from '/js/proton.js';
 import { makeChart } from '/js/chart.js';
@@ -10,16 +10,14 @@ let pollOptions = [];
 let imageValid = false;
 let imageValidation = '';
 
-let fetchURL = url + '/items';
-
 $('#add').addEventListener('click', (event) => {
-    $('#post-item-container').style.display = 'flex';
+    $('#post-container').style.display = 'flex';
     $('#close').style.display = 'block';
     $('body').style.overflow = 'hidden';
 });
 
 $('#close').addEventListener('click', (event) => {
-    $('#post-item-container').style.display = 'none';
+    $('#post-container').style.display = 'none';
     $('body').style.overflow = '';
 });
 
@@ -50,47 +48,52 @@ const voteBTN = () => {
     $$('.vote-btn').forEach(el => {
         el.addEventListener('click', (e) => {
             let obj = {}
-            const arr = e.target.id.split('-')
+            const arr = e.target.id.split('-');
             const num = arr.at(-1);
             obj.id = num;
             obj.user = user;
+
+            const snd = $("#vote-sound");
+
             if ($('input[name="post-' + num + '-options"]').checked) {
                 obj.vote = $('input[name="post-' + num + '-options"]:checked').value;
+
+                const stringifiedObj = JSON.stringify(obj);
+
+                fetch(url + '/vote', {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: stringifiedObj
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    snd.play();
+                    if (!snd.paused) {
+                        el.classList.remove('voted');
+                        el.classList.add('voted');
+                        el.disabled = true;
+                    }
+
+                    //location.reload();
+                    // HOW DO YOU KNOW IF THE USER VOTED TO DISABLE VOTING FOR THIS POST FOR THAT USER?
+                    // change file structure, create separate file for each users and add arrays to each user
+                    // one array with the post ID for posts he created, one with posts he already voted on with 2 keys, post ID and option chosen
+                    // etc
+                }).catch(err => {
+                    console.log(err)
+                });
             } else {
                 alert('You have to select an option to vote.')
             }
-            const stringifiedObj = JSON.stringify(obj);
-
-            fetch(url + '/vote', {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: stringifiedObj
-            }).then(response => {
-                return response.json();
-            }).then(data => {
-                const snd = $("#vote-sound");
-                snd.play();
-                if (!snd.paused) {
-                    el.classList.remove('voted');
-                    el.classList.add('voted');
-                    el.disabled = true;
-                }
-
-                //location.reload();
-                // HOW DO YOU KNOW IF THE USER VOTED TO DISABLE VOTING FOR THIS POST FOR THAT USER?
-                // change file structure, create separate file for each users and add arrays to each user
-                // one array with the post ID for posts he created, one with posts he already voted on with 2 keys, post ID and option chosen
-                // etc
-            });
         });
     });
 }
 
 
-$('#post-item').addEventListener('change', (event) => {
+$('#post-form').addEventListener('change', (event) => {
     postType = $('input[name="type"]:checked').value;
     pollOptions = [];
     $$('.voteInput').forEach((el, i) => {
@@ -128,8 +131,8 @@ $('#post-item').addEventListener('change', (event) => {
 
 });
 
-// Add items to the data array in items.json
-$('#post-item').addEventListener('submit', (event) => {
+// Add posts to the data array in posts.json
+$('#post-form').addEventListener('submit', (event) => {
     event.preventDefault();
 
     if (imageValid) {
@@ -164,11 +167,11 @@ $('#post-item').addEventListener('submit', (event) => {
             return response.json();
         }).then(returnedData => {
             if (returnedData.status === 200) {
-                // Gets and displays all items in the items.json file (including the new one just made)
-                getItems();
+                // Gets and displays all posts in the posts.json file (including the new one just made)
+                getPosts();
 
-                // Hides the form to add an item
-                $('#post-item-container').style.display = 'none';
+                // Hides the form to add an post
+                $('#post-container').style.display = 'none';
                 $('#close').style.display = 'none';
                 $('body').style.overflow = '';
             }
@@ -179,36 +182,36 @@ $('#post-item').addEventListener('submit', (event) => {
 });
 
 
-// // function to get all items from items.json file
-const getItems = () => {
-    // Fetches all data from items.json
-    fetch(fetchURL)
+// // function to get all posts from posts.json file
+const getPosts = () => {
+    // Fetches all data from posts.json
+    fetch(url + '/getposts/' + user)
         .then(response => {
             return response.json();
         })
         .then(data => {
             //Takes data from files and calls the HTML template to display the data
-            $('#items').innerHTML = '';
-            data.forEach(item => {
+            $('#posts').innerHTML = '';
+            data.posts.forEach(post => {
                 const html = new HTML;
-                $('#items').innerHTML += html.insertHTML(item);
-                makeChart(data);
+                $('#posts').innerHTML += html.insertHTML(post);
+                makeChart(data.posts);
                 voteBTN();
 
-
+                // add event listener for the dynamically created delete buttons
                 $$('.delete').forEach(element => {
                     element.addEventListener('click', (event) => {
-                        // get the id (title) of the clicked item
+                        // get the id (title) of the clicked post
                         const arr = event.target.id.split('-')
                         const id = arr.at(-1);
-                        deleteItem(id)
+                        deletePost(id)
                     });
                 });
             });
         });
 }
 
-getItems();
+getPosts();
 
 const vote = () => {
     $$('#voting input').forEach(element => {
@@ -220,11 +223,11 @@ const vote = () => {
 
 vote();
 
-const deleteItem = (id) => {
-    // Fetches all data from items.json
+const deletePost = (id) => {
+    // Fetches all data from posts.json
     const promptString = prompt('Are you sure you want to delete this post?', 'YES');
     if (promptString != null && promptString === 'YES') {
-        //const correctItem = fetchedItems.find(item => item.title === itemTitle);
+        //const correctPost = fetchedPosts.find(post => post.title === postTitle);
         let deleteID = JSON.stringify({ "id": id });
         fetch(url + '/delete', {
             method: 'PUT',
@@ -239,7 +242,7 @@ const deleteItem = (id) => {
             })
             .then(data => {
                 if (data.status === 200) {
-                    getItems()
+                    getPosts()
                 }
             })
             .catch(err => {
@@ -281,7 +284,7 @@ function handleUploadedFile(file) {
     reader.onload = (function (aImg) {
         return function (e) {
             aImg.src = e.target.result;
-            $("#post-item").add;
+            $("#post-form").add;
         };
     })(img);
     reader.readAsDataURL(file);

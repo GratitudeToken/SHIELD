@@ -1,4 +1,4 @@
-#post-item-container {
+#post-container {
     position: fixed;
     padding: 23px 0;
     width: 100%;
@@ -14,16 +14,16 @@
     color: #ffffff
 }
 
-#post-item {
+#post-form {
     min-width: 555px;
     max-width: 100%;
     text-align: left;
 }
 
-#post-item input,
-#post-item button,
-#post-item select,
-#post-item textarea {
+#post-form input,
+#post-form button,
+#post-form select,
+#post-form textarea {
     display: block;
     width: 100%;
     border: 0;
@@ -32,7 +32,7 @@
     margin-bottom: 23px
 }
 
-#post-item button[type=submit] {
+#post-form button[type=submit] {
     width: auto;
     margin: 0 auto;
     padding: 10px 23px;
@@ -43,22 +43,22 @@
     font-size: 23px
 }
 
-#post-item textarea {
+#post-form textarea {
     min-height: 230px
 }
 
-#post-item input[type=file] {
+#post-form input[type=file] {
     display: inline-block;
     min-width: auto;
     width: auto
 }
 
-#post-item .featured-image label {
+#post-form .featured-image label {
     display: inline-block
 }
 
-#post-item label,
-#post-item .label {
+#post-form label,
+#post-form .label {
     display: block;
     margin-bottom: 6px;
     font-size: 14px
@@ -69,32 +69,32 @@
     font-size: 16px
 }
 
-#post-item .radios label,
-#post-item .radios .label,
-#post-item .radios input {
+#post-form .radios label,
+#post-form .radios .label,
+#post-form .radios input {
     display: inline-block;
     width: auto;
     min-width: auto;
 }
 
-#post-item .radios input,
-#post-item .radios label {
+#post-form .radios input,
+#post-form .radios label {
     cursor: pointer;
     font-size: 18px
 }
 
-#post-item .radios label {
+#post-form .radios label {
     padding: 0 12px;
     margin: 6px 6px 6px -12px
 }
 
-#post-item .radios label:hover,
-#post-item .radios input:hover+label,
-#post-item .radios input:checked+label {
+#post-form .radios label:hover,
+#post-form .radios input:hover+label,
+#post-form .radios input:checked+label {
     color: #0274f9
 }
 
-#post-item .btn {
+#post-form .btn {
     margin-top: 23px !important
 }
 

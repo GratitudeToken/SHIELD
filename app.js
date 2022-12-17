@@ -1,11 +1,12 @@
 const path = require('path');
 const express = require('express');
-const multer = require("multer");
-const Joi = require('joi');
-const fs = require('fs');
+const multer = require("multer"); // we use this for storing images and other files sent from the user
+const Joi = require('joi'); // this is for data validation sent from front-end
+const fs = require('fs'); // this is for saving or reading files to the server
 
-const Item = require('./methods/items');
+const Post = require('./methods/posts');
 
+// configuration for multer
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads')
@@ -27,8 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// GETs all data from items.json file 
-app.get('/items', (req, res) => {
+// GETs all data from posts.json file 
+app.get('/getposts/:user', (req, res) => {
   //if (req.params.parameter) {
   // do this
   //   if (req.params.parameter === 'tag') {
@@ -48,33 +49,35 @@ app.get('/items', (req, res) => {
   //   }
 
   // } else {
-  //   let data = JSON.parse(fs.readFileSync('data/items.json'));
+  //   let data = JSON.parse(fs.readFileSync('data/' + req.params.user + '.json'));
   //   res.send(data);
   // }
-  let data = JSON.parse(fs.readFileSync('data/items.json'));
+
+  const user = req.params.user;
+  let data = JSON.parse(fs.readFileSync('data/users/' + user + '.json')); // ADD GUARDIAN AND VISIONARY MEMBERSHIP TYPE in json structure
   res.send(data);
 });
 
-app.get('/item/:itemName', (req, res) => {
-  const itemName = req.params.itemName
-  const data = JSON.parse(fs.readFileSync('data/items.json'));
-  let correctItem = data.filter(item => {
-    let fixedItemName = item.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
-    return fixedItemName === itemName
-  })
-  console.log(correctItem[0].title)
-  
-})
+// app.get('/:postName', (req, res) => {
+//   const postName = req.params.postName
+//   const data = JSON.parse(fs.readFileSync('data/' + req.params.user + '.json'));
+//   let correctPost = data.posts.filter(post => {
+//     let fixedPostName = post.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
+//     return fixedPostName === postName
+//   })
+//   console.log(correctPost[0].title)
 
-app.get('/tag/:tagName', (req, res) => {
-  const tagName = req.params.tagName
-  const data = JSON.parse(fs.readFileSync('data/items.json'));
-  let correctTag = data.filter(item => item.tags.includes(tagName))
-  console.log(correctTag)
-  
-})
+// })
 
-// POSTs items to the items.json file
+// app.get('/tag/:tagName', (req, res) => {
+//   const tagName = req.params.tagName
+//   const data = JSON.parse(fs.readFileSync('data/' + req.params.user + '.json'));
+//   let correctTag = data.filter(post => post.tags.includes(tagName))
+//   console.log(correctTag)
+
+// })
+
+// POST to the posts.json file
 // IF THERE IS NO AUTHENTICATED USER THE ADD BUTTON WILL NOT BE SHOWN !!!!!!!!!!!!!!!!
 app.post('/post', upload.single("image"), (req, res) => {
 
@@ -100,9 +103,10 @@ app.post('/post', upload.single("image"), (req, res) => {
     res.send({ "status": 200 })
   }
 
-  const item = new Item({ ...req.body, ...req.file });
-  item.save();
+  const post = new Post({ ...req.body, ...req.file });
+  post.save();
 });
+
 
 app.post('/vote', (req, res) => {
   // Joi Schema = how the incoming input data is validated
@@ -121,15 +125,15 @@ app.post('/vote', (req, res) => {
     res.send({ "status": 200 })
   }
 
-  Item.vote(req.body);
+  Post.vote(req.body);
 });
 
 // HERE WE HAVE TO CHECK IF THE USER THAT MADE THE POST IS AUTHENTICATED !!!!!!!!!!!!!!!!
 ///////////////////////////////////////////////////
 app.put('/delete', (req, res) => {
-  const data = JSON.parse(fs.readFileSync('data/items.json'));
-  const filteredItems = data.filter(item => item.id != req.body.id)
-  fs.writeFileSync('data/items.json', JSON.stringify(filteredItems))
+  const data = JSON.parse(fs.readFileSync('data/posts.json'));
+  const filteredPosts = data.filter(post => post.id != req.body.id)
+  fs.writeFileSync('data/posts.json', JSON.stringify(filteredPosts))
   res.send({ "status": 200 })
 })
 

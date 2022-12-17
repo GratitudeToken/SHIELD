@@ -85,9 +85,9 @@ The json file data structure looks like this:
 
 We check on page reload if the issues/proposals of each user is older than 1 month, then:
 
-We count the number of votes for each item in the user file, we compare it against the total number of SHIELD members from the item key "members".
+We count the number of votes for each post in the user file, we compare it against the total number of SHIELD members from the post key "members".
 
-If 1 month has passed for any item. We calculate this on front-end based on "post-date" - then, on any user page load we do an update and set the status key to "ended" for the respective item and do the math for the results on the front-end, based on the item data.
+If 1 month has passed for any post. We calculate this on front-end based on "post-date" - then, on any user page load we do an update and set the status key to "ended" for the respective post and do the math for the results on the front-end, based on the post data.
 
 **Binary vote:**
 - We can set it to "ended" or "nope" when the votes are >= 50% +1 for one option (only after the month since posted expires).
