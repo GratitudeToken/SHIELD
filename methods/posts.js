@@ -19,26 +19,33 @@ module.exports = class Post {
 
   save() {
     // save the new post inside the user JSON file
-    fs.readFile('data/users/' + this.user + '.json', (err, fileContent) => {
-      let posts = [];
+    let newID = 0; // first, let's reserve the ID in the index.json file, we create a new index variable that is set to 0 to make it number type
+
+    fs.readFile('data/index.json', (err, fileContent) => {
+      let newIndex = []; // let's have an empty array to write after it's updated
       if (!err) {
-        posts = JSON.parse(fileContent);
+        newIndex = JSON.parse(fileContent); // parse the string content from index.json into an array and assign it to newIndex variable
       }
-      const id = posts.posts.length + 1;
-      this.id = id;
-      posts.posts.push(this);
-      fs.writeFile(p, JSON.stringify(posts), err => {
+      newID = newIndex.length + 1; // calculate the length of the array in order to add +1 - thus we have the new ID to use in the next method below for the user JSOn file
+      this.id = newID; // here we set the correct value to the key named ID for the user object
+      newIndex.push(this.user); // add the new user to the array, then write the new array to the index.json file
+      fs.writeFile('data/index.json', JSON.stringify(newIndex), err => {
         console.log(err);
       });
 
-      // save the username in the index.json file to have the ID of the new post (which is the index.json array location + 1) associated with the new user
-      fs.readFile('data/users/index.json', (err, fileContent) => {
-        let index = [];
+      // now let's read the user file
+      fs.readFile(`data/users/${this.user}.json`, (err, fileContent) => {
+        let userFile = {};
         if (!err) {
-          index = JSON.parse(fileContent);
+          userFile = JSON.parse(fileContent);
         }
-        index.push(this.user);
-        fs.writeFile('data/users/index.json', JSON.stringify(index), err => {
+
+        let posts = userFile.posts;
+        posts.push(this);
+
+        userFile.posts = posts;
+        console.log(userFile);
+        fs.writeFile(`data/users/${this.user}.json`, JSON.stringify(userFile), err => {
           console.log(err);
         });
       });

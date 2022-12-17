@@ -263,7 +263,7 @@ function checkFileProperties(theFile) {
         return false;
     } else { imageValid = true; }
 
-    if (theFile){
+    if (theFile) {
         if (theFile.size > 512000) {
             imageValidation = '<b>Error:</b> ' + (theFile.size / 1024).toFixed(2) + ' KB - File size is too big. Max file size is: 500 KB';
             $('#error').innerHTML = imageValidation;

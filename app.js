@@ -132,8 +132,9 @@ app.post('/vote', (req, res) => {
 ///////////////////////////////////////////////////
 app.put('/delete', (req, res) => {
   const data = JSON.parse(fs.readFileSync(`data/users/${req.body.user}.json`));
-  const filteredPosts = data.posts.filter(post => post.id != req.body.id)
-  fs.writeFileSync(`data/users/${req.body.user}.json`, JSON.stringify(filteredPosts))
+  const filteredPosts = data.posts.filter(post => post.id != req.body.id);
+  data.posts = filteredPosts;
+  fs.writeFileSync(`data/users/${req.body.user}.json`, JSON.stringify(data))
   res.send({ "status": 200 })
 })
 
