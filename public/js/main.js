@@ -204,7 +204,7 @@ const getPosts = () => {
                         // get the id (title) of the clicked post
                         const arr = event.target.id.split('-')
                         const id = arr.at(-1);
-                        deletePost(id)
+                        deletePost(id, user)
                     });
                 });
             });
@@ -223,12 +223,12 @@ const vote = () => {
 
 vote();
 
-const deletePost = (id) => {
+const deletePost = (id, user) => {
     // Fetches all data from posts.json
     const promptString = prompt('Are you sure you want to delete this post?', 'YES');
     if (promptString != null && promptString === 'YES') {
         //const correctPost = fetchedPosts.find(post => post.title === postTitle);
-        let deleteID = JSON.stringify({ "id": id });
+        let deleteID = JSON.stringify({ "id": id, "user": user });
         fetch(url + '/delete', {
             method: 'PUT',
             headers: {
@@ -263,18 +263,19 @@ function checkFileProperties(theFile) {
         return false;
     } else { imageValid = true; }
 
-    if (theFile.size > 512000) {
-        imageValidation = '<b>Error:</b> ' + (theFile.size / 1024).toFixed(2) + ' KB - File size is too big. Max file size is: 500 KB';
-        $('#error').innerHTML = imageValidation;
-        return false;
-    } else { imageValid = true; }
+    if (theFile) {
+        if (theFile.size > 512000) {
+            imageValidation = '<b>Error:</b> ' + (theFile.size / 1024).toFixed(2) + ' KB - File size is too big. Max file size is: 500 KB';
+            $('#error').innerHTML = imageValidation;
+            return false;
+        } else { imageValid = true; }
+    }
 
     return true;
 }
 
 function handleUploadedFile(file) {
     $("#image-label").innerHTML = "";
-    const fileName = file.name;
     var img = document.createElement("img");
     img.setAttribute("id", "theImageTag");
     img.file = file;
@@ -283,8 +284,12 @@ function handleUploadedFile(file) {
     var reader = new FileReader();
     reader.onload = (function (aImg) {
         return function (e) {
-            aImg.src = e.target.result;
-            $("#post-form").add;
+            if (file) {
+                aImg.src = e.target.result;
+                $("#post-form").add;
+            } else {
+                $("#image-label").innerHTML = "";
+            }
         };
     })(img);
     reader.readAsDataURL(file);

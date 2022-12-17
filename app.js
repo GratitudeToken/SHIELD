@@ -131,9 +131,10 @@ app.post('/vote', (req, res) => {
 // HERE WE HAVE TO CHECK IF THE USER THAT MADE THE POST IS AUTHENTICATED !!!!!!!!!!!!!!!!
 ///////////////////////////////////////////////////
 app.put('/delete', (req, res) => {
-  const data = JSON.parse(fs.readFileSync('data/posts.json'));
-  const filteredPosts = data.filter(post => post.id != req.body.id)
-  fs.writeFileSync('data/posts.json', JSON.stringify(filteredPosts))
+  const data = JSON.parse(fs.readFileSync(`data/users/${req.body.user}.json`));
+  const filteredPosts = data.posts.filter(post => post.id != req.body.id);
+  data.posts = filteredPosts;
+  fs.writeFileSync(`data/users/${req.body.user}.json`, JSON.stringify(data))
   res.send({ "status": 200 })
 })
 
