@@ -289,6 +289,10 @@ canvas {
     transform: scale(2)
 }
 
+.vote-btn:disabled {
+    opacity: 0.69
+}
+
 @keyframes vote {
     0% {
         transform: scale(2);

@@ -1,5 +1,6 @@
 import { formatDate } from '/js/date-formatting.js';
 import { url } from '/js/proton.js';
+import { user } from '/js/proton.js';
 import { countdown } from '/js/countdown.js';
 
 // HTML post display template that is used when getPosts is called
@@ -13,8 +14,14 @@ export class HTML {
         let pollHTML = '';
         const options = data.options;
 
+        let disabled;
+        if (data.voted !== false) {
+            disabled = 'disabled';
+        }
+        let checked;
         options && options.forEach((post, i) => {
-            pollHTML += '<li><input id="' + data.id + '-option-' + i + '" type="radio" name="post-' + data.id + '-options" value="' + i + '"/> <label for="' + data.id + '-option-' + i + '">' + post + '</label></li>';
+            data.voted === i ? checked = 'checked' : checked = 'disabled';
+            pollHTML += `<li><input id="post-${data.id}-option-${i}" type="radio" name="post-${data.id}-options" value="${i}" ${checked}/> <label for="post-${data.id}-option-${i}">${post}</label></li>`;
         });
         pollHTML = '<ol>' + pollHTML + '</ol>';
 
@@ -51,7 +58,7 @@ export class HTML {
                         <div class="tags ${data.type}"><b>Tags:</b> ${tagsString}</div>
                     </div>
                 </div>
-                <div class="voting" id="voting"><button id="vote-for-post-` + data.id + `" class="vote-btn ${data.type}-bg"></button><canvas class="myChart"></canvas></div>
+                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${disabled}></button><canvas class="myChart"></canvas></div>
             </div>
         </article>
         `;
