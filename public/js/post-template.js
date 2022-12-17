@@ -2,19 +2,19 @@ import { formatDate } from '/js/date-formatting.js';
 import { url } from '/js/proton.js';
 import { countdown } from '/js/countdown.js';
 
-// HTML item display template that is used when getItems is called
+// HTML post display template that is used when getPosts is called
 export class HTML {
     insertHTML(data) {
         // title
         let linkTitle = data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        let mainLinkTitle = url + '/?' + data.type + '=' + linkTitle;
-        let itemTitleLink = url + `/item/${linkTitle}`
+        // let mainLinkTitle = url + '/?' + data.type + '=' + linkTitle;
+        // let postTitleLink = url + `/post/${linkTitle}`
 
         let pollHTML = '';
         const options = data.options;
 
-        options && options.forEach((item, i) => {
-            pollHTML += '<li><input id="' + data.id + '-option-' + i + '" type="radio" name="post-' + data.id + '-options" value="' + i + '"/> <label for="' + data.id + '-option-' + i + '">' + item + '</label></li>';
+        options && options.forEach((post, i) => {
+            pollHTML += '<li><input id="' + data.id + '-option-' + i + '" type="radio" name="post-' + data.id + '-options" value="' + i + '"/> <label for="' + data.id + '-option-' + i + '">' + post + '</label></li>';
         });
         pollHTML = '<ol>' + pollHTML + '</ol>';
 
@@ -22,8 +22,8 @@ export class HTML {
         // tags
         const tags = data.tags.split(" ");
         let tagsString = '';
-        tags.forEach(item => {
-            tagsString += `<a class="tag ${data.type}" href="${url}/tag/${item}">#${item}</a>`;
+        tags.forEach(post => {
+            tagsString += `<a class="tag ${data.type}" href="${url}/tag/${post}">#${post}</a>`;
         });
 
         // check if we have an image
@@ -33,14 +33,14 @@ export class HTML {
         } else { imageSRC = '/img/love-technology.jpg'; }
 
         return `
-        <article class="item" id="post-${data.id}">
+        <article class="post" id="post-${data.id}">
             <div class="flex">
                 <div class="flex justify-start">
                     <a class="main-image" href="${linkTitle}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.title}" /></a>
 
                     <div class="content">
                         <div class="user_info">
-                            <span class="${data.type} item-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <strong>@decryptr</strong> | <span class="date" id="date">` + formatDate(data.date) + `</span>
+                            <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <strong>@decryptr</strong> | <span class="date" id="date">` + formatDate(data.date) + `</span>
                             <span id="countdown"> | <img class="clock" src="/svgs/clock.svg" alt="clock" />`+ countdown(data.date) + ` d:h</span>
                             <span class="actions">
                                 <button id="delete-${data.id}" class="delete"></button>

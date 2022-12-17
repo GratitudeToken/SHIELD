@@ -33,7 +33,8 @@ body p {
 }
 
 #transferFormContainer,
-#languageOptions input {
+#close,
+audio {
   display: none
 }
 
@@ -46,40 +47,10 @@ h5 {
   padding: 0;
 }
 
-#translateBody {
+#main {
   width: 100%;
   height: 100%;
   margin: 0 auto;
-}
-
-#languageOptions {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, .95);
-  position: fixed;
-  top: 0;
-  z-index: 99;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  flex-direction: column;
-  line-height: 2;
-  font-size: 200%;
-}
-
-#languageOptions label {
-  cursor: pointer;
-  display: block;
-  margin: 23px
-}
-
-#languageOptions label:hover {
-  color: #0274f9
-}
-
-#languageOptions input:checked+label {
-  color: #0274f9
 }
 
 #main_header {
@@ -141,10 +112,6 @@ h5 {
 #close:hover,
 .hamburger:hover {
   transform: rotate(180deg);
-}
-
-#close {
-  display: none
 }
 
 #add {

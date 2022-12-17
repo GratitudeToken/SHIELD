@@ -6,15 +6,15 @@
     justify-content: space-between;
 }
 
-#post-item-container {
+#post-container {
     overflow-y: auto
 }
 
-#items {
+#posts {
     padding: 15px 0
 }
 
-.item {
+.post {
     width: 100%;
     margin: 0 0 32px 0;
     border-bottom: 1px dashed #c3c3c3;
@@ -59,7 +59,7 @@
     margin-top: 10px;
 }
 
-.item-type {
+.post-type {
     border: 1px solid #0274f9;
     margin-right: 6px;
     border-radius: 3px;
@@ -200,14 +200,14 @@
     text-decoration: underline;
 }
 
-.item button {
+.post button {
     display: block;
     width: 32px;
     height: 32px;
     border: 0;
 }
 
-.item .delete {
+.post .delete {
     background: url(/svgs/trash.svg) no-repeat 50% 50% #ffffff;
     background-size: 23px 23px;
     margin: -4px 0 0 9px
