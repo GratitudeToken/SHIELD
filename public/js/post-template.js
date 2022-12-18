@@ -1,6 +1,5 @@
 import { formatDate } from '/js/date-formatting.js';
-import { url } from '/js/proton.js';
-import { user } from '/js/proton.js';
+import { url, user } from '/js/proton.js';
 import { countdown } from '/js/countdown.js';
 
 // HTML post display template that is used when getPosts is called
