@@ -1,7 +1,7 @@
 import { $, $$ } from '/js/selectors.js';
 
 let imageValidation = '';
-let imageValid = false;
+export let imageValid = false;
 
 export const checkFileProperties = (theFile) => {
     if (

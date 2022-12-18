@@ -3,7 +3,7 @@ import { HTML } from '/js/post-template.js';
 import { user } from '/js/proton.js';
 import { url } from '/js/proton.js';
 import { makeChart } from '/js/chart.js';
-import { checkFileProperties, handleUploadedFile } from '/js/image-select.js';
+import { imageValid, checkFileProperties, handleUploadedFile } from '/js/image-select.js';
 
 // here we will add all user input data
 let allPosts = new Object();
