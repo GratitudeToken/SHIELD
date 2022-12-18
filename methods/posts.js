@@ -67,7 +67,7 @@ module.exports = class Post {
       });
 
       userFile.posts[userPostIndex].votes[obj.vote] += 1;
-      userFile.posts[userPostIndex].voted = true;
+      userFile.posts[userPostIndex].voted = parseInt(obj.vote);
 
       let newVote = {}
       newVote.id = obj.id;

@@ -290,7 +290,7 @@ canvas {
 }
 
 .vote-btn:disabled {
-    opacity: 0.69
+    animation: voteDisabled 0.44s forwards;
 }
 
 @keyframes vote {
@@ -307,6 +307,22 @@ canvas {
     }
 }
 
+@keyframes voteDisabled {
+    0% {
+        transform: scale(3);
+    }
+
+    77% {
+        transform: scale(3);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.69;
+    }
+}
+
 .voted {
-    animation: vote 0.44s forwards
+    animation: vote 0.44s forwards;
 }
