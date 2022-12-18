@@ -15,13 +15,25 @@ export class HTML {
         const options = data.options;
 
         let disabled;
+        let checked;
+        let deleteBtnTitle;
+        let disabledColor;
         if (data.voted !== false) {
             disabled = 'disabled';
-        }
-        let checked;
+            deleteBtnTitle = 'title="You voted already."';
+        } else { deleteBtnTitle = 'title="Hit the SHIELD to cast your vote."'; }
+
         options && options.forEach((post, i) => {
-            data.voted === i ? checked = 'checked' : checked = 'disabled';
-            pollHTML += `<li><input id="post-${data.id}-option-${i}" type="radio" name="post-${data.id}-options" value="${i}" ${checked}/> <label for="post-${data.id}-option-${i}">${post}</label></li>`;
+            if (data.voted !== false) {
+                if (data.voted === i) {
+                    checked = 'checked';
+                } else {
+                    checked = 'disabled';
+                    disabledColor = 'style="color: gray"';
+                }
+            } else { checked = ''; }
+
+            pollHTML += `<li><input id="post-${data.id}-option-${i}" type="radio" name="post-${data.id}-options" value="${i}" ${checked}/> <label for="post-${data.id}-option-${i}" ${disabledColor}>${post}</label></li>`;
         });
         pollHTML = '<ol>' + pollHTML + '</ol>';
 
@@ -58,7 +70,7 @@ export class HTML {
                         <div class="tags ${data.type}"><b>Tags:</b> ${tagsString}</div>
                     </div>
                 </div>
-                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${disabled}></button><canvas class="myChart"></canvas></div>
+                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${disabled} ${deleteBtnTitle}></button><canvas class="myChart"></canvas></div>
             </div>
         </article>
         `;

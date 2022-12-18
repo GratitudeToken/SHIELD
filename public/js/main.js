@@ -3,12 +3,64 @@ import { HTML } from '/js/post-template.js';
 import { user } from '/js/proton.js';
 import { url } from '/js/proton.js';
 import { makeChart } from '/js/chart.js';
+import { checkFileProperties, handleUploadedFile } from '/js/image-select.js';
 
 // here we will add all user input data
+let allPosts = new Object();
 let postType;
 let pollOptions = [];
-let imageValid = false;
-let imageValidation = '';
+
+const postActions = (clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem) => {
+    if (fetchy === true) {
+        fetch(url + '/getposts/' + user)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                allPosts = data.posts;
+                if (looper === true) {
+                    allPosts.forEach(post => {
+                        // populate HTML function
+                        if (populatePosts === true) {
+                            const html = new HTML;
+                            $('#posts').innerHTML += html.insertHTML(post);
+                        }
+
+
+                        // remake all charts function
+                        if (charts === true) { makeChart(allPosts) }
+
+                        // voteBTNs addEventListeners
+                        if (voteBTNlisteners === true) { voteBTN() }
+
+                        // delete btns addEventListeners
+                        if (deleteBTNs === true) {
+                            $$('.delete').forEach(element => {
+                                element.addEventListener('click', (event) => {
+                                    // get the id (title) of the clicked post
+                                    const arr = event.target.id.split('-')
+                                    const id = arr.at(-1);
+                                    deletePost(id, user)
+                                });
+                            });
+                        }
+                    });
+                }
+            });
+    }
+    // clear all items
+    if (clearItems === true) {
+        $('#posts').innerHTML = '';
+    }
+
+    // remove last post from HTML
+    if (removeLastItem === true) {
+        $('#posts .post:last-of-type').remove()
+    }
+}
+
+postActions(true, true, true, true, true, true, true, false);
+
 
 $('#add').addEventListener('click', (event) => {
     $('#post-container').style.display = 'flex';
@@ -44,9 +96,11 @@ $('#remove_option').addEventListener('click', (event) => {
     }
 });
 
+
 const voteBTN = () => {
     $$('.vote-btn').forEach(el => {
         el.addEventListener('click', (e) => {
+
             let obj = {}
             obj.id = parseInt(e.target.dataset.id);
             obj.user = user;
@@ -71,9 +125,10 @@ const voteBTN = () => {
                 }).then(data => {
                     snd.play();
                     if (!snd.paused) {
+                        el.disabled = true;
                         el.classList.remove('voted');
                         el.classList.add('voted');
-                        el.disabled = true;
+                        postActions(true, true, true, true, true, true, true, false);
                     }
 
                     //location.reload();
@@ -169,7 +224,9 @@ $('#post-form').addEventListener('submit', (event) => {
         }).then(returnedData => {
             if (returnedData.status === 200) {
                 // Gets and displays all posts in the posts.json file (including the new one just made)
-                getPosts();
+                postActions(true, true, true, true, true, true, true, false);
+                // const html = new HTML;
+                // $('#posts').innerHTML += html.insertHTML(formData); ///////////////////////////////////////  adding is not working, delete is also not working properly
 
                 // Hides the form to add an post
                 $('#post-container').style.display = 'none';
@@ -182,37 +239,6 @@ $('#post-form').addEventListener('submit', (event) => {
 
 });
 
-
-// // function to get all posts from posts.json file
-const getPosts = () => {
-    // Fetches all data from posts.json
-    fetch(url + '/getposts/' + user)
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            //Takes data from files and calls the HTML template to display the data
-            $('#posts').innerHTML = '';
-            data.posts.forEach(post => {
-                const html = new HTML;
-                $('#posts').innerHTML += html.insertHTML(post);
-                makeChart(data.posts);
-                voteBTN();
-
-                // add event listener for the dynamically created delete buttons
-                $$('.delete').forEach(element => {
-                    element.addEventListener('click', (event) => {
-                        // get the id (title) of the clicked post
-                        const arr = event.target.id.split('-')
-                        const id = arr.at(-1);
-                        deletePost(id, user)
-                    });
-                });
-            });
-        });
-}
-
-getPosts();
 
 const deletePost = (id, user) => {
     // Fetches all data from posts.json
@@ -233,55 +259,11 @@ const deletePost = (id, user) => {
             })
             .then(data => {
                 if (data.status === 200) {
-                    getPosts()
+                    postActions(true, true, true, true, true, true, true, false);
                 }
             })
             .catch(err => {
                 console.log(err)
             })
     }
-}
-
-// HANDLING IMAGE UPLOAD
-
-function checkFileProperties(theFile) {
-    if (
-        theFile &&
-        (theFile.type !== "image/png" && theFile.type !== "image/jpeg" && theFile.type !== "image/jpg" && theFile.type !== "image/gif" && theFile.type !== "image/webp" && theFile.type !== "image/svg")
-    ) {
-        imageValidation = '<b>Error:</b> Only - PNG, JPG, JPEG, GIF, WEBP and SVG file types are accepted.';
-        $('#error').innerHTML = imageValidation;
-        return false;
-    } else { imageValid = true; }
-
-    if (theFile) {
-        if (theFile.size > 512000) {
-            imageValidation = '<b>Error:</b> ' + (theFile.size / 1024).toFixed(2) + ' KB - File size is too big. Max file size is: 500 KB';
-            $('#error').innerHTML = imageValidation;
-            return false;
-        } else { imageValid = true; }
-    }
-
-    return true;
-}
-
-function handleUploadedFile(file) {
-    $("#image-label").innerHTML = "";
-    var img = document.createElement("img");
-    img.setAttribute("id", "theImageTag");
-    img.file = file;
-    $("#image-label").appendChild(img);
-
-    var reader = new FileReader();
-    reader.onload = (function (aImg) {
-        return function (e) {
-            if (file) {
-                aImg.src = e.target.result;
-                $("#post-form").add;
-            } else {
-                $("#image-label").innerHTML = "";
-            }
-        };
-    })(img);
-    reader.readAsDataURL(file);
 }
