@@ -4,6 +4,7 @@ import { addBTN, closeBTN, addOption, removeOption } from '/js/event-listeners.j
 addBTN(); closeBTN(); addOption(); removeOption();
 
 submitPost();
+
 // first page load - populate all posts
 postActions(true, true, true, true, true, true, true, false);
 

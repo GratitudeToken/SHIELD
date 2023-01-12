@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "user": "decryptr",
+        "datevoted": "2022-12-18T17:01:17.908Z",
+        "votes": [
+            1,
+            0,
+            0
+        ],
+        "voted": 0
+    },
+    {
+        "id": 2,
+        "user": "decryptr",
+        "datevoted": "2022-12-19T14:39:58.540Z",
+        "votes": [
+            0,
+            1
+        ],
+        "voted": 1
+    },
+    {
+        "id": 3,
+        "user": "decryptr",
+        "datevoted": "",
+        "votes": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "voted": false
+    },
+    {
+        "id": 4,
+        "user": "decryptr",
+        "datevoted": "",
+        "votes": [
+            0,
+            0
+        ],
+        "voted": false
+    }
+]

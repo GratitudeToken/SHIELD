@@ -2,8 +2,8 @@ import { $, $$ } from '/js/selectors.js';
 import { url, user } from '/js/proton.js';
 import { postActions } from '/js/post-actions.js';
 
-export const voteBTN = () => {
-
+export const voteBTN = (votes) => {
+    // REFACTOR THIS ENTIRE FUKN THING, I broke it, also check if delete works, including image file
     $$('.vote-btn').forEach(el => {
         el.addEventListener('click', (e) => {
 
@@ -36,12 +36,6 @@ export const voteBTN = () => {
                         el.classList.add('voted');
                         postActions(true, true, true, true, true, true, true, false);
                     }
-
-                    //location.reload();
-                    // HOW DO YOU KNOW IF THE USER VOTED TO DISABLE VOTING FOR THIS POST FOR THAT USER?
-                    // change file structure, create separate file for each users and add arrays to each user
-                    // one array with the post ID for posts he created, one with posts he already voted on with 2 keys, post ID and option chosen
-                    // etc
                 }).catch(err => {
                     console.log(err)
                 });

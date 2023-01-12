@@ -91,11 +91,15 @@ export const submitPost = () => {
         let theFile;
         if (event.target.files) {
             theFile = event.target.files[0];
-            $('#error').innerHTML = '';
+            $('#error').classList.add('error');
             if (checkFileProperties(theFile)) {
                 handleUploadedFile(theFile);
             }
         }
 
+    });
+    $('#image').addEventListener('click', (event) => {
+        $('#error').innerHTML = '';
+        $('#error').classList.remove('error');
     });
 }

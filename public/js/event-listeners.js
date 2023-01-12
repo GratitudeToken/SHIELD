@@ -19,7 +19,7 @@ export const addOption = () => {
     $('#add_option').addEventListener('click', (event) => {
         event.preventDefault();
         if ($$('.voteInput').length < 9) {
-            $('.options').innerHTML += '<input class="voteInput" type="text" required />';
+            $('.options').innerHTML += '<input class="voteInput" type="text" maxlength="96" required />';
             $('#remove_option').style = 'display: inline-block !important';
             $('.voteInput:first-of-type').placeholder = '';
             $('.voteInput:nth-of-type(2)').placeholder = '';

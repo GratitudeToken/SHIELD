@@ -26,6 +26,18 @@
     justify-content: flex-start;
 }
 
+.index-post {
+    width: 100%;
+    margin: 0 0 32px 0;
+    border-bottom: 1px dashed #c3c3c3;
+    *background: linear-gradient(#ffffff, #c5e8ff);
+    padding-bottom: 32px;
+    display: flex;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
 .flex {
     width: 100%;
     display: flex;
@@ -71,6 +83,11 @@
     text-transform: uppercase;
 }
 
+.description {
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
 .description ol {
     padding: 0 0 0 23px;
 }
@@ -85,7 +102,7 @@
 }
 
 .description p {
-    font-size: 14px
+    font-size: 14px;
 }
 
 .description ol input {
@@ -180,8 +197,14 @@
 
 .content {
     width: 100%;
+    max-width: calc(100% - 230px);
     text-align: left;
-    padding-left: 15px
+    padding-left: 15px;
+}
+
+.content * {
+    overflow: hidden;
+    white-space: break-word;
 }
 
 .tags {

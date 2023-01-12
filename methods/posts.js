@@ -5,46 +5,57 @@ module.exports = class Post {
     this.id = 0;
     this.user = postData.user;
     this.title = postData.title;
-    this.image = `/uploads/${postData.filename}`;
+    this.image = `${postData.filename}`;
     this.description = postData.description;
     this.options = postData.options;
     this.date = new Date();
     this.tags = postData.tags;
     this.type = postData.type;
     this.votes = postData.votes?.map((vote) => parseInt(vote));
-    this.voted = false;
-    this.members = 10;
   }
 
 
   save() {
-    // save the new post inside the user JSON file
-    let newID = 0; // first, let's reserve the ID in the index.json file, we create a new index variable that is set to 0 to make it number type
 
-    fs.readFile('data/index.json', (err, fileContent) => {
-      let newIndex = []; // let's have an empty array to write after it's updated
+    let newID = 0;
+
+    fs.readFile('data/votes.json', (err, fileContent) => {
+
+      let newVotes = [];
       if (!err) {
-        newIndex = JSON.parse(fileContent); // parse the string content from index.json into an array and assign it to newIndex variable
+        newVotes = JSON.parse(fileContent);
       }
-      newID = newIndex.length + 1; // calculate the length of the array in order to add +1 - thus we have the new ID to use in the next method below for the user JSOn file
-      this.id = newID; // here we set the correct value to the key named ID for the user object
-      newIndex.push(this.user); // add the new user to the array, then write the new array to the index.json file
-      fs.writeFile('data/index.json', JSON.stringify(newIndex), err => {
+      newID = parseInt(newVotes.length + 1);
+
+      this.id = newID;
+
+      let newPostData = {}
+
+      newPostData.id = newID;
+      newPostData.user = this.user;
+      newPostData.datevoted = "";
+      newPostData.votes = this.votes;
+      newPostData.voted = false;
+
+      newVotes.push(newPostData);
+      fs.writeFile('data/votes.json', JSON.stringify(newVotes), err => {
         console.log(err);
       });
 
-      // now let's read the user file
-      fs.readFile(`data/users/${this.user}.json`, (err, fileContent) => {
+      // save the other important data from user, this will never change
+      fs.readFile(`data/posts.json`, (err, fileContent) => {
         let userFile = {};
         if (!err) {
           userFile = JSON.parse(fileContent);
         }
 
-        let posts = userFile.posts;
-        posts.push(this);
+        let newEntry = this;
+        delete newEntry['votes'];
 
-        userFile.posts = posts;
-        fs.writeFile(`data/users/${this.user}.json`, JSON.stringify(userFile), err => {
+
+        userFile.push(newEntry);
+
+        fs.writeFile(`data/posts.json`, JSON.stringify(userFile), err => {
           console.log(err);
         });
       });
@@ -52,32 +63,22 @@ module.exports = class Post {
   }
 
   static vote(obj) {
-    fs.readFile('data/users/' + obj.user + '.json', (err, fileContent) => {
-      let userFile = {};
+    fs.readFile('data/votes.json', (err, fileContent) => {
+      let votesFile = {};
       if (!err) {
-        userFile = JSON.parse(fileContent);
+        votesFile = JSON.parse(fileContent);
       }
 
-      let userPostIndex;
-
-      userFile.posts.map((el, index) => {
-        if (el.id == obj.id) {
-          userPostIndex = index;
+      votesFile.map((el, i) => {
+        if (el.id === obj.id && el.user === obj.user) {
+          votesFile[i].votes[obj.vote] += 1;
+          votesFile[i].voted = parseInt(obj.vote);
+          votesFile[i].datevoted = new Date();
         }
-      });
 
-      userFile.posts[userPostIndex].votes[obj.vote] += 1;
-      userFile.posts[userPostIndex].voted = parseInt(obj.vote);
-
-      let newVote = {}
-      newVote.id = obj.id;
-      newVote.option = obj.vote;
-      newVote.date = new Date();
-
-      userFile.voted.push(newVote);
-
-      fs.writeFile('data/users/' + obj.user + '.json', JSON.stringify(userFile), err => {
-        console.log(err);
+        fs.writeFile('data/votes.json', JSON.stringify(votesFile), err => {
+          console.log(err);
+        });
       });
     });
   }

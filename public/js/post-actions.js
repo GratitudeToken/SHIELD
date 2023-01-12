@@ -1,5 +1,6 @@
 import { $, $$ } from '/js/selectors.js';
 import { url, user } from '/js/proton.js';
+//import { indexHTML } from '/js/index-template.js';
 import { HTML } from '/js/post-template.js';
 import { makeChart } from '/js/chart.js';
 import { voteBTN } from '/js/vote.js';
@@ -7,25 +8,26 @@ import { deletePost } from '/js/delete-post.js';
 
 export const postActions = (clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem) => {
     if (fetchy === true) {
-        fetch(url + '/getposts/' + user)
+        fetch(url + '/getposts')
             .then(response => {
                 return response.json();
             })
             .then(data => {
                 if (looper === true) {
-                    data.posts.forEach(post => {
+                    data.posts.forEach((post, i) => {
+                        console.log({ ...post, ...data.votes[i] });
                         // populate HTML function
                         if (populatePosts === true) {
                             const html = new HTML;
-                            $('#posts').innerHTML += html.insertHTML(post);
+                            $('#posts').innerHTML += html.insertHTML({ ...post, ...data.votes[i] });
                         }
 
 
                         // remake all charts function
-                        if (charts === true) { makeChart(data.posts) }
+                        if (charts === true) { makeChart(data.votes) }
 
                         // voteBTNs addEventListeners
-                        if (voteBTNlisteners === true) { voteBTN() }
+                        if (voteBTNlisteners === true) { voteBTN(data.votes) }
 
                         // delete btns addEventListeners
                         if (deleteBTNs === true) {
