@@ -31,7 +31,7 @@ export const submitPost = () => {
             (postType === "poll" ? pollOptions : ["Yes", "No"]).forEach((option) =>
                 formData.append("options[]", option)
             );
-            formData.append("tags", "tag1, tag5");
+            formData.append("tags", $('#tags-input').value);
             formData.append("type", $('input[name="type"]:checked').value);
             (votes || []).forEach((option) =>
                 formData.append("votes[]", parseInt(option))
@@ -46,14 +46,10 @@ export const submitPost = () => {
             }).then(returnedData => {
                 if (returnedData.status === 200) {
                     // Gets and displays all posts in the posts.json file (including the new one just made)
-                    postActions(true, true, true, true, true, true, true, false);
-                    // const html = new HTML;
-                    // $('#posts').innerHTML += html.insertHTML(formData); ///////////////////////////////////////  adding is not working, delete is also not working properly
-
-                    // Hides the form to add an post
-                    $('#post-container').style.display = 'none';
-                    $('#close').style.display = 'none';
-                    $('body').style.overflow = '';
+                    // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
+                    // title, tag, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
+                    postActions(false, false, true, true, true, true, true, true, true, false);
+                    window.location.replace('/');
                 }
             });
         }
@@ -91,11 +87,15 @@ export const submitPost = () => {
         let theFile;
         if (event.target.files) {
             theFile = event.target.files[0];
-            $('#error').innerHTML = '';
+            $('#error').classList.add('error');
             if (checkFileProperties(theFile)) {
                 handleUploadedFile(theFile);
             }
         }
 
+    });
+    $('#image').addEventListener('click', (event) => {
+        $('#error').innerHTML = '';
+        $('#error').classList.remove('error');
     });
 }

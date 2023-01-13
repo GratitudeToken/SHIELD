@@ -4,7 +4,22 @@ import { addBTN, closeBTN, addOption, removeOption } from '/js/event-listeners.j
 addBTN(); closeBTN(); addOption(); removeOption();
 
 submitPost();
+
 // first page load - populate all posts
-postActions(true, true, true, true, true, true, true, false);
+// Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
+// title, tag, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
+const urlString = window.location.search;
+const urlSearch = new URLSearchParams(urlString);
+
+if (urlSearch.get('title')) {
+    postActions(urlSearch.get('title'), null, true, true, true, true, true, true, true, false);
+}
+else if (urlSearch.get('tag')) {
+    postActions(null, urlSearch.get('tag'), true, true, true, true, true, true, true, false);
+}
+else {
+    postActions(null, null, true, true, true, true, false, false, false, false);
+}
+
 
 

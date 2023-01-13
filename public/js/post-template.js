@@ -1,3 +1,4 @@
+import { $, $$ } from '/js/selectors.js';
 import { formatDate } from '/js/date-formatting.js';
 import { url, user } from '/js/proton.js';
 import { countdown } from '/js/countdown.js';
@@ -6,7 +7,7 @@ import { countdown } from '/js/countdown.js';
 export class HTML {
     insertHTML(data) {
         // title
-        let linkTitle = data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+        let linkTitle = '?user=' + data.user + '&title=' + data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         // let mainLinkTitle = url + '/?' + data.type + '=' + linkTitle;
         // let postTitleLink = url + `/post/${linkTitle}`
 
@@ -17,6 +18,7 @@ export class HTML {
         let checked;
         let deleteBtnTitle;
         let disabledColor;
+
         if (data.voted !== false) {
             disabled = 'disabled';
             deleteBtnTitle = 'title="You voted already."';
@@ -41,19 +43,21 @@ export class HTML {
         const tags = data.tags.split(" ");
         let tagsString = '';
         tags.forEach(post => {
-            tagsString += `<a class="tag ${data.type}" href="${url}/tag/${post}">#${post}</a>`;
+            tagsString += `<a class="tag ${data.type}" href="${url}?tag=${post}">#${post}</a>`;
         });
 
         // check if we have an image
         let imageSRC;
         if (data.image && data.image != '') {
-            imageSRC = data.image
+            imageSRC = '/uploads/' + data.image;
         } else { imageSRC = '/img/love-technology.jpg'; }
+
+        $('body').classList.add('postPage');
 
         return `
         <article class="post" id="post-${data.id}">
             <div class="flex">
-                <div class="flex justify-start">
+                <div class="flex justify-start maxw-1111-230">
                     <a class="main-image" href="${linkTitle}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.title}" /></a>
 
                     <div class="content">
@@ -72,6 +76,7 @@ export class HTML {
                 <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${disabled} ${deleteBtnTitle}></button><canvas class="myChart"></canvas></div>
             </div>
         </article>
+        <div class="comments">Comments Section</div>
         `;
     }
 }

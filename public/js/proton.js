@@ -3,7 +3,7 @@
 // let accountData = {};
 
 export const user = 'decryptr';
-export const url = 'http://127.0.0.1:3333';
+export const url = 'http://127.0.0.1:2030';
 
 // const appIdentifier = "Shield Login"
 // const chainId = "384da888112027f0321850a169f737c33e53b388aad48b5adace4bab97f437e0"

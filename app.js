@@ -14,7 +14,8 @@ let storage = multer.diskStorage({
   filename: function (req, file, cb) {
     let extArray = file.mimetype.split("/");
     let extension = extArray[extArray.length - 1];
-    cb(null, file.fieldname + '-' + Date.now() + '.' + extension)
+    let newFileName = file.fieldname + '-' + Date.now() + '.' + extension;
+    cb(null, newFileName)
   }
 });
 
@@ -29,53 +30,31 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // GETs all data from posts.json file 
-app.get('/getposts/:user', (req, res) => {
-  //if (req.params.parameter) {
-  // do this
-  //   if (req.params.parameter === 'tag') {
+app.get('/getposts', (req, res) => {
+  let readPosts = JSON.parse(fs.readFileSync('data/posts.json')); // ADD GUARDIAN AND VISIONARY MEMBERSHIP TYPE in json structure
+  let readVotes = JSON.parse(fs.readFileSync('data/votes.json'));
 
-  //   }
+  if (req.query.title) {
+    const posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title);
+    const votes = readVotes.filter(votes => votes.id === posts[0].id);
+    res.send({ posts, votes });
+  }
+  else if (req.query.tag) {
+    const posts = readPosts.filter(post => post.tags.includes(req.query.tag));
+    let votes = [];
+    posts.forEach((el, i) => {
+      let oneObject = readVotes.filter(votes => votes.id === el.id);
+      votes.push(oneObject[0]);
+    });
+    console.log(votes);
 
-  //   if (req.params.parameter === 'proposal') {
-
-  //   }
-
-  //   if (req.params.parameter === 'poll') {
-
-  //   }
-
-  //   if (req.params.parameter === 'issue') {
-
-  //   }
-
-  // } else {
-  //   let data = JSON.parse(fs.readFileSync('data/' + req.params.user + '.json'));
-  //   res.send(data);
-  // }
-
-  const user = req.params.user;
-  let data = JSON.parse(fs.readFileSync('data/users/' + user + '.json')); // ADD GUARDIAN AND VISIONARY MEMBERSHIP TYPE in json structure
-  res.send(data);
+    res.send({ posts, votes });
+  } else {
+    const posts = readPosts;
+    const votes = readVotes;
+    res.send({ posts, votes });
+  }
 });
-
-// app.get('/:postName', (req, res) => {
-//   const postName = req.params.postName
-//   const data = JSON.parse(fs.readFileSync('data/' + req.params.user + '.json'));
-//   let correctPost = data.posts.filter(post => {
-//     let fixedPostName = post.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
-//     return fixedPostName === postName
-//   })
-//   console.log(correctPost[0].title)
-
-// })
-
-// app.get('/tag/:tagName', (req, res) => {
-//   const tagName = req.params.tagName
-//   const data = JSON.parse(fs.readFileSync('data/' + req.params.user + '.json'));
-//   let correctTag = data.filter(post => post.tags.includes(tagName))
-//   console.log(correctTag)
-
-// })
 
 // POST to the posts.json file
 // IF THERE IS NO AUTHENTICATED USER THE ADD BUTTON WILL NOT BE SHOWN !!!!!!!!!!!!!!!!
@@ -84,13 +63,13 @@ app.post('/post', upload.single("image"), (req, res) => {
 
   // Joi Schema = how the incoming input data is validated
   const schema = {
-    user: Joi.string().min(6).max(12).required(),
-    title: Joi.string().min(5).required(),
-    description: Joi.string().min(2).max(500).required(),
-    options: Joi.array().required(),
-    tags: Joi.string().required(),
-    type: Joi.string().required(),
-    votes: Joi.array().required()
+    user: Joi.string().max(23).required(),
+    title: Joi.string().max(124).required(),
+    description: Joi.string().max(1025).required(), // apparently you need to add 1 extra character because it does not match front-end otherwise
+    options: Joi.array().max(1025).required(),
+    tags: Joi.string().max(124).required(),
+    type: Joi.string().max(13).required(),
+    votes: Joi.array().max(1025).required()
   }
 
   const { error } = Joi.validate(req.body, schema)
@@ -99,20 +78,19 @@ app.post('/post', upload.single("image"), (req, res) => {
     res.status(401).send(error.details[0].message)
     return
   } else {
+    const post = new Post({ ...req.body, ...req.file });
+    post.save();
     res.send({ "status": 200 })
   }
-
-  const post = new Post({ ...req.body, ...req.file });
-  post.save();
 });
 
 
 app.post('/vote', (req, res) => {
   // Joi Schema = how the incoming input data is validated
   const schema = {
-    id: Joi.number().integer().max(2300000).precision(0).required(),
-    user: Joi.string().min(6).max(12).required(),
-    vote: Joi.number().integer().max(9).precision(0).required()
+    id: Joi.number().integer().max(23000).precision(0).required(),
+    user: Joi.string().max(13).required(),
+    vote: Joi.number().integer().max(10).precision(0).required()
   }
 
   const { error } = Joi.validate(req.body, schema)
@@ -121,20 +99,31 @@ app.post('/vote', (req, res) => {
     res.status(401).send(error.details[0].message)
     return
   } else {
+    Post.vote(req.body);
     res.send({ "status": 200 })
   }
-
-  Post.vote(req.body);
 });
 
 // HERE WE HAVE TO CHECK IF THE USER THAT MADE THE POST IS AUTHENTICATED !!!!!!!!!!!!!!!!
 ///////////////////////////////////////////////////
 app.put('/delete', (req, res) => {
-  const data = JSON.parse(fs.readFileSync(`data/users/${req.body.user}.json`));
-  const filteredPosts = data.posts.filter(post => post.id != req.body.id);
-  data.posts = filteredPosts;
-  fs.writeFileSync(`data/users/${req.body.user}.json`, JSON.stringify(data))
-  res.send({ "status": 200 })
+  try {
+    const posts = JSON.parse(fs.readFileSync(`data/posts.json`));
+    const votes = JSON.parse(fs.readFileSync(`data/votes.json`));
+    const imageToDelete = posts.filter(post => post.id === parseInt(req.body.id));
+    const filteredPosts = posts.filter(post => post.id !== parseInt(req.body.id));
+    const filteredVotes = votes.filter(vote => vote.id !== parseInt(req.body.id));
+
+    fs.unlinkSync('public/uploads/' + imageToDelete[0].image);
+
+
+    fs.writeFileSync(`data/posts.json`, JSON.stringify(filteredPosts));
+    fs.writeFileSync(`data/votes.json`, JSON.stringify(filteredVotes));
+
+    res.send({ "status": 200 });
+  } catch (err) {
+    console.error(err)
+  }
 })
 
-app.listen(3333);
+app.listen(2030);

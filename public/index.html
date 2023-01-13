@@ -59,7 +59,7 @@
     </svg>
     <BiiP></BiiP>
     <header id="main_header">
-        <a class="logo" href="/shield">SHIELD</a>
+        <a class="logo" href="/">SHIELD</a>
         <button id="login">BiiP</button>
         <nav id="nav"><button id="add">+</button></nav>
         <div id="login-button">Login</div>
@@ -83,16 +83,16 @@
     <!-- << Shared HTML: End >> -->
 
     <div id="main">
-        <main>
+        <nav>
             <div id="posts" class="grid">
             </div>
-        </main>
+        </nav>
 
         <div id="post-container">
             <img id="close" src="/svgs/close.svg" />
             <form id="post-form" class="post-form edit-post">
                 <label for="title">Title</label>
-                <input type="text" name="title" id="title" required>
+                <input type="text" name="title" id="title" maxlength="123" required>
                 <div class="featured-image">
                     <label id="image-label" for="image">Image</label>
                     <input name="image" id="image" type="file" required />
@@ -112,14 +112,14 @@
 
                 <div id="description-container">
                     <label for="description">Description</label>
-                    <textarea id="description" type="text" required></textarea>
+                    <textarea id="description" type="text" maxlength="1000" required></textarea>
                 </div>
 
                 <div id="options">
                     <div class="options" style="display: none">
                         <span class="label">Options: </span>
-                        <input class="voteInput" type="text" placeholder="Yes" />
-                        <input class="voteInput" type="text" placeholder="No" />
+                        <input class="voteInput" type="text" maxlength="96" placeholder="Yes" />
+                        <input class="voteInput" type="text" maxlength="96" placeholder="No" />
                     </div>
                     <div id="add-remove-inputs">
                         <button id="add_option" class="form-btn"> + </button>
@@ -129,7 +129,7 @@
 
                 <div id="tags-container">
                     <label for="tags-input">Tags</label>
-                    <input id="tags-input" type="text" placeholder="tag1 tag2 tag3" required />
+                    <input id="tags-input" type="text" placeholder="tag1 tag2 tag3" maxlength="123" required />
                 </div>
                 <div id="error"></div>
                 <button class="btn" type="submit">Submit</button>
