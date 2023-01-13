@@ -6,7 +6,7 @@ export let makeChart = (votes) => {
 
     ctx.forEach((element, index) => {
         let voteLabels = [];
-        votes[index].votes.length > 2 ? voteLabels = [...Array(votes[index].votes.length + 1).keys()].slice(1) : voteLabels = ['Yes', 'No'];
+        votes.length > 2 ? voteLabels = [...Array(votes.length + 1).keys()].slice(1) : voteLabels = ['Yes', 'No'];
 
         // Change the legend text to array numbers !!!!!!!!!!!!!!!!!!!
         new Chart(element, {
@@ -14,7 +14,7 @@ export let makeChart = (votes) => {
             data: {
                 labels: voteLabels,
                 datasets: [{
-                    data: votes[index].votes,
+                    data: votes,
                     borderWidth: 0,
                     backgroundColor: colors
                 }]

@@ -31,30 +31,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // GETs all data from posts.json file 
 app.get('/getposts', (req, res) => {
-  let posts = JSON.parse(fs.readFileSync('data/posts.json')); // ADD GUARDIAN AND VISIONARY MEMBERSHIP TYPE in json structure
-  let votes = JSON.parse(fs.readFileSync('data/votes.json'));
-  res.send({ posts, votes });
+  let readPosts = JSON.parse(fs.readFileSync('data/posts.json')); // ADD GUARDIAN AND VISIONARY MEMBERSHIP TYPE in json structure
+  let readVotes = JSON.parse(fs.readFileSync('data/votes.json'));
+
+  if (req.query.title) {
+    const posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title);
+    const votes = readVotes.filter(votes => votes.id === posts[0].id);
+    res.send({ posts, votes });
+  }
+  else if (req.query.tag) {
+    const posts = readPosts.filter(post => post.tags.includes(req.query.tag));
+    let votes = [];
+    posts.forEach((el, i) => {
+      let oneObject = readVotes.filter(votes => votes.id === el.id);
+      votes.push(oneObject[0]);
+    });
+    console.log(votes);
+
+    res.send({ posts, votes });
+  } else {
+    const posts = readPosts;
+    const votes = readVotes;
+    res.send({ posts, votes });
+  }
 });
-
-// app.get('/:postName', (req, res) => {
-//   const postName = req.params.postName;
-//   const user = req.params.user;
-
-//   const data = JSON.parse(fs.readFileSync('data/users/' + user + '.json'));
-//   let correctPost = data.posts.filter(post => {
-//     let fixedPostName = post.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
-//     return fixedPostName === postName
-//   });
-//   res.send(correctPost);
-// })
-
-// app.get('/tag/:tagName', (req, res) => {
-//   const tagName = req.params.tagName
-//   const data = JSON.parse(fs.readFileSync('data/' + req.params.user + '.json'));
-//   let correctTag = data.filter(post => post.tags.includes(tagName))
-//   console.log(correctTag)
-
-// })
 
 // POST to the posts.json file
 // IF THERE IS NO AUTHENTICATED USER THE ADD BUTTON WILL NOT BE SHOWN !!!!!!!!!!!!!!!!
