@@ -12,6 +12,16 @@
     border-radius: 0
 }
 
+.postPage .title,
+.postPage .title:visited {
+    margin-top: 10px;
+    font-size: 23px
+}
+
+.postPage .post h2 {
+    font-size: 18px
+}
+
 .postPage .main-image {
     width: 230px;
     height: 230px;

@@ -14,28 +14,33 @@ export class HTML {
         let pollHTML = '';
         const options = data.options;
 
-        let disabled;
+        let votingDisabled;
         let checked;
         let deleteBtnTitle;
         let disabledColor;
 
-        if (data.voted !== false) {
-            disabled = 'disabled';
+        console.log(data)
+
+        const counter = new countdown;
+        const expired = counter.count(data.id, data.expires, false);
+
+        let voted;
+        data.voted === false ? voted = false : voted = data.voted.includes(user);
+
+        if (expired === 'Expired' || voted === true) {
+            checked = 'disabled';
+            disabledColor = 'style="color: gray"';
+            votingDisabled = 'disabled';
             deleteBtnTitle = 'title="You voted already."';
-        } else { deleteBtnTitle = 'title="Hit the SHIELD to cast your vote."'; }
+        } else {
+            checked = ''; disabledColor = '';
+            deleteBtnTitle = 'title="Hit the SHIELD to cast your vote."';
+        }
 
         options && options.forEach((post, i) => {
-            if (data.voted !== false) {
-                if (data.voted === i) {
-                    checked = 'checked';
-                } else {
-                    checked = 'disabled';
-                    disabledColor = 'style="color: gray"';
-                }
-            } else { checked = ''; }
-
             pollHTML += `<li><input id="post-${data.id}-option-${i}" type="radio" name="post-${data.id}-options" value="${i}" ${checked}/> <label for="post-${data.id}-option-${i}" ${disabledColor}>${post}</label></li>`;
         });
+
         pollHTML = '<ol>' + pollHTML + '</ol>';
 
 
@@ -58,22 +63,22 @@ export class HTML {
         <article class="post" id="post-${data.id}">
             <div class="flex">
                 <div class="flex justify-start maxw-1111-230">
-                    <a class="main-image" href="${linkTitle}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.title}" /></a>
+                    <a class="main-image" href="${imageSRC}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.title}" /></a>
 
                     <div class="content">
                         <div class="user_info">
-                            <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <strong>@decryptr</strong> | <span class="date" id="date">` + formatDate(data.date) + `</span>
-                            <span id="countdown"> | <img class="clock" src="/svgs/clock.svg" alt="clock" />`+ countdown(data.date) + ` d:h</span>
+                            <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <strong>@decryptr</strong> | <span class="date" id="date">` + formatDate(data.date) + ` | <img class="hourglass" src="/svgs/hourglass.svg" alt="clock" /></span>
+                            <span class="countdown"></span>
                             <span class="actions">
                                 <button id="delete-${data.id}" class="delete"></button>
                             </span>
                         </div>
-                        <a class="title ${data.type}" href="${linkTitle}"><h2>${data.title}</h2></a>
+                        <h1 class="title ${data.type}">${data.title}</h1>
                         <div class="description"><p>${data.description}</p> ${pollHTML}</div>
                         <div class="tags ${data.type}"><b>Tags:</b> ${tagsString}</div>
                     </div>
                 </div>
-                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${disabled} ${deleteBtnTitle}></button><canvas class="myChart"></canvas></div>
+                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${votingDisabled} ${deleteBtnTitle}></button><canvas class="myChart"></canvas></div>
             </div>
         </article>
         <div class="comments">Comments Section</div>

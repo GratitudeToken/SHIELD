@@ -188,7 +188,7 @@ footer {
 }
 
 .error {
-  animation: shake forwards 0.32s
+  animation: shake forwards 0.5s
 }
 
 .maxw-1111 {
@@ -301,6 +301,10 @@ footer {
   border-radius: 6px;
 }
 
+.post h2 {
+  font-size: 14px
+}
+
 .index-post {
   width: 100%;
   margin: 0 0 32px 0;
@@ -324,6 +328,16 @@ footer {
   justify-content: flex-start
 }
 
+.flex-space-vertical {
+  display: flex;
+  flex-wrap: wrap;
+  height: 64px;
+  flex-direction: column;
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
 .main-image {
   display: block;
   text-decoration: none;
@@ -342,7 +356,6 @@ footer {
   display: block;
   color: #0274f9;
   text-decoration: none;
-  margin-top: 10px;
 }
 
 .post-type {
@@ -510,12 +523,12 @@ footer {
   margin: -4px 0 0 9px
 }
 
-.clock {
-  width: 20px;
-  height: 20px;
+.hourglass {
+  width: 18px;
+  height: 18px;
   display: inline-block;
   vertical-align: sub;
-  margin: 0 9px 0 6px;
+  margin: 0 0 0 3px;
 }
 
 .actions button {

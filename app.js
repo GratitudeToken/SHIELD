@@ -3,7 +3,6 @@ const express = require('express');
 const multer = require("multer"); // we use this for storing images and other files sent from the user
 const Joi = require('joi'); // this is for data validation sent from front-end
 const fs = require('fs'); // this is for saving or reading files to the server
-
 const Post = require('./methods/posts');
 
 // configuration for multer
@@ -46,7 +45,6 @@ app.get('/getposts', (req, res) => {
       let oneObject = readVotes.filter(votes => votes.id === el.id);
       votes.push(oneObject[0]);
     });
-    console.log(votes);
 
     res.send({ posts, votes });
   } else {

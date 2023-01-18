@@ -3,9 +3,9 @@ import { postActions } from '/js/post-actions.js';
 import { addBTN, closeBTN, addOption, removeOption } from '/js/event-listeners.js';
 addBTN(); closeBTN(); addOption(); removeOption();
 
-submitPost();
+submitPost(); // listener for submit event
 
-// first page load - populate all posts
+// page load - populate all posts
 // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
 // title, tag, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
 const urlString = window.location.search;

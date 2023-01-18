@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "start-server": "node app.js"
+    "start-server": "node app.js",
+    "svgo": "npx svgo --multipass public/svgs/clock.svg"
   },
   "author": "Cade Robinson, Lucian Apetrei",
   "license": "GPL 3.0",
