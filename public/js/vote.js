@@ -36,7 +36,7 @@ export const voteBTN = (title, tag) => {
                         el.classList.add('voted');
                         // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
                         // title, tag, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
-                        postActions(title, tag, true, true, false, true, true, true, true, false);
+                        postActions(title, tag, true, true, true, true, true, true, true, false);
                     }
                 }).catch(err => {
                     console.log(err)

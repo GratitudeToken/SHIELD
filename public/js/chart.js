@@ -1,20 +1,18 @@
 import { $, $$ } from '/js/selectors.js';
 import { colors } from '/js/colors.js';
 
-export let makeChart = (votes) => {
+export let makeChart = (posts, votes) => {
     const ctx = $$('.myChart');
 
     ctx.forEach((element, index) => {
-        let voteLabels = [];
-        votes.length > 2 ? voteLabels = [...Array(votes.length + 1).keys()].slice(1) : voteLabels = ['Yes', 'No'];
+        let voteLabels = posts[index].options;
 
-        // Change the legend text to array numbers !!!!!!!!!!!!!!!!!!!
         new Chart(element, {
             type: 'doughnut',
             data: {
                 labels: voteLabels,
                 datasets: [{
-                    data: votes,
+                    data: votes[index].votes,
                     borderWidth: 0,
                     backgroundColor: colors
                 }]

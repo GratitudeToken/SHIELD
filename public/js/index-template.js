@@ -7,9 +7,17 @@ export class indexHTML {
     insertHTML(data) {
         // title
         let linkTitle = '?title=' + data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-
+        let voted;
         let votedClass = '';
-        data.voted === false ? votedClass = '' : votedClass = 'postVoted';
+        const counter = new countdown;
+        const expired = counter.count(data.id, data.expires, false);
+        data.voted === false ? voted = false : voted = data.voted.includes(user);
+
+        if (expired === 'Expired' || voted === true) {
+            votedClass = 'postVoted'
+        } else {
+            votedClass = ''
+        }
 
         // check if we have an image
         let imageSRC;
@@ -23,11 +31,13 @@ export class indexHTML {
                 <div class="main-image"><img class="image" src="${imageSRC}" alt="${data.title}" /></div>
 
                 <div class="content">
-                    <div class="user_info">
-                        <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <strong>@decryptr</strong> | <span class="date" id="date">` + formatDate(data.date) + `</span>
-                        <span id="countdown"> | <img class="clock" src="/svgs/clock.svg" alt="clock" />`+ countdown(data.date) + ` d:h</span>
+                    <div class="flex-space-vertical">
+                        <div class="user_info">
+                            <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <strong>@decryptr</strong> | <span class="date" id="date">` + formatDate(data.date) + ` | <img class="hourglass" src="/svgs/hourglass.svg" alt="clock" /></span>
+                            <span class="countdown"></span>
+                        </div>
+                        <div class="title ${data.type}"><h2>${data.title}</h2></div>
                     </div>
-                    <span class="title ${data.type}" href="${linkTitle}"><h2>${data.title}</h2></span>
                 </div>
             </a>
         </article>

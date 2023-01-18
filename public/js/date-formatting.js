@@ -1,5 +1,7 @@
-export const formatDate = (dateString) => {
-    let options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", timeZone: 'Europe/Bucharest' }
-    let date = new Date(dateString);
-    return date.toLocaleDateString('ro-RO', options);
+export const formatDate = (date) => {
+    var currentDate = new Date(date);
+    var day = currentDate.getDate();
+    var month = currentDate.getMonth() + 1;
+    var year = currentDate.getFullYear();
+    return (day < 10 ? "0" + day : day) + "." + (month < 10 ? "0" + month : month) + "." + year;
 }

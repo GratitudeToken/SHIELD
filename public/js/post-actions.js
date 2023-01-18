@@ -5,6 +5,7 @@ import { HTML } from '/js/post-template.js';
 import { makeChart } from '/js/chart.js';
 import { voteBTN } from '/js/vote.js';
 import { deletePost } from '/js/delete-post.js';
+import { countdown } from '/js/countdown.js';
 
 export const postActions = (title, tag, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem) => {
     let newURL = '';
@@ -22,6 +23,7 @@ export const postActions = (title, tag, clearItems, fetchy, looper, populatePost
                 // let's reverse order of data on the client, to save computing power on server and to have most recent posts to be first
                 const latestPosts = data.posts.reverse();
                 const latestVotes = data.votes.reverse();
+
                 const postFunctions = (item, index) => {
                     // populate HTML function
                     if (populatePosts === true) {
@@ -30,13 +32,12 @@ export const postActions = (title, tag, clearItems, fetchy, looper, populatePost
                         if (title === null && tag === null) {
                             html = new indexHTML
                         } else { html = new HTML }
-                        console.log(data);
                         $('#posts').innerHTML += html.insertHTML({ ...item, ...latestVotes[index] });
                     }
 
 
                     // remake all charts functiony
-                    if (charts === true) { makeChart(latestVotes) }
+                    if (charts === true) { makeChart(latestPosts, latestVotes) }
 
                     // voteBTNs addEventListeners
                     if (voteBTNlisteners === true) { voteBTN(title, tag) }
@@ -52,6 +53,9 @@ export const postActions = (title, tag, clearItems, fetchy, looper, populatePost
                             });
                         });
                     }
+
+                    const counter = new countdown;
+                    counter.count(item.id, latestVotes[index].expires, true);
                 }
 
                 if (looper === true) {

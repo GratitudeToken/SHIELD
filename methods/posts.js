@@ -1,5 +1,15 @@
 const fs = require('fs');
 
+function addHoursToUTC(date, H) {
+  const passedDate = new Date(date);
+  passedDate.setUTCHours(passedDate.getUTCHours() + H);
+  return passedDate
+}
+
+//console.log(addHoursToUTC(new Date(), 3)); //adds 3 hours to the current UTC date and returns the new date
+
+//This function takes 2 arguments, date and H. date is the passed date string and H is the number of hours to add to the current UTC date.
+
 module.exports = class Post {
   constructor(postData) {
     this.id = 0;
@@ -18,7 +28,7 @@ module.exports = class Post {
   save() {
 
     let newID = 0;
-
+    // read votes file first
     fs.readFile('data/votes.json', (err, fileContent) => {
 
       let newVotes = [];
@@ -33,16 +43,18 @@ module.exports = class Post {
 
       newPostData.id = newID;
       newPostData.user = this.user;
-      newPostData.datevoted = "";
+      newPostData.expires = addHoursToUTC(this.date, 720);
       newPostData.votes = this.votes;
       newPostData.voted = false;
 
       newVotes.push(newPostData);
+
+      // save votes file first
       fs.writeFile('data/votes.json', JSON.stringify(newVotes), err => {
         console.log(err);
       });
 
-      // save the other important data from user, this will never change
+      // save the rest of the important data from user, this will never change
       fs.readFile(`data/posts.json`, (err, fileContent) => {
         let userFile = {};
         if (!err) {
@@ -72,8 +84,9 @@ module.exports = class Post {
       votesFile.map((el, i) => {
         if (el.id === obj.id && el.user === obj.user) {
           votesFile[i].votes[obj.vote] += 1;
-          votesFile[i].voted = parseInt(obj.vote);
-          votesFile[i].datevoted = new Date();
+          let votingUsers = [];
+          votingUsers.push(obj.user)
+          votesFile[i].voted = votingUsers;
         }
 
         fs.writeFile('data/votes.json', JSON.stringify(votesFile), err => {
