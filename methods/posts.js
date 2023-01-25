@@ -15,7 +15,7 @@ module.exports = class Post {
     this.id = 0;
     this.user = postData.user;
     this.title = postData.title;
-    this.image = `${postData.filename}`;
+    this.image = `${postData.filename || ''}`;
     this.description = postData.description;
     this.options = postData.options;
     this.date = new Date();
@@ -88,10 +88,9 @@ module.exports = class Post {
           votingUsers.push(obj.user)
           votesFile[i].voted = votingUsers;
         }
-
-        fs.writeFile('data/votes.json', JSON.stringify(votesFile), err => {
-          console.log(err);
-        });
+      });
+      fs.writeFile('data/votes.json', JSON.stringify(votesFile), err => {
+        console.log(err);
       });
     });
   }

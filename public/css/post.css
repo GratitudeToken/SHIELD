@@ -35,3 +35,11 @@
 .comments {
     margin-bottom: 32px
 }
+
+.indexPost .post-type {
+    vertical-align: initial;
+}
+
+.indexPost user {
+    margin-left: 0
+}
