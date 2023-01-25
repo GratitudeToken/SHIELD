@@ -83,19 +83,21 @@
     <!-- << Shared HTML: End >> -->
 
     <div id="main">
-        <nav>
-            <div id="posts" class="grid">
-            </div>
-        </nav>
+        <form id="search">
+            <input type="text" min="3" max="99" placeholder="Search in all posts" />
+            <input type="submit" value="OK" />
+        </form>
 
-        <div id="post-container">
+        <div id="posts" class="grid"></div>
+
+        <div id="post-form-container">
             <img id="close" src="/svgs/close.svg" />
             <form id="post-form" class="post-form edit-post">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title" maxlength="123" required>
                 <div class="featured-image">
                     <label id="image-label" for="image">Image</label>
-                    <input name="image" id="image" type="file" required />
+                    <input name="image" id="image" type="file" />
                 </div>
 
                 <div id="types" class="radios">

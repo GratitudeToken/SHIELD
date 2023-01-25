@@ -6,10 +6,10 @@ import { countdown } from '/js/countdown.js';
 // HTML post display template that is used when getPosts is called
 export class HTML {
     insertHTML(data) {
-        // title
-        let linkTitle = '?user=' + data.user + '&title=' + data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        // let mainLinkTitle = url + '/?' + data.type + '=' + linkTitle;
-        // let postTitleLink = url + `/post/${linkTitle}`
+        // define some actions, like delete
+        let actions = '';
+        user === data.user ? actions = `<button id="delete-${data.id}" class="delete"></button>` : null;
+
 
         let pollHTML = '';
         const options = data.options;
@@ -19,15 +19,13 @@ export class HTML {
         let deleteBtnTitle;
         let disabledColor;
 
-        console.log(data)
-
         const counter = new countdown;
-        const expired = counter.count(data.id, data.expires, false);
+        const closed = counter.count(data.id, data.expires, false);
 
         let voted;
         data.voted === false ? voted = false : voted = data.voted.includes(user);
 
-        if (expired === 'Expired' || voted === true) {
+        if (closed === 'Closed' || voted === true) {
             checked = 'disabled';
             disabledColor = 'style="color: gray"';
             votingDisabled = 'disabled';
@@ -63,19 +61,17 @@ export class HTML {
         <article class="post" id="post-${data.id}">
             <div class="flex">
                 <div class="flex justify-start maxw-1111-230">
-                    <a class="main-image" href="${imageSRC}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.title}" /></a>
+                    <a class="main-image" href="${imageSRC}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.tags}" /></a>
 
                     <div class="content">
                         <div class="user_info">
-                            <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <strong>@decryptr</strong> | <span class="date" id="date">` + formatDate(data.date) + ` | <img class="hourglass" src="/svgs/hourglass.svg" alt="clock" /></span>
-                            <span class="countdown"></span>
-                            <span class="actions">
-                                <button id="delete-${data.id}" class="delete"></button>
-                            </span>
+                            <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <user>decryptr</user> - <span class="date" id="date">` + formatDate(data.date) + `&nbsp;&nbsp;- <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left" /></span>
+                            <span class="countdown" title="Time left"></span>
+                            <span class="actions">${actions}</span>
                         </div>
                         <h1 class="title ${data.type}">${data.title}</h1>
+                        <div class="tags ${data.type}">${tagsString}</div>
                         <div class="description"><p>${data.description}</p> ${pollHTML}</div>
-                        <div class="tags ${data.type}"><b>Tags:</b> ${tagsString}</div>
                     </div>
                 </div>
                 <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${votingDisabled} ${deleteBtnTitle}></button><canvas class="myChart"></canvas></div>

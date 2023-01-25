@@ -10,10 +10,10 @@ export class indexHTML {
         let voted;
         let votedClass = '';
         const counter = new countdown;
-        const expired = counter.count(data.id, data.expires, false);
+        const closed = counter.count(data.id, data.expires, false);
         data.voted === false ? voted = false : voted = data.voted.includes(user);
 
-        if (expired === 'Expired' || voted === true) {
+        if (closed === 'Closed' || voted === true) {
             votedClass = 'postVoted'
         } else {
             votedClass = ''
@@ -28,12 +28,13 @@ export class indexHTML {
         return `
         <article class="post ${votedClass}" id="post-${data.id}">
             <a href="${linkTitle}" class="flex indexPost">
-                <div class="main-image"><img class="image" src="${imageSRC}" alt="${data.title}" /></div>
+                <div class="main-image"><img class="image" src="/img/cade.jpg" alt="${data.user} avatar" /></div>
 
                 <div class="content">
                     <div class="flex-space-vertical">
                         <div class="user_info">
-                            <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <strong>@decryptr</strong> | <span class="date" id="date">` + formatDate(data.date) + ` | <img class="hourglass" src="/svgs/hourglass.svg" alt="clock" /></span>
+                            <span class="${data.type} post-type">${data.type}</span> <user>decryptr</user> - <span class="date" id="date">` + formatDate(data.date) + `&nbsp;&nbsp;- <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left" /></span>
+                            <span class="countdown" title="Time left"></span>
                             <span class="countdown"></span>
                         </div>
                         <div class="title ${data.type}"><h2>${data.title}</h2></div>

@@ -38,6 +38,7 @@ app.get('/getposts', (req, res) => {
     const votes = readVotes.filter(votes => votes.id === posts[0].id);
     res.send({ posts, votes });
   }
+
   else if (req.query.tag) {
     const posts = readPosts.filter(post => post.tags.includes(req.query.tag));
     let votes = [];
@@ -47,11 +48,56 @@ app.get('/getposts', (req, res) => {
     });
 
     res.send({ posts, votes });
-  } else {
+  }
+
+  else if (req.query.search) {
+    const s = req.query.search;
+
+    // const searchString = (string, searchTerm) => {
+    //   let regex = new RegExp(searchTerm, 'gi');
+    //   return string.match(regex) !== null;
+    // }
+    let votes = [];
+    let posts = [];
+
+    const searchStringInJSON = (str, json) => {
+      json.forEach(object => {
+
+        for (var key in object) {
+          if (key === 'title' && object[key].includes(str)) {
+            posts.push(object);
+            votes.push(readVotes.filter(votes => votes.id === object.id)[0]);
+            break;
+          }
+          if (key === 'tags' && object[key].includes(str)) {
+            posts.push(object);
+            votes.push(readVotes.filter(votes => votes.id === object.id)[0]);
+            break;
+          }
+          if (key === 'options') {
+            const stringifiedOptions = JSON.stringify(object.options);
+            if (stringifiedOptions.includes(str)) {
+              posts.push(object);
+              votes.push(readVotes.filter(votes => votes.id === object.id)[0]);
+              break;
+            }
+          }
+        }
+
+      });
+      return posts;
+    }
+
+    posts = searchStringInJSON(s, readPosts);
+    res.send({ posts, votes });
+  }
+
+  else {
     const posts = readPosts;
     const votes = readVotes;
     res.send({ posts, votes });
   }
+
 });
 
 // POST to the posts.json file
@@ -112,7 +158,7 @@ app.put('/delete', (req, res) => {
     const filteredPosts = posts.filter(post => post.id !== parseInt(req.body.id));
     const filteredVotes = votes.filter(vote => vote.id !== parseInt(req.body.id));
 
-    fs.unlinkSync('public/uploads/' + imageToDelete[0].image);
+    imageToDelete[0].image !== '' ? fs.unlinkSync('public/uploads/' + imageToDelete[0].image) : null;
 
 
     fs.writeFileSync(`data/posts.json`, JSON.stringify(filteredPosts));
@@ -124,4 +170,4 @@ app.put('/delete', (req, res) => {
   }
 })
 
-app.listen(2030);
+app.listen(9632);
