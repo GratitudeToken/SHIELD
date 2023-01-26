@@ -7,11 +7,10 @@
     <meta name="viewport"
         content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1 user-scalable=0, minimal-ui">
     <!-- Favicon -->
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="icon" href="/svgs/gratitude-token-logo.svg" type="image/svg+xml">
-    <link rel="manifest" href="/favicon/site.webmanifest"> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
     <!-- Custom WebSafe Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,20 +52,18 @@
 </head>
 
 <body class="showUI">
+    <style id="root_variables"></style>
     <svg class="hamburger">
         <path
             d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" />
     </svg>
-    <BiiP></BiiP>
     <header id="main_header">
         <a class="logo" href="/">SHIELD</a>
-        <button id="login">BiiP</button>
-        <nav id="nav"><button id="add">+</button></nav>
-        <div id="login-button">Login</div>
+        <nav id="nav"><button id="add"></button></nav>
         <div id="avatar">
-            <img id="avatar-image" src="/img/cade.jpg" onload="" style="width: 23px; height: 23px" />
-            <span id="avatar-name"></span>
-            <button id="logout-button">Logout</button>
+            <b id="avatar-name"></b>
+            <button id="login-button"><img /></button>
+            <button id="logout-button"><img src="/svgs/logout.svg" /></button>
         </div>
     </header>
     <!-- << Shared HTML: Start >> -->
@@ -84,7 +81,7 @@
 
     <div id="main">
         <form id="search">
-            <input type="text" min="3" max="99" placeholder="Search in all posts" />
+            <input type="text" minlength="3" maxlength="99" placeholder="Search in all posts" />
             <input type="submit" value="OK" />
         </form>
 
@@ -120,8 +117,8 @@
                 <div id="options">
                     <div class="options" style="display: none">
                         <span class="label">Options: </span>
-                        <input class="voteInput" type="text" maxlength="96" placeholder="Yes" />
-                        <input class="voteInput" type="text" maxlength="96" placeholder="No" />
+                        <input class="voteInput" type="text" maxlength="96" placeholder="Valid" />
+                        <input class="voteInput" type="text" maxlength="96" placeholder="Invalid" />
                     </div>
                     <div id="add-remove-inputs">
                         <button id="add_option" class="form-btn"> + </button>
@@ -173,10 +170,11 @@
     <audio controls id="vote-sound" preload="none">
         <source src="/sounds/vote.mp3" type="audio/mpeg">
     </audio>
+    <script type="module" src="/js/proton.js"></script>
+    <script src="https://unpkg.com/@proton/web-sdk@4.2.8"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="/js/main.js"></script>
-    <script type="module" src="/js/proton.js"></script>
-    <script src="https://unpkg.com/@proton/web-sdk@4.2.7"></script>
+
 
     <!-- << Shared HTML: Start >> -->
 

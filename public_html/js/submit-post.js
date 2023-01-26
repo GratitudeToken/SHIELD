@@ -28,7 +28,7 @@ export const submitPost = () => {
         formData.append("title", $("#title").value);
         imageSelected && imageValid ? formData.append("image", $("#image").files[0]) : null;
         formData.append("description", $("#description").value);
-        (postType === "poll" ? pollOptions : ["Yes", "No"]).forEach((option) =>
+        (postType === "poll" ? pollOptions : ["Valid", "Invalid"]).forEach((option) =>
             formData.append("options[]", option)
         );
         formData.append("tags", $('#tags-input').value);

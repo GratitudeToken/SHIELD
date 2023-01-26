@@ -28,12 +28,12 @@ export class indexHTML {
         return `
         <article class="post ${votedClass}" id="post-${data.id}">
             <a href="${linkTitle}" class="flex indexPost">
-                <div class="main-image"><img class="image" src="/img/cade.jpg" alt="${data.user} avatar" /></div>
+                <div class="main-image"><img class="image" src="/avatars/${data.user}.webp" alt="${data.user} avatar" /></div>
 
                 <div class="content">
                     <div class="flex-space-vertical">
                         <div class="user_info">
-                            <span class="${data.type} post-type">${data.type}</span> <user>decryptr</user> - <span class="date" id="date">` + formatDate(data.date) + `&nbsp;&nbsp;- <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left" /></span>
+                            <span class="${data.type} post-type">${data.type}</span> <user>${data.user}</user> - <span class="date" id="date">` + formatDate(data.date) + `&nbsp;&nbsp;- <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left" /></span>
                             <span class="countdown" title="Time left"></span>
                             <span class="countdown"></span>
                         </div>
