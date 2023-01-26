@@ -4,11 +4,13 @@ const multer = require("multer"); // we use this for storing images and other fi
 const Joi = require('joi'); // this is for data validation sent from front-end
 const fs = require('fs'); // this is for saving or reading files to the server
 const Post = require('./methods/posts');
+const sharp = require('sharp');
+const { ApiClass } = require('@proton/api');
 
 // configuration for multer
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads')
+    cb(null, 'public_html/uploads')
   },
   filename: function (req, file, cb) {
     let extArray = file.mimetype.split("/");
@@ -26,7 +28,7 @@ const app = express();
 // express.json to decifer json data from incoming requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public_html')));
 
 // GETs all data from posts.json file 
 app.get('/getposts', (req, res) => {
@@ -75,7 +77,7 @@ app.get('/getposts', (req, res) => {
             break;
           }
           if (key === 'options') {
-            const stringifiedOptions = JSON.stringify(object.options);
+            const stringifiedOptions = JSON.stringify(object.options).toLowerCase().replace(/ /g, '').replace(/[^\w-]+/g, ',');
             if (stringifiedOptions.includes(str)) {
               posts.push(object);
               votes.push(readVotes.filter(votes => votes.id === object.id)[0]);
@@ -158,7 +160,7 @@ app.put('/delete', (req, res) => {
     const filteredPosts = posts.filter(post => post.id !== parseInt(req.body.id));
     const filteredVotes = votes.filter(vote => vote.id !== parseInt(req.body.id));
 
-    imageToDelete[0].image !== '' ? fs.unlinkSync('public/uploads/' + imageToDelete[0].image) : null;
+    imageToDelete[0].image !== '' ? fs.unlinkSync('public_html/uploads/' + imageToDelete[0].image) : null;
 
 
     fs.writeFileSync(`data/posts.json`, JSON.stringify(filteredPosts));
@@ -167,6 +169,29 @@ app.put('/delete', (req, res) => {
     res.send({ "status": 200 });
   } catch (err) {
     console.error(err)
+  }
+})
+
+app.get('/avatarsave', async (req, res) => {
+  try {
+    if (fs.existsSync(`public_html/avatars/${req.query.user}.webp`)) {
+      //file exists
+      res.send({ "avatar": 'exists' });
+    }
+  } catch (err) {
+    console.error(err)
+
+    const api = new ApiClass('proton');
+    const actorAvatar = await api.getProtonAvatar(req.query.user);
+
+    const imgBuffer = Buffer.from(actorAvatar.avatar, 'base64');
+
+    sharp(imgBuffer)
+      .resize(320)
+      .toFile(`public_html/avatars/${req.query.user}.webp`, (err, info) => {
+        console.log('Error saving avatar ?: ' + err);
+        res.send({ "avatar": "saved" });
+      });
   }
 })
 

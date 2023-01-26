@@ -33,6 +33,3 @@ else {
     // generate index page
     postActions(null, true, true, true, true, false, false, false, false);
 }
-
-
-

@@ -65,8 +65,8 @@ export class HTML {
 
                     <div class="content">
                         <div class="user_info">
-                            <span class="${data.type} post-type">${data.type}</span> <img class="avatar" src="/img/cade.jpg" /> <user>decryptr</user> - <span class="date" id="date">` + formatDate(data.date) + `&nbsp;&nbsp;- <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left" /></span>
-                            <span class="countdown" title="Time left"></span>
+                            <span class="${data.type} post-type">${data.type}</span> <span class="avatar"><img src="/avatars/${data.user}.webp" /></span> <user>${data.user}</user> <span class="time-info"> - <span class="date" id="date">` + formatDate(data.date) + `&nbsp;&nbsp;- <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left" /></span>
+                            <span class="countdown" title="Time left"></span></span>
                             <span class="actions">${actions}</span>
                         </div>
                         <h1 class="title ${data.type}">${data.title}</h1>
