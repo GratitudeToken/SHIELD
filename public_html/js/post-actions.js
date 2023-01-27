@@ -36,7 +36,7 @@ export const postActions = (filterObj, clearItems, fetchy, looper, populatePosts
                     if (populatePosts === true) {
                         let html;
                         // if the URL coming from page load on main.js and passed to this postActions function does not contain any title or tag parameters, use indexHTML, else, use HTML
-                        if (filterObj === null) {
+                        if (filterObj === null || filterObj.type === 'search') {
                             html = new indexHTML
                         } else { html = new HTML }
                         $('#posts').innerHTML += html.insertHTML({ ...item, ...latestVotes[index] });
