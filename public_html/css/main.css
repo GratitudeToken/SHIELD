@@ -49,10 +49,11 @@ h5 {
   width: 100%;
   height: 100%;
   max-width: 1111px;
-  margin: 80px auto 0 auto;
+  margin: 120px auto 0 auto;
 }
 
-#main_header {
+#main_header,
+#subheader {
   position: fixed;
   top: 0;
   left: 0;
@@ -63,7 +64,6 @@ h5 {
   height: 60px;
   max-height: 60px;
   background: #ffffff;
-  border-bottom: 1px solid #e7e7e7;
   display: flex;
   align-content: center;
   align-items: center;
@@ -74,6 +74,55 @@ h5 {
 
 #main_header * {
   pointer-events: all;
+}
+
+
+#subheader {
+  height: auto;
+  background-color: #e0eeff;
+  border: 1px solid #cfe6ff;
+  border-radius: 5px;
+  top: 60px;
+  z-index: 8;
+  pointer-events: all;
+}
+
+#subheader input {
+  border: 0;
+  border-radius: 5px;
+  padding: 5px;
+  color: #012453
+}
+
+#subheader input[type=text] {
+  padding-right: 32px;
+  max-width: 150px
+}
+
+#subheader input[type=submit] {
+  width: 27px;
+  cursor: pointer;
+  background-image: url(/svgs/search.svg);
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-position: 50% 50%;
+  background-color: #012453;
+  color: #ffffff;
+  border-radius: 5px;
+  margin-left: -27px;
+  transition: 0.23s background-color
+}
+
+#subheader input[type=submit]:hover {
+  background-color: #0274f9;
+}
+
+.visionary img {
+  content: url(/svgs/eye.svg)
+}
+
+.guardian img {
+  content: url(/svgs/SHIELD-logo.svg)
 }
 
 .logo,
@@ -114,6 +163,7 @@ h5 {
 }
 
 #add {
+  display: none;
   font-size: 32px;
   padding: 0 10px;
   color: #ffffff;
@@ -168,6 +218,25 @@ h5 {
   position: absolute;
   top: 0;
   left: 0
+}
+
+#avatar #logout-button {
+  display: none
+}
+
+#avatar #login-button.authenticated+#logout-button {
+  display: inline-block
+}
+
+#stats {
+  margin: 0 5px 0 0;
+}
+
+#stats img {
+  width: 23px;
+  height: 16px;
+  vertical-align: sub;
+  margin: 0 1px 0 12px
 }
 
 button {
@@ -342,6 +411,7 @@ footer {
 .post:hover {
   background-color: #ececec;
   border-radius: 6px;
+  box-shadow: inset 0 0 10px #00000023;
 }
 
 .post h2 {

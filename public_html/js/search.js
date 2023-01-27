@@ -18,7 +18,7 @@ export const search = () => {
             .then(data => {
                 // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
                 // filterObj, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
-                postActions(filterObj, true, true, true, true, true, true, true, false);
+                postActions(filterObj, true, true, true, true, false, false, false, false);
             });
     });
 }

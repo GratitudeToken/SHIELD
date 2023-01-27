@@ -3,7 +3,10 @@ import { $, $$ } from '/js/selectors.js'
 let link = undefined
 let session = undefined
 
-export let user
+export let user = localStorage.getItem('user') || null
+//export let membership = localStorage.getItem('membership') || null
+export let membership = 'visionary'
+
 export const url = 'http://127.0.0.1:9632'
 export let accountData
 export let avatarbase64
@@ -17,7 +20,7 @@ const avatarName = $('#avatar-name')
 const username = $('#username')
 const toInput = $('#to-input')
 const amountInput = $('#amount-input')
-const logoutIcon = $('#logout-button')
+const logoutButton = $('#logout-button')
 const transferFormContainer = $('#transferFormContainer')
 const transferButton = $('#transfer-button')
 
@@ -43,22 +46,17 @@ const getAccountData = (user) => {
 }
 
 const saveAvatar = (user) => {
-    fetch(url + '/avatarsave?user=' + user, {
-    }).then(response => {
-        return response.json();
-    }).then(data => {
-        console.log(data)
-        $('#login-button img').src = `/avatars/${user}.webp`
-    });
+    if (user !== undefined || user !== null) {
+        fetch(url + '/avatarsave?user=' + user, {
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            console.log(data)
+            $('#login-button img').src = `/avatars/${user}.webp`
+        });
+    }
 }
 
-// Status is updated once a user is logged in
-const updateStatus = () => {
-    user = session.auth.actor
-    localStorage.setItem('user', user)
-    avatarName.textContent = user;
-    saveAvatar(user)
-}
 
 // Login in function that is called when the login button is clicked
 const login = async (restoreSession) => {
@@ -95,8 +93,19 @@ const login = async (restoreSession) => {
 
     link = localLink
     session = localSession
+    // for now we don't use information after login, so no need to store these
+    // localStorage.setItem('link', localLink)
+    // localStorage.setItem('session', localSession)
+    localSession ? user = localSession.auth.actor : user = null
 
-    updateStatus()
+    // Status is updated once a user is logged in
+    if (user != null || user != undefined) {
+        localStorage.setItem('user', user)
+        avatarName.textContent = user
+        $('#add').style.display = 'block'
+        loginButton.classList.add('authenticated')
+        saveAvatar(user)
+    }
 }
 
 // Logout function sets the link and session back to original state of undefined
@@ -106,13 +115,15 @@ const logout = async () => {
     }
     session = undefined
     link = undefined
-
-    updateStatus()
+    localStorage.removeItem('user')
+    avatarName.textContent = ''
+    $('#login-button img').src = `/svgs/user.svg`
+    location.reload()
 }
 
 // Add button listeners
 loginButton.addEventListener("click", () => login(false))
-logoutIcon.addEventListener("click", logout)
+logoutButton.addEventListener("click", () => logout())
 // Restore
 login(true)
 
