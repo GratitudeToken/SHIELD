@@ -60,9 +60,9 @@
     <header id="main_header">
         <a class="logo" href="/">SHIELD</a>
         <nav id="nav"><button id="add" title="Submit a post"></button></nav>
-        <div id="avatar">
+        <div id="avatar" class="flex">
             <b id="avatar-name"></b>
-            <button id="login-button" title="Authenticate"><img src="/svgs/user.svg" /></button>
+            <button id="login-button" class="avatar" title="Authenticate"><img src="/svgs/user.svg" /></button>
             <button id="logout-button" title="Logout"><img src="/svgs/logout.svg" /></button>
         </div>
     </header>
@@ -71,13 +71,15 @@
             <input type="text" minlength="3" maxlength="99" placeholder="Search in all posts" /><input type="submit"
                 value=" " title="Search" />
         </form>
-        <div id="stats">
-            <span id="membership" class="visionary" title="Membership type"><img /><b>Visionary</b></span>
-            <span id="balance" title="Staked"><img src="/svgs/gratitude-token-logo.svg" /><b>0.00 GRAT</b></span>
+        <div id="stats" class="flex">
+            <div id="membership" class="flex visionary " title="Membership type"><img id="renew"
+                    src="/svgs/renew.svg" /> <img class="membership-icon" /><b>Visionary</b></div>
+            <div id="staked" class="flex" title="Staked"> <img class="membership-t"
+                    src="/svgs/gratitude-token-logo.svg" /><b>0.00 GRAT</b>
+            </div>
         </div>
     </div>
     <!-- << Shared HTML: Start >> -->
-    <div id="BiiP_wrapper" style="display: none"></div>
     <form id="languageOptions" style="display: none">
         <div>
             <input type="radio" id="en" value="en" name="language"> <label for="en">English (EN)</label>
@@ -175,8 +177,9 @@
     <audio controls id="vote-sound" preload="none">
         <source src="/sounds/vote.mp3" type="audio/mpeg">
     </audio>
-    <script type="module" src="/js/proton.js"></script>
+
     <script src="https://unpkg.com/@proton/web-sdk@4.2.8"></script>
+    <script type="module" src="/js/proton.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="/js/main.js"></script>
 

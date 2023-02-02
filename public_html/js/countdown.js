@@ -39,7 +39,7 @@ export class countdown {
             // return the result
             let result;
             if (distance < 0) {
-                result = "Closed";
+                result = "🔒 Closed";
             } else { result = days + ":" + hours + ":" + minutes + ' - D:H:M'; }
 
             return result
@@ -47,9 +47,6 @@ export class countdown {
 
         if (updateDiv === true) {
             countdownDiv.innerHTML = countdown(passedDate);
-            setInterval(function () {
-                countdownDiv.innerHTML = countdown(passedDate);
-            }, 60000);
         } else { return countdown(passedDate) }
     }
 }
