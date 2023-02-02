@@ -64,9 +64,14 @@ export class HTML {
                     <a class="main-image" href="${imageSRC}" target="_blank"><img class="image" src="${imageSRC}" alt="${data.tags}" /></a>
 
                     <div class="content">
-                        <div class="user_info">
-                            <span class="${data.type} post-type">${data.type}</span> <span class="avatar"><img src="/avatars/${data.user}.webp" /></span> <user>${data.user}</user> <span class="time-info"> - <span class="date" id="date">` + formatDate(data.date) + `&nbsp;&nbsp;- <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left" /></span>
-                            <span class="countdown" title="Time left"></span></span>
+                        <div class="user_info flex">
+                            <span class="${data.type} post-type">${data.type}</span>
+                            <span class="postAvatar avatar"><img src="/avatars/${data.user}.webp" /></span>
+                            <span class="user">${data.user}</span>
+                            <img class="calendar" src="/svgs/calendar.svg" alt="calendar date posted icon" />
+                            <span class="date">` + formatDate(data.date) + `</span>
+                            <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left icon" />
+                            <span class="countdown" title="Time left"></span>
                             <span class="actions">${actions}</span>
                         </div>
                         <h1 class="title ${data.type}">${data.title}</h1>

@@ -1,11 +1,21 @@
-const path = require('path');
-const express = require('express');
-const multer = require("multer"); // we use this for storing images and other files sent from the user
-const Joi = require('joi'); // this is for data validation sent from front-end
-const fs = require('fs'); // this is for saving or reading files to the server
-const Post = require('./methods/posts');
-const sharp = require('sharp');
-const { ApiClass } = require('@proton/api');
+const path = require('path')
+const express = require('express')
+const multer = require("multer") // we use this for storing images and other files sent from the user
+const Joi = require('joi') // this is for data validation sent from front-end
+const fs = require('fs') // this is for saving or reading files to the server
+const Post = require('./methods/posts')
+const sharp = require('sharp')
+const { JsonRpc } = require("@proton/hyperion")
+const fetch = require("isomorphic-fetch")
+const endpoint = "https://eos.hyperion.eosrio.io"
+
+const V1Point = 'https://proton.greymass.com/v1/history/get_transaction'
+const v2Point = '/v2/history/get_actions?account=lucianape3&act.name=lucianape3'
+
+
+
+
+
 
 // configuration for multer
 let storage = multer.diskStorage({
@@ -13,97 +23,136 @@ let storage = multer.diskStorage({
     cb(null, 'public_html/uploads')
   },
   filename: function (req, file, cb) {
-    let extArray = file.mimetype.split("/");
-    let extension = extArray[extArray.length - 1];
-    let newFileName = file.fieldname + '-' + Date.now() + '.' + extension;
+    let extArray = file.mimetype.split("/")
+    let extension = extArray[extArray.length - 1]
+    let newFileName = file.fieldname + '-' + Date.now() + '.' + extension
     cb(null, newFileName)
   }
-});
+})
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage })
 
-const app = express();
+const app = express()
 
 
 // express.json to decifer json data from incoming requests
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public_html')));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, 'public_html')))
+
+
+
+// const rpc = new JsonRpc(endpoint + v2Point, { fetch })
+
+// const test = async () => {
+//   let response
+//   try {
+//     response = await rpc.get_transaction('e14d9104a1e9d12864a06a2dfe5f448af7b24a71911190eb990c1dde3544b36f')
+//     console.log(response);
+
+//   }
+
+//   catch (error) {
+//     console.log(error)
+//     console.log(response);
+//   }
+// }
+
+// test()
+
+
+app.post('/trx', (req, res) => {
+  fetch(V1Point, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: req.body.trx
+    })
+  }).then(response => {
+    return response.json()
+  }).then(data => {
+    const receivedTRX = data
+    res.send(receivedTRX)
+    // data.traces[1].receipt.receiver
+  }).catch(err => {
+    res.send(err)
+  })
+
+})
+
+
 
 // GETs all data from posts.json file 
 app.get('/getposts', (req, res) => {
-  let readPosts = JSON.parse(fs.readFileSync('data/posts.json')); // ADD GUARDIAN AND VISIONARY MEMBERSHIP TYPE in json structure
-  let readVotes = JSON.parse(fs.readFileSync('data/votes.json'));
+  let readPosts = JSON.parse(fs.readFileSync('data/posts.json'))
+  let readVotes = JSON.parse(fs.readFileSync('data/votes.json'))
 
   if (req.query.title) {
-    const posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title);
-    const votes = readVotes.filter(votes => votes.id === posts[0].id);
-    res.send({ posts, votes });
+    const posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title)
+    const votes = readVotes.filter(votes => votes.id === posts[0].id)
+    res.send({ posts, votes })
   }
 
   else if (req.query.tag) {
-    const posts = readPosts.filter(post => post.tags.includes(req.query.tag));
-    let votes = [];
+    const posts = readPosts.filter(post => post.tags.includes(req.query.tag))
+    let votes = []
     posts.forEach((el, i) => {
-      let oneObject = readVotes.filter(votes => votes.id === el.id);
-      votes.push(oneObject[0]);
-    });
+      let oneObject = readVotes.filter(votes => votes.id === el.id)
+      votes.push(oneObject[0])
+    })
 
-    res.send({ posts, votes });
+    res.send({ posts, votes })
   }
 
   else if (req.query.search) {
-    const s = req.query.search;
-
-    // const searchString = (string, searchTerm) => {
-    //   let regex = new RegExp(searchTerm, 'gi');
-    //   return string.match(regex) !== null;
-    // }
-    let votes = [];
-    let posts = [];
+    const s = req.query.search
+    let votes = []
+    let posts = []
 
     const searchStringInJSON = (str, json) => {
       json.forEach(object => {
 
         for (var key in object) {
           if (key === 'title' && object[key].includes(str)) {
-            posts.push(object);
-            votes.push(readVotes.filter(votes => votes.id === object.id)[0]);
-            break;
+            posts.push(object)
+            votes.push(readVotes.filter(votes => votes.id === object.id)[0])
+            break
           }
           if (key === 'tags' && object[key].includes(str)) {
-            posts.push(object);
-            votes.push(readVotes.filter(votes => votes.id === object.id)[0]);
-            break;
+            posts.push(object)
+            votes.push(readVotes.filter(votes => votes.id === object.id)[0])
+            break
           }
           if (key === 'options') {
-            const stringifiedOptions = JSON.stringify(object.options).toLowerCase().replace(/ /g, '').replace(/[^\w-]+/g, ',');
+            const stringifiedOptions = JSON.stringify(object.options).toLowerCase().replace(/ /g, '').replace(/[^\w-]+/g, ',')
             if (stringifiedOptions.includes(str)) {
-              posts.push(object);
-              votes.push(readVotes.filter(votes => votes.id === object.id)[0]);
-              break;
+              posts.push(object)
+              votes.push(readVotes.filter(votes => votes.id === object.id)[0])
+              break
             }
           }
         }
 
-      });
-      return posts;
+      })
+      return posts
     }
 
-    posts = searchStringInJSON(s, readPosts);
-    res.send({ posts, votes });
+    posts = searchStringInJSON(s, readPosts)
+    res.send({ posts, votes })
   }
 
   else {
-    const posts = readPosts;
-    const votes = readVotes;
-    res.send({ posts, votes });
+    const posts = readPosts
+    const votes = readVotes
+    res.send({ posts, votes })
   }
 
-});
+})
 
 // POST to the posts.json file
-// IF THERE IS NO AUTHENTICATED USER THE ADD BUTTON WILL NOT BE SHOWN !!!!!!!!!!!!!!!!
 app.post('/post', upload.single("image"), (req, res) => {
 
 
@@ -124,11 +173,11 @@ app.post('/post', upload.single("image"), (req, res) => {
     res.status(401).send(error.details[0].message)
     return
   } else {
-    const post = new Post({ ...req.body, ...req.file });
-    post.save();
+    const post = new Post({ ...req.body, ...req.file })
+    post.save()
     res.send({ "status": 200 })
   }
-});
+})
 
 
 app.post('/vote', (req, res) => {
@@ -145,54 +194,42 @@ app.post('/vote', (req, res) => {
     res.status(401).send(error.details[0].message)
     return
   } else {
-    Post.vote(req.body);
+    Post.vote(req.body)
     res.send({ "status": 200 })
   }
-});
+})
 
-// HERE WE HAVE TO CHECK IF THE USER THAT MADE THE POST IS AUTHENTICATED !!!!!!!!!!!!!!!!
-///////////////////////////////////////////////////
+
 app.put('/delete', (req, res) => {
   try {
-    const posts = JSON.parse(fs.readFileSync(`data/posts.json`));
-    const votes = JSON.parse(fs.readFileSync(`data/votes.json`));
-    const imageToDelete = posts.filter(post => post.id === parseInt(req.body.id));
-    const filteredPosts = posts.filter(post => post.id !== parseInt(req.body.id));
-    const filteredVotes = votes.filter(vote => vote.id !== parseInt(req.body.id));
+    const posts = JSON.parse(fs.readFileSync(`data/posts.json`))
+    const votes = JSON.parse(fs.readFileSync(`data/votes.json`))
+    const imageToDelete = posts.filter(post => post.id === parseInt(req.body.id))
+    const filteredPosts = posts.filter(post => post.id !== parseInt(req.body.id))
+    const filteredVotes = votes.filter(vote => vote.id !== parseInt(req.body.id))
 
-    imageToDelete[0].image !== '' ? fs.unlinkSync('public_html/uploads/' + imageToDelete[0].image) : null;
+    imageToDelete[0].image !== '' ? fs.unlinkSync('public_html/uploads/' + imageToDelete[0].image) : null
 
 
-    fs.writeFileSync(`data/posts.json`, JSON.stringify(filteredPosts));
-    fs.writeFileSync(`data/votes.json`, JSON.stringify(filteredVotes));
+    fs.writeFileSync(`data/posts.json`, JSON.stringify(filteredPosts))
+    fs.writeFileSync(`data/votes.json`, JSON.stringify(filteredVotes))
 
-    res.send({ "status": 200 });
+    res.send({ "status": 200 })
   } catch (err) {
     console.error(err)
   }
 })
 
-app.get('/avatarsave', async (req, res) => {
-  try {
-    if (fs.existsSync(`public_html/avatars/${req.query.user}.webp`)) {
-      //file exists
-      res.send({ "avatar": 'exists' });
-    }
-  } catch (err) {
-    console.error(err)
 
-    const api = new ApiClass('proton');
-    const actorAvatar = await api.getProtonAvatar(req.query.user);
-
-    const imgBuffer = Buffer.from(actorAvatar.avatar, 'base64');
-
-    sharp(imgBuffer)
-      .resize(320)
-      .toFile(`public_html/avatars/${req.query.user}.webp`, (err, info) => {
-        console.log('Error saving avatar ?: ' + err);
-        res.send({ "avatar": "saved" });
-      });
-  }
+app.post('/avatarsave', (req, res) => {
+  // create buffer for sharp
+  const imgBuffer = Buffer.from(req.body.ava, 'base64')
+  sharp(imgBuffer)
+    .resize(320)
+    .toFile(`public_html/avatars/${req.body.user}.webp`, (err, info) => {
+      console.log('Error saving avatar ?: ' + err)
+      err === null ? res.send({ "avatar": "saved" }) : null
+    })
 })
 
-app.listen(9632);
+app.listen(9632)

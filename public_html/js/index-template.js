@@ -27,15 +27,17 @@ export class indexHTML {
 
         return `
         <article class="post ${votedClass}" id="post-${data.id}">
-            <a href="${linkTitle}" class="flex indexPost">
-                <div class="main-image"><img class="image" src="/avatars/${data.user}.webp" alt="${data.user} avatar" /></div>
+            <a href="${linkTitle}" class="flex indexPost" title="${data.user}">
+                <div class="main-image avatar"><img class="image" src="/avatars/${data.user}.webp" alt="${data.user} avatar" /></div>
 
                 <div class="content">
                     <div class="flex-space-vertical">
-                        <div class="user_info">
-                            <span class="${data.type} post-type">${data.type}</span> <user>${data.user}</user> - <span class="date" id="date">` + formatDate(data.date) + `&nbsp;&nbsp;- <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left" /></span>
+                        <div class="user_info flex">
+                            <span class="${data.type} post-type">${data.type}</span>
+                            <img class="calendar" src="/svgs/calendar.svg" alt="calendar date posted icon" />
+                            <span class="date">` + formatDate(data.date) + `</span>
+                            <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left icon" />
                             <span class="countdown" title="Time left"></span>
-                            <span class="countdown"></span>
                         </div>
                         <div class="title ${data.type}"><h2>${data.title}</h2></div>
                     </div>

@@ -15,15 +15,15 @@
     "nodemon": "^2.0.20"
   },
   "dependencies": {
-    "@proton/api": "^27.1.2",
+    "@proton/hyperion": "^3.4.0",
     "@proton/js": "^27.3.0",
     "@proton/web-sdk": "^4.2.8",
     "ejs": "^3.1.8",
     "express": "^4.16.3",
     "express-handlebars": "^6.0.6",
+    "isomorphic-fetch": "^3.0.0",
     "joi": "^13.1.0",
     "multer": "^1.4.5-lts.1",
-    "node-fetch": "^3.2.10",
     "path": "^0.12.7",
     "pug": "^3.0.2",
     "sharp": "^0.31.3",
