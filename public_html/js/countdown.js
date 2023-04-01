@@ -39,7 +39,7 @@ export class countdown {
             // return the result
             let result;
             if (distance < 0) {
-                result = "🔒 Closed";
+                result = "Closed";
             } else { result = days + ":" + hours + ":" + minutes + ' - D:H:M'; }
 
             return result

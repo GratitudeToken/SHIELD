@@ -6,6 +6,7 @@ import { makeChart } from '/js/chart.js'
 import { voteBTN } from '/js/vote.js'
 import { deletePost } from '/js/delete-post.js'
 import { countdown } from '/js/countdown.js'
+import { commentEvents } from '/js/comments.js'
 
 export const postActions = (filterObj, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem) => {
 
@@ -30,16 +31,22 @@ export const postActions = (filterObj, clearItems, fetchy, looper, populatePosts
                 const latestPosts = data.posts.reverse()
                 let latestVotes
                 data.votes ? latestVotes = data.votes.reverse() : null
-
                 const postFunctions = (item, index) => {
+
                     // populate HTML function
                     if (populatePosts === true) {
                         let html
                         // if the URL coming from page load on main.js and passed to this postActions function does not contain any title or tag parameters, use indexHTML, else, use HTML
+                        let indexPage = true
                         if (filterObj === null || filterObj.type === 'search' || filterObj.type === 'tag') {
                             html = new indexHTML
-                        } else { html = new HTML }
-                        $('#posts').innerHTML += html.insertHTML({ ...item, ...latestVotes[index] })
+                        } else {
+                            html = new HTML
+                            indexPage = false
+                        }
+                        $('#posts').innerHTML += html.insertHTML({ ...item, ...latestVotes[index], ...data.comments })
+
+                        indexPage === false ? commentEvents(data.posts[0].id) : null
                     }
 
 

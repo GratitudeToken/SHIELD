@@ -7,6 +7,7 @@ function addHoursToUTC(date, H) {
 }
 
 module.exports = class Post {
+
   constructor(postData) {
     this.id = 0
     this.user = postData.user
@@ -14,6 +15,8 @@ module.exports = class Post {
     this.image = `${postData.filename || ''}`
     this.description = postData.description
     this.options = postData.options
+    postData.type === 'proposal' ? this.options = ['For', 'Against'] : null
+    postData.type === 'issue' ? this.options = ['Valid', 'Invalid'] : null
     this.date = new Date()
     this.tags = postData.tags
     this.type = postData.type
@@ -50,6 +53,12 @@ module.exports = class Post {
         console.log(err)
       })
 
+      // create the comments file
+
+      fs.writeFile('data/comments/#' + this.id + '.json', '[]', err => {
+        console.log(err)
+      })
+
       // save the rest of the important data from user, this will never change
       fs.readFile(`data/posts.json`, (err, fileContent) => {
         let userFile = {}
@@ -71,22 +80,24 @@ module.exports = class Post {
   }
 
   static vote(obj) {
+
     fs.readFile('data/votes.json', (err, fileContent) => {
-      let votesFile = {}
+      let votesFile
       if (!err) {
         votesFile = JSON.parse(fileContent)
       }
 
       votesFile.map((el, i) => {
-        if (el.id === obj.id && el.user === obj.user) {
+        if (el.id === obj.id) {
           votesFile[i].votes[obj.vote] += 1
           let votingUsers = []
           votingUsers.push(obj.user)
           votesFile[i].voted = votingUsers
         }
       })
+
       fs.writeFile('data/votes.json', JSON.stringify(votesFile), err => {
-        console.log(err)
+        console.log('Voting error: ' + err)
       })
     })
   }

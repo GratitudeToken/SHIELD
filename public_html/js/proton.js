@@ -12,24 +12,103 @@ export const url = 'http://127.0.0.1:9632'
 
 export let avatarbase64
 
+const PROTON_MAINNET_EPS = [
+    "https://api.protonnz.com",
+    "https://proton.eosusa.news",
+    "https://sbp.proton.cryptolions.io",
+    "https://hyperion.quantumblok.com",
+    "https://proton.protonuk.io",
+    "https://proton.eoscafeblock.com",
+    "https://bp1.protonmt.com",
+    "https://proton.eu.eosamsterdam.net",
+    "https://proton.greymass.com",
+    "https://proton.eosphere.io",
+    "https://proton.genereos.io",
+    "https://api.proton.alohaeos.com",
+    "https://protonapi.ledgerwise.io",
+    "https://proton-api.eosiomadrid.io",
+    "https://api.proton.eossweden.org",
+    "https://api.proton.bountyblok.io",
+    "https://proton.eosrio.io",
+    "https://api.proton.detroitledger.tech",
+    "https://hyperion.proton.detroitledger.tech",
+    "https://proton.eoscannon.io",
+    "https://proton.eosargentina.io",
+    "https://apiproton.blockside.io",
+    "https://api.protoneastern.cn",
+    "https://proton.eoseoul.io",
+    "https://api-proton.eosarabia.net",
+    "https://mainnet.brotonbp.com",
+    "https://bp1.protonind.com",
+    "http://bp1-mainnet.euproton.com",
+    "https://proton.edenia.cloud",
+    "https://api.protongroup.info",
+    "https://main.proton.kiwi",
+    "https://proton-api.alvosec.com",
+    "https://proton.eosvenezuela.io",
+    "https://api-proton.saltant.io",
+    "https://aa-proton.saltant.io",
+    "https://api.protonpoland.com",
+    "https://proton.eos.barcelona",
+    "https://api.protongb.com"
+]
+
+const PROTON_TESTNET_EP = [
+    "https://testnet.brotonbp.com",
+    "https://api-protontest.saltant.io",
+    "https://api.testnet.protongb.com",
+    "https://testnet-api.protongroup.info"
+]
+
+const MAINET_CHAINID = "384da888112027f0321850a169f737c33e53b388aad48b5adace4bab97f437e0"
+const TESTNET_CHAINID = "71ee83bcf52142d61019d95f9cc5427ba6a0d7ff8accd9e2088ae2abeaf3d3dd"
+
 const appIdentifier = "SHIELD"
-const chainId = "384da888112027f0321850a169f737c33e53b388aad48b5adace4bab97f437e0"
-const endpoints = ["https://proton.greymass.com", "https://proton.eosphere.io"]
+const chainId = MAINET_CHAINID
+const endpoints = PROTON_MAINNET_EPS
 
 const loginButton = $('#login-button')
 const avatarName = $('#avatar-name')
-const username = $('#username')
-const toInput = $('#to-input')
-const amountInput = $('#amount-input')
+// const username = $('#username')
+// const toInput = $('#to-input')
+// const amountInput = $('#amount-input')
 const logoutButton = $('#logout-button')
-const transferFormContainer = $('#transferFormContainer')
-const transferButton = $('#transfer-button')
+// const transferFormContainer = $('#transferFormContainer')
+// const transferButton = $('#transfer-button')
 
-const contractName = 'grat'
-const token = 'GRAT'
+// const contractName = 'grat'
+// const token = 'GRAT'
+
+async function sayHello() {
+
+    const rpc = new JsonRpc(PROTON_TESTNET_EP);
+    const res = await rpc.get_table_rows({
+        json: true,
+        code: "shieldvault",
+        scope: "shieldvault",
+        table: "accounts",
+        lower_bound: "crotte",
+        upper_bound: "crotte",
+    })
+    /*
+    session.api.rpc.get_table_rows({
+        get_table_rows({
+        json: true,
+        code: "shieldvault",
+        scope: "shieldvault",
+        table:"accounts",
+        lower_bound:session.auth.actor,
+        upper_bound:session.auth.actor
+    })
+    */
+
+    console.log(res)
 
 
 
+}
+
+sayHello();
 
 
 const fetchUrl = endpoints[0] + '/v1/history/get_actions'
@@ -51,6 +130,19 @@ const getAccountData = (user, url) => {
 }
 
 // when clicking on #renew button, pop-up a prompt or modal to enter TRX to confirm type of membership
+
+// GET THE TX STUFF with data.traces[2].act.data -- and much more in data --- or use the method from rockerone to get balance and other stuff
+const getStuff = (id) => {
+    fetch(url + '/trx?id=' + id, {
+    }).then(response => {
+        return response.json()
+    }).then(data => {
+        //console.log(data)
+        //console.log(data.traces[2].act.data)
+    })
+}
+
+getStuff('35439649bfe1cfb1e65c6ea81bd0897073611456e64933a368694858466dba46')
 
 
 // Login in function that is called when the login button is clicked
@@ -110,24 +202,25 @@ const login = async (restoreSession) => {
         getAccountData(user, fetchUrl)
         const data = JSON.parse(localStorage.getItem('accountData'))
 
-        let ava = undefined
-        // let's see which of these objects has the ava key name, stop at the first one
+        let ava = []
+        // let's see which of these objects has the ava key name, save all the avatar strings in an array
         for (const key in data.actions) {
             if (data.actions.hasOwnProperty(key)) {
-                const avaCheck = data.actions[key].action_trace.act.data.ava
-                if (avaCheck != undefined) {
-                    ava = avaCheck
+                if (data.actions[key].action_trace.act.data.ava) {
+                    ava.push(data.actions[key].action_trace.act.data.ava)
                 }
             }
         }
 
-        //if we have a base64 string for the avatar
+
+
+        //let's construct the payload
         let postData = {
             "user": user,
             "ava": ''
         }
-        // if we do not have a base64 string from the API, we save a generic user icon for this user
-        ava === undefined ? postData.ava = 'PHN2ZyBmaWxsPSIjMDEyNDUzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI0IDI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiAwQzUuNCAwIDAgNS40IDAgMTJzNS40IDEyIDEyIDEyIDEyLTUuNCAxMi0xMlMxOC42IDAgMTIgMHptMCA0YzIuMiAwIDQgMi4yIDQgNXMtMS44IDUtNCA1LTQtMi4yLTQtNSAxLjgtNSA0LTV6bTYuNiAxNS41QzE2LjkgMjEgMTQuNSAyMiAxMiAyMnMtNC45LTEtNi42LTIuNWMtLjQtLjQtLjUtMS0uMS0xLjQgMS4xLTEuMyAyLjYtMi4yIDQuMi0yLjcuOC40IDEuNi42IDIuNS42czEuNy0uMiAyLjUtLjZjMS43LjUgMy4xIDEuNCA0LjIgMi43LjQuNC40IDEtLjEgMS40eiIvPjwvc3ZnPg==' : postData.ava = ava
+        // if we do not have any avatar base64 string from the API, we save a generic user icon for this user, else, we use the last string in the array
+        ava.length === 0 ? postData.ava = 'PHN2ZyBmaWxsPSIjMDEyNDUzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI0IDI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiAwQzUuNCAwIDAgNS40IDAgMTJzNS40IDEyIDEyIDEyIDEyLTUuNCAxMi0xMlMxOC42IDAgMTIgMHptMCA0YzIuMiAwIDQgMi4yIDQgNXMtMS44IDUtNCA1LTQtMi4yLTQtNSAxLjgtNSA0LTV6bTYuNiAxNS41QzE2LjkgMjEgMTQuNSAyMiAxMiAyMnMtNC45LTEtNi42LTIuNWMtLjQtLjQtLjUtMS0uMS0xLjQgMS4xLTEuMyAyLjYtMi4yIDQuMi0yLjcuOC40IDEuNi42IDIuNS42czEuNy0uMiAyLjUtLjZjMS43LjUgMy4xIDEuNCA0LjIgMi43LjQuNC40IDEtLjEgMS40eiIvPjwvc3ZnPg==' : postData.ava = ava[ava.length - 1]
 
         // send it to the server
         fetch(url + '/avatarsave', {
@@ -148,20 +241,24 @@ const login = async (restoreSession) => {
 
 
     //if we have a date saved in localStorage, let's compare it to NOW to see if it has been more than 23 hours
+    const nowTime = Date.now()
+    //console.log('Now time: ' + nowTime)
+    let savedTime
     if (user != null) {
         // let's get the date for when the avatar was last saved and a now date
         const localStorageAvatarDate = localStorage.getItem('avatarExpirationDate')
-        let savedTime
-        localStorageAvatarDate != null ? savedTime = new Date(JSON.parse(localStorageAvatarDate)).getTime() : savedTime = null
-        const nowTime = new Date().getTime()
+        localStorageAvatarDate ? savedTime = localStorageAvatarDate : savedTime = null
+        //console.log(localStorageAvatarDate)
 
-        const timediff = Math.abs(savedTime - nowTime) / 3600000
-        console.log('Hours passed for avatar: ' + timediff.toFixed(2))
+        if (savedTime !== null) {
+            const timediff = Math.abs(savedTime - nowTime) / 3600000
+            console.log('Hours passed for avatar: ' + timediff.toFixed(2) + ' | Avatar update happens when min 23 hours have passed since last update.')
 
-        if (savedTime != null && timediff >= 23) {
-            fetchAndSave(user)
-            localStorage.setItem('avatarExpirationDate', nowTime)
-            console.log('Expired avatar overwritten.')
+            if (timediff >= 23) {
+                fetchAndSave(user)
+                localStorage.setItem('avatarExpirationDate', nowTime)
+                console.log('Expired avatar overwritten.')
+            }
         }
 
         if (savedTime === null) {
@@ -172,6 +269,7 @@ const login = async (restoreSession) => {
         }
         $('#login-button img').src = `/avatars/${user}.webp`
     }
+
 }
 
 // Logout function sets the link and session back to original state of undefined
@@ -182,6 +280,7 @@ const logout = async () => {
     session = undefined
     link = undefined
     localStorage.removeItem('user')
+    localStorage.removeItem('avatarExpirationDate')
     avatarName.textContent = ''
     $('#login-button img').src = `/svgs/user.svg`
     location.reload()
