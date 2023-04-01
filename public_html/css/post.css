@@ -4,6 +4,7 @@
 
 .postPage .post {
     padding-bottom: 32px;
+    margin-bottom: 0;
     border: 0;
 }
 
@@ -25,16 +26,24 @@
 
 .postPage .main-image {
     width: 230px;
-    height: 230px;
+    position: relative
+}
+
+.main-image .main-image-username {
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    left: 12px
+}
+
+.main-image .user {
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    text-shadow: 0 0 6px #000000;
 }
 
 .postPage .main-image img {
     max-width: 230px;
-    max-height: 230px;
-}
-
-.comments {
-    margin-bottom: 32px
 }
 
 .indexPost .post-type {
@@ -43,4 +52,145 @@
 
 .indexPost user {
     margin-left: 0
+}
+
+.comments-section {
+    display: none;
+    text-align: left;
+    padding: 23px 0;
+    margin-top: 23px;
+    border-top: 1px solid rgb(230, 230, 230)
+}
+
+.Closed .comments-section {
+    display: block
+}
+
+.comments-section form {
+    margin-top: 12px;
+    text-align: right;
+}
+
+.comments-section textarea {
+    width: 100%;
+    resize: vertical;
+    display: block;
+    padding: 6px 12px;
+    border-radius: 5px;
+    min-height: 69px
+}
+
+.submit-comment {
+    text-align: right;
+}
+
+.comments-section input {
+    margin-top: 12px;
+    cursor: pointer
+}
+
+.comments {
+    margin-top: 23px
+}
+
+comment {
+    padding: 10px 12px;
+    border-radius: 5px;
+    margin: 23px 0 0 0;
+    display: block;
+    cursor: url(/svgs/reply.svg) 0 23, pointer;
+    transition: background-color 0.23s
+}
+
+comment:hover {
+    background-color: #e0eeff
+}
+
+reply {
+    margin: 6px 0 0 0;
+    display: block;
+}
+
+comment form {
+    padding-left: 23px
+}
+
+comment replies {
+    display: block;
+    padding: 6px 0 0 12px;
+    margin-left: 23px;
+    *border-width: 1px solid #e0eeff;
+    *border-top: 1px solid #e0eeff;
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(to right, #e0eeff, transparent) 1 0 1 1;
+}
+
+comment header {
+    font-size: 16px;
+}
+
+comment avatar {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    border-radius: 51%;
+    margin-right: 6px;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+comment avatar img {
+    width: 32px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+comment p {
+    margin: 0;
+    padding: 6px 0
+}
+
+.comments .typing {
+    position: relative;
+    margin: 12px 23px;
+    height: 23px;
+}
+
+.typing span {
+    content: '';
+    animation: blink 1.5s infinite;
+    animation-fill-mode: both;
+    height: 10px;
+    width: 10px;
+    background: #3b5998;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+}
+
+.typing span:nth-of-type(2) {
+    animation-delay: .2s;
+    margin-left: 15px;
+}
+
+.typing span:nth-of-type(3) {
+    animation-delay: .4s;
+    margin-left: 30px;
+}
+
+@keyframes blink {
+    0% {
+        opacity: .1;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: .1;
+    }
 }

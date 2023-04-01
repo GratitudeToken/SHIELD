@@ -1,1 +1,52 @@
-[{"id":1,"user":"lucianape3","expires":"2023-02-09T11:39:00.423Z","votes":[3,0,1],"voted":["lucianape3"]},{"id":2,"user":"lucianape3","expires":"2023-02-11T11:39:00.423Z","votes":[1,2],"voted":["lucianape3"]},{"id":3,"user":"gratitude","expires":"2023-02-13T11:39:00.423Z","votes":[0,0,0,0,0,0,0,0,0],"voted":false},{"id":4,"user":"gratitude","expires":"2023-02-17T11:39:00.423Z","votes":[0,0],"voted":false}]
+[
+    {
+        "id": 1,
+        "user": "lucianape3",
+        "expires": "2023-02-07T11:39:00.423Z",
+        "votes": [
+            3,
+            0,
+            1
+        ],
+        "voted": [
+            "lucianape3"
+        ]
+    },
+    {
+        "id": 2,
+        "user": "lucianape3",
+        "expires": "2023-04-29T11:39:00.423Z",
+        "votes": [
+            0,
+            0
+        ],
+        "voted": false
+    },
+    {
+        "id": 3,
+        "user": "gratitude",
+        "expires": "2023-04-23T11:39:00.423Z",
+        "votes": [
+            2,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+        ],
+        "voted": false
+    },
+    {
+        "id": 4,
+        "user": "gratitude",
+        "expires": "2023-04-23T11:39:00.423Z",
+        "votes": [
+            0,
+            0
+        ],
+        "voted": false
+    }
+]

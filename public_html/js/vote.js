@@ -15,7 +15,7 @@ export const voteBTN = () => {
             const checkedRadio = $('input[name="post-' + obj.id + '-options"]:checked') || null;
 
             if (checkedRadio) {
-                obj.vote = checkedRadio.value;
+                obj.vote = parseInt(checkedRadio.value);
 
                 const stringifiedObj = JSON.stringify(obj);
 
@@ -29,6 +29,7 @@ export const voteBTN = () => {
                 }).then(response => {
                     return response.json();
                 }).then(data => {
+                    console.log(data)
                     snd.play();
                     if (!snd.paused) {
                         el.disabled = true;

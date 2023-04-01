@@ -14,9 +14,6 @@ const v2Point = '/v2/history/get_actions?account=lucianape3&act.name=lucianape3'
 
 
 
-
-
-
 // configuration for multer
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -60,8 +57,17 @@ app.use(express.static(path.join(__dirname, 'public_html')))
 
 // test()
 
+// https://proton.greymass.com/v1/chain/get_currency_balance
+//        ^^^^^^
+const currencyPayload = {
+  "code": "eosio.token",
+  "account": "lucianape3",
+  "symbol": "XPR"
+}
 
-app.post('/trx', (req, res) => {
+
+// with this request we can get all the data of a transaction
+app.get('/trx', (req, res) => {
   fetch(V1Point, {
     method: 'POST',
     headers: {
@@ -69,13 +75,12 @@ app.post('/trx', (req, res) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      id: req.body.trx
+      id: req.query.id
     })
   }).then(response => {
     return response.json()
   }).then(data => {
-    const receivedTRX = data
-    res.send(receivedTRX)
+    res.send(data)
     // data.traces[1].receipt.receiver
   }).catch(err => {
     res.send(err)
@@ -85,15 +90,19 @@ app.post('/trx', (req, res) => {
 
 
 
+
+
 // GETs all data from posts.json file 
 app.get('/getposts', (req, res) => {
   let readPosts = JSON.parse(fs.readFileSync('data/posts.json'))
   let readVotes = JSON.parse(fs.readFileSync('data/votes.json'))
+  //let comments
 
   if (req.query.title) {
     const posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title)
     const votes = readVotes.filter(votes => votes.id === posts[0].id)
-    res.send({ posts, votes })
+    comments = JSON.parse(fs.readFileSync('data/comments/#' + posts[0].id + '.json')) || null
+    res.send({ posts, votes, comments })
   }
 
   else if (req.query.tag) {
@@ -208,7 +217,11 @@ app.put('/delete', (req, res) => {
     const filteredPosts = posts.filter(post => post.id !== parseInt(req.body.id))
     const filteredVotes = votes.filter(vote => vote.id !== parseInt(req.body.id))
 
+    // delete the image
     imageToDelete[0].image !== '' ? fs.unlinkSync('public_html/uploads/' + imageToDelete[0].image) : null
+
+    // delete the comments file
+    fs.unlinkSync('data/comments/#' + req.body.id + '.json')
 
 
     fs.writeFileSync(`data/posts.json`, JSON.stringify(filteredPosts))
@@ -230,6 +243,62 @@ app.post('/avatarsave', (req, res) => {
       console.log('Error saving avatar ?: ' + err)
       err === null ? res.send({ "avatar": "saved" }) : null
     })
+})
+
+
+app.post('/comment', (req, res) => {
+  let commentData = {}
+  commentData.id = req.body.commentid
+  commentData.user = req.body.user
+  commentData.text = req.body.comment
+  //Joi Schema = how the incoming input data is validated
+  const schema = {
+    user: Joi.string().max(23).required(),
+    postid: Joi.number().integer().max(23000).precision(0).required(),
+    commentid: Joi.number().max(23000).precision(0).required(),
+    type: Joi.string().max(10).required(),
+    comment: Joi.string().min(2).max(1001).required()
+  }
+
+  const { error } = Joi.validate(req.body, schema)
+
+  if (error) {
+    res.status(401).send(error.details[0].message)
+    return
+  } else {
+    let commentsFile = JSON.parse(fs.readFileSync(`data/comments/#${req.body.postid}.json`))
+
+    let count = 1
+    // Define the recursive function
+    function countKeys(obj) {
+      for (const key in obj) {
+        if (key === "id") {
+          count++;
+        }
+
+        const value = obj[key];
+        if (typeof value === "object") {
+          countKeys(value);
+        }
+      }
+    }
+
+    countKeys(commentsFile)
+
+    commentData.id = count
+
+    if (req.body.type === 'comment') {
+      commentData.replies = []
+      commentsFile.comments.push(commentData)
+    } else {
+      const comment = commentsFile.comments.find(comment => comment.id === req.body.commentid);
+      comment.replies.push(commentData)
+    }
+
+    fs.writeFileSync(`data/comments/#${req.body.postid}.json`, JSON.stringify(commentsFile))
+
+    res.send({ "status": 200 })
+  }
 })
 
 app.listen(9632)
