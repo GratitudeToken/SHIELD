@@ -1,5 +1,5 @@
 * {
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   box-sizing: border-box;
 }
 
@@ -7,7 +7,7 @@ h1,
 h2,
 h3 {
   display: block;
-  font-family: 'Dosis', Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
 
 html,
@@ -186,7 +186,8 @@ h5 {
   font-weight: bold;
   line-height: 62px;
   text-transform: capitalize;
-  color: #012453
+  color: #012453;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
 
 .logo:before {
@@ -332,6 +333,10 @@ h5 {
   text-align: left;
 }
 
+#login span {
+  vertical-align: middle;
+}
+
 
 #stats {
   margin: 0 5px 0 0;
@@ -354,7 +359,8 @@ h5 {
 }
 
 button {
-  cursor: pointer
+  cursor: pointer;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
 
 #nav {
@@ -515,7 +521,7 @@ footer {
 }
 
 .unapproved {
-  background-color: #ff464623;
+  background-color: #ff464650;
 }
 
 .post-voted {
@@ -539,6 +545,7 @@ footer {
 
 .post h2 {
   font-size: 15px;
+  line-height: 1.4;
   padding: 0 0 1px 0
 }
 
@@ -585,7 +592,7 @@ footer {
 
 .indexPost .main-image {
   display: block;
-  width: 74px !important;
+  width: 64px;
   height: 64px;
   overflow: hidden;
   position: relative
@@ -596,7 +603,6 @@ footer {
   width: 230px;
   border-radius: 6px;
 }
-
 
 .indexPost .main-image img {
   width: 64px;
@@ -765,6 +771,10 @@ footer {
   *max-width: calc(100% - 230px);
   text-align: left;
   padding-left: 15px;
+}
+
+.indexPost .content {
+  width: calc(100% - 64px)
 }
 
 .content .title,
@@ -1002,6 +1012,31 @@ canvas {
     padding: 10px 0 0 0 !important
   }
 
+  .indexPost .content {
+    width: calc(100% - 74px)
+  }
+
+  .indexPost .content .flex-space-vertical {
+    height: auto !important
+  }
+
+  .post h2 {
+    font-size: 14px;
+    margin-top: 10px
+  }
+
+  .indexPost .user_info * {
+    font-size: 10px
+  }
+
+  .tag {
+    font-size: 18px;
+  }
+
+  .post-type {
+    padding: 3px 6px
+  }
+
   .indexPost,
   .indexPost:visited {
     padding: 0;
@@ -1020,8 +1055,8 @@ canvas {
     background: none !important
   }
 
-  .postPage .content {
-    padding: 0 0 0 10px
+  .content {
+    padding: 0
   }
 
   #post-form {
