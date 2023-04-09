@@ -21,7 +21,7 @@ export const deletePost = (id, user) => {
             .then(data => {
                 if (data.status === 200) {
                     // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
-                    // filterObj, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
+                    // queryURL, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
                     postActions(null, true, true, true, true, true, true, true, false);
                     window.location.replace('/');
                 }

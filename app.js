@@ -3,16 +3,18 @@ const express = require('express')
 const multer = require("multer") // we use this for storing images and other files sent from the user
 const Joi = require('joi') // this is for data validation sent from front-end
 const fs = require('fs') // this is for saving or reading files to the server
-const Post = require('./methods/posts')
-const sharp = require('sharp')
-const { JsonRpc } = require("@proton/hyperion")
-const fetch = require("isomorphic-fetch")
-const endpoint = "https://eos.hyperion.eosrio.io"
-
-const V1Point = 'https://proton.greymass.com/v1/history/get_transaction'
-const v2Point = '/v2/history/get_actions?account=lucianape3&act.name=lucianape3'
+const Post = require('./methods/posts') // class / constructor
+const { Vote, userInfo } = require('./methods/posts') // functions ?  variables
 
 
+global.admins = ["lucianape3", "fatzuca"]
+
+// const { JsonRpc } = require("@proton/hyperion")
+// const fetch = require("isomorphic-fetch")
+// const endpoint = "https://eos.hyperion.eosrio.io"
+
+// const V1Point = 'https://proton.greymass.com/v1/history/get_transaction'
+// const v2Point = '/v2/history/get_actions?account=lucianape3&act.name=lucianape3'
 
 // configuration for multer
 let storage = multer.diskStorage({
@@ -38,7 +40,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public_html')))
 
 
-
 // const rpc = new JsonRpc(endpoint + v2Point, { fetch })
 
 // const test = async () => {
@@ -59,60 +60,82 @@ app.use(express.static(path.join(__dirname, 'public_html')))
 
 // https://proton.greymass.com/v1/chain/get_currency_balance
 //        ^^^^^^
-const currencyPayload = {
-  "code": "eosio.token",
-  "account": "lucianape3",
-  "symbol": "XPR"
-}
+// const currencyPayload = {
+//   "code": "eosio.token",
+//   "account": "lucianape3",
+//   "symbol": "XPR"
+// }
 
 
 // with this request we can get all the data of a transaction
-app.get('/trx', (req, res) => {
-  fetch(V1Point, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      id: req.query.id
-    })
-  }).then(response => {
-    return response.json()
-  }).then(data => {
-    res.send(data)
-    // data.traces[1].receipt.receiver
-  }).catch(err => {
-    res.send(err)
-  })
+// app.get('/balance', (req, res) => {
+//   fetch(V1Point, {
+//     method: 'POST',
+//     headers: {
+//       'Accept': 'application/json',
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({
+//       id: req.query.id
+//     })
+//   }).then(response => {
+//     return response.json()
+//   }).then(data => {
+//     res.send(data)
+//     // data.traces[1].receipt.receiver
+//   }).catch(err => {
+//     res.send(err)
+//   })
 
-})
-
-
-
+// })
 
 
 // GETs all data from posts.json file 
 app.get('/getposts', (req, res) => {
+
   let readPosts = JSON.parse(fs.readFileSync('data/posts.json'))
   let readVotes = JSON.parse(fs.readFileSync('data/votes.json'))
   //let comments
 
+  // filter posts and votes object based on: if the user requesting is an admin or regular user
+  if (req.query.user && admins.includes(req.query.user)) {
+  } else {
+    // if the user is not present or is not an admin
+    const filteredPosts = readPosts.filter(post => post.approved)
+    const filteredVotes = readVotes.filter(vote => {
+      const post = filteredPosts.find(p => p.id === vote.id)
+      return post && post.approved
+    })
+
+    readPosts = filteredPosts
+    readVotes = filteredVotes
+  }
+
   if (req.query.title) {
-    const posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title)
-    const votes = readVotes.filter(votes => votes.id === posts[0].id)
-    comments = JSON.parse(fs.readFileSync('data/comments/#' + posts[0].id + '.json')) || null
+    let posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title)
+    let votes
+    let comments
+    if (posts.length > 0) {
+      votes = readVotes.filter(vote => vote.id === posts[0].id)
+      comments = JSON.parse(fs.readFileSync('data/comments/#' + posts[0].id + '.json'))
+    } else {
+      posts, votes, comments = null
+    }
     res.send({ posts, votes, comments })
   }
 
   else if (req.query.tag) {
-    const posts = readPosts.filter(post => post.tags.includes(req.query.tag))
+    let posts = readPosts.filter(post => post.tags.includes(req.query.tag))
     let votes = []
-    posts.forEach((el, i) => {
-      let oneObject = readVotes.filter(votes => votes.id === el.id)
-      votes.push(oneObject[0])
-    })
 
+    if (posts.length > 0) {
+      posts.forEach((el, i) => {
+        let oneObject = readVotes.filter(vote => vote.id === el.id)
+        votes.push(oneObject[0])
+      })
+    } else {
+      posts, votes = null
+    }
     res.send({ posts, votes })
   }
 
@@ -127,19 +150,19 @@ app.get('/getposts', (req, res) => {
         for (var key in object) {
           if (key === 'title' && object[key].includes(str)) {
             posts.push(object)
-            votes.push(readVotes.filter(votes => votes.id === object.id)[0])
+            votes.push(readVotes.filter(vote => vote.id === object.id)[0])
             break
           }
           if (key === 'tags' && object[key].includes(str)) {
             posts.push(object)
-            votes.push(readVotes.filter(votes => votes.id === object.id)[0])
+            votes.push(readVotes.filter(vote => vote.id === object.id)[0])
             break
           }
           if (key === 'options') {
             const stringifiedOptions = JSON.stringify(object.options).toLowerCase().replace(/ /g, '').replace(/[^\w-]+/g, ',')
             if (stringifiedOptions.includes(str)) {
               posts.push(object)
-              votes.push(readVotes.filter(votes => votes.id === object.id)[0])
+              votes.push(readVotes.filter(vote => vote.id === object.id)[0])
               break
             }
           }
@@ -159,6 +182,24 @@ app.get('/getposts', (req, res) => {
     res.send({ posts, votes })
   }
 
+})
+
+app.post('/approve', (req, res) => {
+
+  if (admins.includes(req.body.user)) {
+    const posts = JSON.parse(fs.readFileSync('data/posts.json'))
+
+    const updatedPosts = posts.map(post => {
+      if (post.id === req.body.id) {
+        return { ...post, approved: true }
+      }
+      return post;
+    })
+
+    fs.writeFileSync(`data/posts.json`, JSON.stringify(updatedPosts))
+
+    res.send({ "status": 200 })
+  }
 })
 
 // POST to the posts.json file
@@ -203,7 +244,7 @@ app.post('/vote', (req, res) => {
     res.status(401).send(error.details[0].message)
     return
   } else {
-    Post.vote(req.body)
+    Vote(req.body)
     res.send({ "status": 200 })
   }
 })
@@ -234,15 +275,18 @@ app.put('/delete', (req, res) => {
 })
 
 
-app.post('/avatarsave', (req, res) => {
-  // create buffer for sharp
-  const imgBuffer = Buffer.from(req.body.ava, 'base64')
-  sharp(imgBuffer)
-    .resize(320)
-    .toFile(`public_html/avatars/${req.body.user}.webp`, (err, info) => {
-      console.log('Error saving avatar ?: ' + err)
-      err === null ? res.send({ "avatar": "saved" }) : null
-    })
+app.get('/userinfo', async (req, res) => {
+  // const gigi = await protonApi.rpc.get_table_rows({
+  //   json: true,
+  //   code: 'grat',
+  //   scope: 'lucianape3',
+  //   table: 'accounts',
+  //   limit: 10,
+  //   reverse: false,
+  //   show_payer: false
+  // })
+
+  res.send(await userInfo(req.query.user, req.query.login))
 })
 
 

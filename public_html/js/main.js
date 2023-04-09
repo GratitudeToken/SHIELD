@@ -1,3 +1,4 @@
+import { $ } from '/js/selectors.js'
 import { submitPost } from '/js/submit-post.js';
 import { search } from '/js/search.js';
 import { postActions } from '/js/post-actions.js';
@@ -9,27 +10,31 @@ submitPost(); // listener for submit event
 
 // page load - populate all posts
 // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
-// filterObj, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
+// queryURL, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
 const urlString = window.location.search;
 const urlSearch = new URLSearchParams(urlString);
 
-let filterObj = {}
+let queryURL = {}
 
 
 if (urlSearch.get('title') !== null) {
-    filterObj.type = 'title';
-    filterObj.string = urlSearch.get('title');
+    queryURL.type = 'title';
+    queryURL.string = urlSearch.get('title');
     // generate post page
-    postActions(filterObj, true, true, true, true, true, true, true, false);
+    postActions(queryURL, true, true, true, true, true, true, true, false);
 }
 else if (urlSearch.get('tag') !== null) {
-    filterObj.type = 'tag';
-    filterObj.string = urlSearch.get('tag');
+    queryURL.type = 'tag';
+    queryURL.string = urlSearch.get('tag');
     // generate post page
-    postActions(filterObj, true, true, true, true, true, true, true, false);
+    postActions(queryURL, true, true, true, true, true, true, true, false);
 }
 
 else {
     // generate index page
     postActions(null, true, true, true, true, false, false, false, false);
 }
+
+$('#bugs').addEventListener('click', (event) => {
+    alert('Send bugs or feedback at:\rEmail: support' + '@' + 'gratitudetoken' + '.world' + '\rTelegram: https://t.me/gratitude_token\rDiscord: https://discord.gg/Rq6tZcSKgS')
+})
