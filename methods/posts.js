@@ -1,4 +1,8 @@
 const fs = require('fs')
+const sharp = require('sharp')
+const { ApiClass } = require('@proton/api')
+const protonApi = new ApiClass('proton')
+
 
 function addHoursToUTC(date, H) {
   const passedDate = new Date(date)
@@ -10,7 +14,9 @@ module.exports = class Post {
 
   constructor(postData) {
     this.id = 0
+    this.type = postData.type
     this.user = postData.user
+    this.approved = false
     this.title = postData.title
     this.image = `${postData.filename || ''}`
     this.description = postData.description
@@ -19,7 +25,6 @@ module.exports = class Post {
     postData.type === 'issue' ? this.options = ['Valid', 'Invalid'] : null
     this.date = new Date()
     this.tags = postData.tags
-    this.type = postData.type
     this.votes = postData.votes?.map((vote) => parseInt(vote))
   }
 
@@ -79,26 +84,130 @@ module.exports = class Post {
     })
   }
 
-  static vote(obj) {
+}
 
-    fs.readFile('data/votes.json', (err, fileContent) => {
-      let votesFile
-      if (!err) {
-        votesFile = JSON.parse(fileContent)
+
+
+module.exports.Vote = async function (obj) {
+  fs.readFile('data/votes.json', (err, fileContent) => {
+    let votesFile
+    if (!err) {
+      votesFile = JSON.parse(fileContent)
+    }
+
+    votesFile.map((el, i) => {
+      if (el.id === obj.id) {
+        votesFile[i].votes[obj.vote] += 1
+        let votingUsers = []
+        votingUsers.push(obj.user)
+        votesFile[i].voted = votingUsers
       }
-
-      votesFile.map((el, i) => {
-        if (el.id === obj.id) {
-          votesFile[i].votes[obj.vote] += 1
-          let votingUsers = []
-          votingUsers.push(obj.user)
-          votesFile[i].voted = votingUsers
-        }
-      })
-
-      fs.writeFile('data/votes.json', JSON.stringify(votesFile), err => {
-        console.log('Voting error: ' + err)
-      })
     })
+
+    fs.writeFile('data/votes.json', JSON.stringify(votesFile), err => {
+      console.log('Voting error: ' + err)
+    })
+  })
+
+
+  fs.readFile(`data/members.json`, (err, fileContent) => {
+    let membersFile = {}
+    if (!err) {
+      membersFile = JSON.parse(fileContent)
+    }
+
+    membersFile[obj.user].lastVoted = new Date()
+    membersFile[obj.user].balance = 0
+
+    fs.writeFile(`data/members.json`, JSON.stringify(membersFile), err => {
+      console.log(err)
+    })
+  })
+}
+
+
+
+///// ON EVERY VOTE CHECK IF BALANCE IS >= 5 and maybe if KYC is done?
+///////////////////////////////////////////////////////////////////////
+
+module.exports.userInfo = async function (user, authenticating) {
+  // read members file
+  const members = JSON.parse(fs.readFileSync(`data/members.json`))
+
+  // check balance and remaining ban hours (720 hours = 30 days)
+
+  // for (let x in members) {
+  //   const lastVoted = new Date(members[x].lastVoted).getTime()
+  //   const nowDate = new Date().getTime()
+  //   console.log((nowDate - lastVoted) / 60000)
+  //   if (members[x].balance < 5 && remainingBanHours <= 0) {
+  //     members[x].banned = true
+  //   }
+  // }
+
+  // let's check if the user is verified and has the minimum token balance required and send back the response
+  const { rows } = await protonApi.rpc.get_table_rows({
+    code: 'eosio.proton',
+    table: 'usersinfo',
+    scope: 'eosio.proton',
+    lower_bound: user,
+    upper_bound: user,
+  })
+
+
+  let kyc
+
+  rows[0].kyc[0] != undefined ? kyc = rows[0].kyc[0].kyc_level.includes('birthdate' || 'selfie' || 'frontofid') : kyc = false
+  const balance = await protonApi.getTokenBalance('grat', user, 'GRAT')
+
+  // console.log('KYC Verified Status: ' + kyc)
+  // console.log('Balance: ' + balance)
+
+  // for new users check if user stil has min 5 GRAT and if KYC is passed
+  // if (balance >= 5 && kyc === true) {
+  //   members[user].active = true
+  // } else { members[user].active = false }
+  members[user].balance = parseInt(balance)
+
+  fs.writeFileSync(`data/members.json`, JSON.stringify(members))
+
+
+  const sharpSave = (avatar) => {
+    // create buffer for sharp
+    const imgBuffer = Buffer.from(avatar, 'base64')
+    sharp(imgBuffer)
+      .resize(320)
+      .toFile(`public_html/avatars/${user}.webp`, (err, info) => {
+        err ? console.log('Error saving avatar: ' + err) : null
+      })
   }
+
+  let avatar
+
+  const saveAvatar = (avatar) => {
+    // update avatar base64 string
+    if (authenticating == 'true') {
+      avatar = rows[0].avatar || 'PHN2ZyBmaWxsPSIjMDEyNDUzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI0IDI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiAwQzUuNCAwIDAgNS40IDAgMTJzNS40IDEyIDEyIDEyIDEyLTUuNCAxMi0xMlMxOC42IDAgMTIgMHptMCA0YzIuMiAwIDQgMi4yIDQgNXMtMS44IDUtNCA1LTQtMi4yLTQtNSAxLjgtNSA0LTV6bTYuNiAxNS41QzE2LjkgMjEgMTQuNSAyMiAxMiAyMnMtNC45LTEtNi42LTIuNWMtLjQtLjQtLjUtMS0uMS0xLjQgMS4xLTEuMyAyLjYtMi4yIDQuMi0yLjcuOC40IDEuNi42IDIuNS42czEuNy0uMiAyLjUtLjZjMS43LjUgMy4xIDEuNCA0LjIgMi43LjQuNC40IDEtLjEgMS40eiIvPjwvc3ZnPg=='
+      sharpSave()
+    }
+  }
+
+  let avatarPromise = new Promise(function (myResolve, myReject) {
+    if (avatar) {
+      myResolve("OK");
+    } else {
+      myReject("Error");
+    }
+  })
+
+  avatarPromise.then(
+    (value) => { saveAvatar(value) },
+    (error) => { saveAvatar(error) }
+  )
+
+  return { "balance": parseInt(balance).toFixed(2), "kyc": kyc }
+
+  // check if avatar exists on server
+  // const avatarExists = fs.existsSync(`public_html/avatars/${user}.webp`)
+
 }

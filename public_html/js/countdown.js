@@ -40,12 +40,12 @@ export class countdown {
             let result;
             if (distance < 0) {
                 result = "Closed";
-            } else { result = days + ":" + hours + ":" + minutes + ' - D:H:M'; }
+            } else { result = days + ":" + hours + ":" + minutes }
 
             return result
         }
 
-        if (updateDiv === true) {
+        if (updateDiv === true && countdownDiv) {
             countdownDiv.innerHTML = countdown(passedDate);
         } else { return countdown(passedDate) }
     }

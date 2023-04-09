@@ -1,6 +1,6 @@
 import { $, $$ } from '/js/selectors.js'
 import { url, user } from '/js/proton.js'
-import { membership } from '/js/proton.js'
+import { membership, accountStatus } from '/js/proton.js'
 import { imageValid } from '/js/image-select.js'
 import { checkFileProperties, handleUploadedFile } from '/js/image-select.js'
 import { postActions } from '/js/post-actions.js'
@@ -12,10 +12,7 @@ export const submitPost = () => {
 
     $('#post-form').addEventListener('submit', (event) => {
         event.preventDefault()
-        if (membership === 'visionary') {
-            // VERY IMPORTANT !!!!
-            // WE MUST CHECK IF THE USER IS VISIONARY by validating proton transactions that happened for this user
-            // otherwise he will get a message saying he does not have enough tokens staked to create a visionary post
+        if (membership === true) {
 
             // get the number of options added and push 0 for each of them to the votes array
             let votes = []
@@ -57,7 +54,16 @@ export const submitPost = () => {
                 }
             })
         } else {
-            alert('Only visionary members can submit a post.')
+            let message = 'Only members can submit a post.\nAccount Membership Status:\n\n'
+            if (accountStatus.balance >= 5) {
+                message += 'Hold 5 GRAT in the account: OK\n'
+            } else { message += 'Hold 5 GRAT in the account: NO\n' }
+
+            if (accountStatus.kyc === true) {
+                message += 'Pass the KYC process: OK'
+            } else { message += 'Pass the KYC process: NO' }
+
+            alert(message)
         }
     })
 

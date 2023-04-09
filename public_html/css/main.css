@@ -32,7 +32,9 @@ body p {
 
 #transferFormContainer,
 #close,
-audio {
+audio,
+.features,
+#filters {
   display: none
 }
 
@@ -52,6 +54,52 @@ h5 {
   margin: 0 auto;
 }
 
+.features h1 {
+  padding: 23px 10px 0 10px;
+  text-transform: uppercase;
+  color: #0274f9
+}
+
+.features .grid-6 {
+  display: grid;
+  gap: 0;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  line-height: 1.4;
+}
+
+.features .grid-6 div {
+  padding: 23px 12px 12px 12px
+}
+
+.features .grid-6 img {
+  width: 55px;
+  height: 55px;
+  display: block;
+  margin: 0 auto 12px auto
+}
+
+.features b {
+  font-size: 14px;
+  color: #012453
+}
+
+.features p {
+  color: #696969;
+  padding: 23px 10px
+}
+
+#filters {
+  text-align: right;
+  padding: 0 10px
+}
+
+#filters img {
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+}
+
 #main_header,
 #subheader {
   position: sticky;
@@ -68,7 +116,7 @@ h5 {
   align-content: center;
   align-items: center;
   justify-content: space-between;
-  z-index: 7;
+  z-index: 9;
   pointer-events: none;
 }
 
@@ -96,7 +144,12 @@ h5 {
 
 #subheader input[type=text] {
   padding-right: 32px;
-  max-width: 150px
+  max-width: 150px;
+  transition: 0.23s max-width
+}
+
+#search input[type=text]:focus {
+  max-width: 230px;
 }
 
 #subheader input[type=submit] {
@@ -198,42 +251,87 @@ h5 {
   pointer-events: none;
 }
 
-#avatar {
-  width: auto;
-  align-items: center;
+.small-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
-#avatar button {
+#user-menu {
+  width: auto;
+  align-items: center;
+  position: relative;
+}
+
+.avatar-container {
   width: 32px;
   height: 32px;
   margin: 0 0 0 5px;
-  display: inline-block;
-  border: 0;
   border-radius: 51%;
-  transition: transform 0.23s;
-  position: relative;
   overflow: hidden;
-  background: none
+  position: relative;
 }
 
-#avatar button:hover {
-  transform: scale(1.23)
-}
-
-#avatar button img {
+.avatar {
   width: 32px;
+  display: block;
+  border: 0;
+}
+
+#user-menu:hover #menu-options {
+  display: block
+}
+
+#menu-options {
+  min-width: 120px;
+  display: none;
   position: absolute;
-  top: 0;
-  left: 0
+  right: 5px;
+  margin: 37px 38px 0 0;
+  border-radius: 5px;
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 15px #00000050;
+  text-align: left;
 }
 
-#avatar #logout-button {
-  display: none
+#menu-options button:first-of-type {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
-#avatar #login-button.authenticated+#logout-button {
-  display: inline-block
+#menu-options button:last-of-type {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
+
+#menu-options:after {
+  display: block;
+  content: '';
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 10px;
+  right: -11px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #9cccff;
+}
+
+#menu-options button:hover {
+  background: #cfe6ff
+}
+
+#login,
+#logout {
+  border-radius: 0;
+  min-width: 120px;
+  border: 0;
+  padding: 10px;
+  background: #ffffff;
+  text-align: left;
+}
+
 
 #stats {
   margin: 0 5px 0 0;
@@ -416,6 +514,10 @@ footer {
   filter: grayscale(1);
 }
 
+.unapproved {
+  background-color: #ff464623;
+}
+
 .post-voted {
   opacity: 0.69;
 }
@@ -427,12 +529,12 @@ footer {
   align-content: center;
   align-items: flex-start;
   justify-content: flex-start;
+  border-radius: 6px
 }
 
 .post:hover {
   background-color: #ececec;
-  border-radius: 6px;
-  box-shadow: inset 0 0 10px #00000023;
+  box-shadow: inset 0 0 10px #00000032;
 }
 
 .post h2 {
@@ -483,7 +585,7 @@ footer {
 
 .indexPost .main-image {
   display: block;
-  width: 74px;
+  width: 74px !important;
   height: 64px;
   overflow: hidden;
   position: relative
@@ -692,10 +794,18 @@ footer {
   border: 0;
 }
 
+.post .action-button {
+  margin: -4px 0 0 9px
+}
+
 .post .delete {
   background: url(/svgs/trash.svg) no-repeat 50% 50% #ffffff;
   background-size: 23px 23px;
-  margin: -4px 0 0 9px
+}
+
+.post .approve {
+  background: url(/svgs/checked.svg) no-repeat 50% 50% #ffffff;
+  background-size: 23px 23px;
 }
 
 .user {
@@ -838,11 +948,96 @@ canvas {
 
 
 @media screen and (max-width: 959px) {
+  .maxw-1111-230 {
+    max-width: 100%;
+  }
+
   #main_header {
     padding: 0 10px
   }
 
+  .logo,
+  .logo:visited {
+    padding-left: 0
+  }
+
   #subheader {
-    border-radius: 0
+    border-radius: 0;
+    max-width: calc(100% - 20px)
+  }
+
+  #subheader #search input[type=text] {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .features .grid-6 {
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #posts {
+    margin-top: 23px;
+    padding: 0 10px;
+    grid-template-rows: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .post {
+    margin-bottom: 23px
+  }
+
+  .postPage article>.flex,
+  .postPage article>.flex>.flex {
+    display: block
+  }
+
+  .postPage .main-image,
+  .postPage .main-image img {
+    max-width: 100% !important;
+    width: 100% !important
+  }
+
+  .postPage .content {
+    padding: 10px 0 0 0 !important
+  }
+
+  .indexPost,
+  .indexPost:visited {
+    padding: 0;
+  }
+
+  .postPage #voting {
+    width: 100%;
+  }
+
+  .postPage #voting canvas {
+    margin: 0 auto
+  }
+
+  .post:hover {
+    box-shadow: none;
+    background: none !important
+  }
+
+  .postPage .content {
+    padding: 0 0 0 10px
+  }
+
+  #post-form {
+    min-width: auto !important;
+    padding-top: 23px;
+  }
+
+  body #post-form .btn {
+    margin-top: 0 !important;
+  }
+
+  #filters {
+    padding: 10px
+  }
+
+  footer {
+    padding: 23px 10px
   }
 }

@@ -1,54 +1,72 @@
 import { $, $$ } from '/js/selectors.js';
-import { url, user } from '/js/proton.js';
+import { url, user, membership, accountStatus } from '/js/proton.js';
 import { postActions } from '/js/post-actions.js';
 
 export const voteBTN = () => {
     // REFACTOR THIS ENTIRE FUKN THING, I broke it, also check if delete works, including image file
     $$('.vote-btn').forEach(el => {
         el.addEventListener('click', (e) => {
-
-            let obj = {}
-            obj.id = parseInt(e.target.dataset.id);
-            obj.user = user;
-
-            const snd = $("#vote-sound");
-            const checkedRadio = $('input[name="post-' + obj.id + '-options"]:checked') || null;
-
-            if (checkedRadio) {
-                obj.vote = parseInt(checkedRadio.value);
-
-                const stringifiedObj = JSON.stringify(obj);
-
-                fetch(url + '/vote', {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: stringifiedObj
-                }).then(response => {
-                    return response.json();
-                }).then(data => {
-                    console.log(data)
-                    snd.play();
-                    if (!snd.paused) {
-                        el.disabled = true;
-                        el.classList.remove('voted');
-                        el.classList.add('voted');
-
-                        let filterObj = {}
-                        filterObj.type = 'title';
-                        filterObj.string = $('#post-' + obj.id + ' .title').innerText.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-                        // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
-                        // filterObj, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
-                        postActions(filterObj, true, true, true, true, true, true, true, false);
-                    }
-                }).catch(err => {
-                    console.log(err)
-                });
+            if (!user) {
+                alert("You are not authenticated.")
             } else {
-                alert('You have to select an option to vote.')
+                if (membership) {
+                    let obj = {}
+                    obj.id = parseInt(e.target.dataset.id);
+                    obj.user = user;
+
+                    const snd = $("#vote-sound");
+                    const checkedRadio = $('input[name="post-' + obj.id + '-options"]:checked') || null;
+
+                    if (checkedRadio) {
+                        obj.vote = parseInt(checkedRadio.value);
+
+                        const stringifiedObj = JSON.stringify(obj);
+
+                        fetch(url + '/vote', {
+                            method: "POST",
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: stringifiedObj
+                        }).then(response => {
+                            return response.json();
+                        }).then(data => {
+                            console.log(data)
+                            snd.play();
+                            if (!snd.paused) {
+                                el.disabled = true;
+                                el.classList.remove('voted');
+                                el.classList.add('voted');
+
+                                let queryURL = {}
+                                queryURL.type = 'title';
+                                queryURL.string = $('#post-' + obj.id + ' .title').innerText.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+                                // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
+                                // queryURL, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
+                                postActions(queryURL, true, true, true, true, true, true, true, false);
+                            }
+                        }).catch(err => {
+                            console.log(err)
+                        });
+                    } else {
+                        alert('You have to select an option to vote.')
+                    }
+                } else {
+                    let message = 'Account Membership Status:\n\n'
+                    if (accountStatus.balance >= 5) {
+                        message += 'Hold 5 GRAT in the account: OK\n'
+                    } else { message += 'Hold 5 GRAT in the account: NO\n' }
+
+                    if (accountStatus.kyc === true) {
+                        message += 'Pass the KYC process: OK'
+                    } else { message += 'Pass the KYC process: NO' }
+
+                    alert(message)
+                }
+
             }
+
         });
     });
 }

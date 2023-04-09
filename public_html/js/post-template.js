@@ -9,8 +9,9 @@ export class HTML {
     insertHTML(data) {
         // define some actions, like delete
         let actions = ''
-        user === data.user ? actions = `<button id="delete-${data.id}" class="delete" title="Delete this post"></button>` : null
+        user === data.user ? actions = `<button id="delete-${data.id}" class="action-button delete" title="Delete this post"></button>` : null
 
+        !data.approved ? actions += `<button id="approve-${data.id}" class="action-button approve" title="Approve this post"></button>` : null
 
         let pollHTML = ''
         const options = data.options
