@@ -1,20 +1,13 @@
-const path = require('path')
 const express = require('express')
-const multer = require("multer") // we use this for storing images and other files sent from the user
+const https = require('https')
+const cors = require('cors')
+const path = require('path')
+const multer = require('multer') // we use this for storing images and other files sent from the user
 const Joi = require('joi') // this is for data validation sent from front-end
 const fs = require('fs') // this is for saving or reading files to the server
 const Post = require('./methods/posts') // class / constructor
 const { Vote, userInfo } = require('./methods/posts') // functions ?  variables
-
-
 global.admins = ["lucianape3", "fatzuca"]
-
-// const { JsonRpc } = require("@proton/hyperion")
-// const fetch = require("isomorphic-fetch")
-// const endpoint = "https://eos.hyperion.eosrio.io"
-
-// const V1Point = 'https://proton.greymass.com/v1/history/get_transaction'
-// const v2Point = '/v2/history/get_actions?account=lucianape3&act.name=lucianape3'
 
 // configuration for multer
 let storage = multer.diskStorage({
@@ -31,63 +24,20 @@ let storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-const app = express()
-
-
 // express.json to decifer json data from incoming requests
+const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'shield')))
+app.use(cors());
 
-
-// const rpc = new JsonRpc(endpoint + v2Point, { fetch })
-
-// const test = async () => {
-//   let response
-//   try {
-//     response = await rpc.get_transaction('e14d9104a1e9d12864a06a2dfe5f448af7b24a71911190eb990c1dde3544b36f')
-//     console.log(response);
-
-//   }
-
-//   catch (error) {
-//     console.log(error)
-//     console.log(response);
-//   }
-// }
-
-// test()
-
-// https://proton.greymass.com/v1/chain/get_currency_balance
-//        ^^^^^^
-// const currencyPayload = {
-//   "code": "eosio.token",
-//   "account": "lucianape3",
-//   "symbol": "XPR"
-// }
-
-
-// with this request we can get all the data of a transaction
-// app.get('/balance', (req, res) => {
-//   fetch(V1Point, {
-//     method: 'POST',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({
-//       id: req.query.id
-//     })
-//   }).then(response => {
-//     return response.json()
-//   }).then(data => {
-//     res.send(data)
-//     // data.traces[1].receipt.receiver
-//   }).catch(err => {
-//     res.send(err)
-//   })
-
-// })
+https.createServer({
+  key: fs.readFileSync("server.key"),
+  cert: fs.readFileSync("server.crt"),
+}, app)
+  .listen(9632, () => {
+    console.log("Server is running at port 9632");
+  });
 
 
 // GETs all data from posts.json file 
@@ -120,6 +70,7 @@ app.get('/getposts', (req, res) => {
         comments.comments = JSON.parse(fs.readFileSync('data/comments/#' + posts[0].id + '.json'))
       } else { comments = null }
     }
+
     if (posts.length > 0) {
       votes = readVotes.filter(vote => vote.id === posts[0].id)
     } else {
@@ -279,10 +230,8 @@ app.put('/delete', (req, res) => {
 })
 
 
-app.get('/userinfo', (req, res) => {
-  console.log(userInfo(req.query.user, req.query.login))
-  //res.send(await userInfo(req.query.user, req.query.login))
-  res.send(userInfo(req.query.user, req.query.login))
+app.get('/userinfo', async (req, res) => {
+  res.send(await userInfo(req.query.user, req.query.login))
 })
 
 
@@ -308,8 +257,8 @@ app.post('/comment', (req, res) => {
     res.status(401).send(error.details[0].message)
     return
   } else {
-    if (fs.existsSync(`data/comments/#${req.body.postid}.json`)) {
-      commentsFile = JSON.parse(fs.readFileSync(`data/comments/#${req.body.postid}.json`))
+    if (fs.existsSync(`./data/comments/#${req.body.postid}.json`)) {
+      commentsFile = JSON.parse(fs.readFileSync(`./data/comments/#${req.body.postid}.json`))
     } else { commentsFile = [] }
 
     let count = 1
@@ -339,10 +288,8 @@ app.post('/comment', (req, res) => {
       comment.replies.push(commentData)
     }
 
-    fs.writeFileSync(`data/comments/#${req.body.postid}.json`, JSON.stringify(commentsFile))
+    fs.writeFileSync(`./data/comments/#${req.body.postid}.json`, JSON.stringify(commentsFile))
 
     res.send({ "status": 200 })
   }
 })
-
-app.listen(9632)
