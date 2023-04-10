@@ -153,14 +153,14 @@ module.exports.userInfo = async function (user, authenticating) {
   let avatar
   if (authenticating == 'true') {
     avatar = rows[0].avatar || 'PHN2ZyBmaWxsPSIjMDEyNDUzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI0IDI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiAwQzUuNCAwIDAgNS40IDAgMTJzNS40IDEyIDEyIDEyIDEyLTUuNCAxMi0xMlMxOC42IDAgMTIgMHptMCA0YzIuMiAwIDQgMi4yIDQgNXMtMS44IDUtNCA1LTQtMi4yLTQtNSAxLjgtNSA0LTV6bTYuNiAxNS41QzE2LjkgMjEgMTQuNSAyMiAxMiAyMnMtNC45LTEtNi42LTIuNWMtLjQtLjQtLjUtMS0uMS0xLjQgMS4xLTEuMyAyLjYtMi4yIDQuMi0yLjcuOC40IDEuNi42IDIuNS42czEuNy0uMiAyLjUtLjZjMS43LjUgMy4xIDEuNCA0LjIgMi43LjQuNC40IDEtLjEgMS40eiIvPjwvc3ZnPg=='
-  }
 
-  // create buffer for sharp
-  const imgBuffer = Buffer.from(avatar, 'base64')
-  sharp(imgBuffer)
-    .resize(320)
-    .toFile(`./shield/avatars/${user}.webp`, (err, info) => {
-      err ? console.log('Error saving avatar: ' + err) : null
-      return { "balance": parseInt(balance).toFixed(2), "kyc": kyc }
-    })
+    // create buffer for sharp
+    const imgBuffer = Buffer.from(avatar, 'base64')
+    sharp(imgBuffer)
+      .resize(320)
+      .toFile(`./shield/avatars/${user}.webp`, (err, info) => {
+        err ? console.log('Error saving avatar: ' + err) : null
+      })
+  }
+  return { "balance": parseInt(balance).toFixed(2), "kyc": kyc }
 }
