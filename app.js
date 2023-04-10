@@ -279,8 +279,10 @@ app.put('/delete', (req, res) => {
 })
 
 
-app.get('/userinfo', (req, res) => {
-  res.send(userInfo(req.query.user, req.query.login))
+app.get('/userinfo', async (req, res) => {
+  const returnedObject = await userInfo(req.query.user, req.query.login)
+  console.log(returnedObject)
+  res.send(returnedObject)
 })
 
 
