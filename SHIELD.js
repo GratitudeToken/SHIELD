@@ -230,8 +230,8 @@ app.put('/delete', (req, res) => {
 })
 
 
-app.get('/userinfo', async (req, res) => {
-  res.send(await userInfo(req.query.user, req.query.login))
+app.get('/userinfo', (req, res) => {
+  res.send(userInfo(req.query.user, req.query.login))
 })
 
 
