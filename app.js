@@ -7,7 +7,7 @@ const Post = require('./methods/posts') // class / constructor
 const { Vote, userInfo } = require('./methods/posts') // functions ?  variables
 
 
-global.admins = ["lucianape3", "fatzuca"]
+global.admins = ["lucianape3", "fatzuca", "barbuvlad21"]
 
 // const { JsonRpc } = require("@proton/hyperion")
 // const fetch = require("isomorphic-fetch")
@@ -281,7 +281,6 @@ app.put('/delete', (req, res) => {
 
 app.get('/userinfo', async (req, res) => {
   const returnedObject = await userInfo(req.query.user, req.query.login)
-  console.log(returnedObject)
   res.send(returnedObject)
 })
 

@@ -5,6 +5,7 @@ let session = undefined
 
 
 export let user
+export const admins = ["lucianape3", "fatzuca", "barbuvlad21"]
 export let minBalance = 0 // 5 GRAT tokens
 export let membership = true // default should be false
 export let accountStatus

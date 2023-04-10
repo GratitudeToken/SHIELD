@@ -19,7 +19,7 @@ body {
   line-height: 1;
   text-align: center;
   -webkit-user-drag: none;
-
+  overflow-x: hidden
 }
 
 body {
@@ -252,11 +252,17 @@ h5 {
   pointer-events: none;
 }
 
-.small-icon {
+.small-icon,
+.medium-icon {
   width: 16px;
   height: 16px;
   vertical-align: middle;
   display: inline-block;
+}
+
+.medium-icon {
+  width: 23px;
+  height: 23px;
 }
 
 #user-menu {
@@ -634,6 +640,7 @@ footer {
 .description {
   word-wrap: break-word;
   overflow: hidden;
+  white-space: pre-wrap
 }
 
 .description ol {
@@ -784,6 +791,8 @@ footer {
 
 .tags {
   padding: 10px 10px 10px 0;
+  word-wrap: break-word;
+  line-height: 1.4;
 }
 
 .tag {

@@ -1,6 +1,6 @@
 import { $, $$ } from '/js/selectors.js'
 import { formatDate } from '/js/date-formatting.js'
-import { url, user } from '/js/proton.js'
+import { url, user, admins } from '/js/proton.js'
 import { countdown } from '/js/countdown.js'
 import { commentTemplate } from '/js/comments.js'
 
@@ -9,7 +9,9 @@ export class HTML {
     insertHTML(data) {
         // define some actions, like delete
         let actions = ''
-        user === data.user ? actions = `<button id="delete-${data.id}" class="action-button delete" title="Delete this post"></button>` : null
+        if (user === data.user || admins.includes(user)) {
+            actions = `<button id="delete-${data.id}" class="action-button delete" title="Delete this post"></button>`
+        }
 
         !data.approved ? actions += `<button id="approve-${data.id}" class="action-button approve" title="Approve this post"></button>` : null
 

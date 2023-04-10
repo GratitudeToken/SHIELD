@@ -144,6 +144,7 @@ module.exports.userInfo = async function (user, authenticating) {
       "banned": false,
       "balance": parseInt(balance)
     }
+    fs.writeFileSync(`./data/members.json`, JSON.stringify(members))
   } else {
     if (members[user].kyc !== kyc || members[user].balance !== parseInt(balance)) {
       fs.writeFileSync(`./data/members.json`, JSON.stringify(members))
@@ -156,11 +157,24 @@ module.exports.userInfo = async function (user, authenticating) {
 
     // create buffer for sharp
     const imgBuffer = Buffer.from(avatar, 'base64')
-    sharp(imgBuffer)
-      .resize(320)
-      .toFile(`./shield/avatars/${user}.webp`, (err, info) => {
-        err ? console.log('Error saving avatar: ' + err) : null
+
+    try {
+      const avatarPromise = new Promise((resolve, reject) => {
+        sharp(imgBuffer)
+          .resize(320)
+          .toFile(`./shield/avatars/${user}.webp`, (err, info) => {
+            if (err) {
+              reject(err)
+              console.log('Error saving avatar: ' + err)
+            } else {
+              resolve()
+            }
+          })
       })
+      await avatarPromise
+    } catch (e) {
+      console.error(e)
+    }
   }
   return { "balance": parseInt(balance).toFixed(2), "kyc": kyc }
 }
