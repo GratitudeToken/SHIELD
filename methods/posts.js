@@ -168,12 +168,4 @@ module.exports.userInfo = async function (user, authenticating) {
       })
   }
   sharpSave()
-  // const avatarPromise = Promise.resolve(sharpSave())
-  // avatarPromise.then(
-  //   (value) => {
-  //     console.log(value)
-  //     return value
-  //   },
-  //   (error) => { console.log(error) }
-  // )
 }
