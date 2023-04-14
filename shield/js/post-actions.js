@@ -47,7 +47,6 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                 return response.json()
             })
             .then(data => {
-                console.log(data)
                 // let's filter the data by user selecte post type
                 if (filter !== 'all') {
                     data.posts.forEach((el, i) => {
