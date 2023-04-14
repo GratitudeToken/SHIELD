@@ -79,6 +79,17 @@ h5 {
   margin: 0 auto 12px auto
 }
 
+.first-paragraph {
+  margin-bottom: 0;
+  padding-bottom: 0 !important;
+}
+
+.first-paragraph i {
+  max-width: 60%;
+  display: block;
+  margin: 0 auto
+}
+
 .features b {
   font-size: 14px;
   color: #012453
@@ -163,11 +174,13 @@ h5 {
   color: #ffffff;
   border-radius: 5px;
   margin-left: -27px;
-  transition: 0.23s background-color
+  transition: 0.23s all
 }
 
 #subheader input[type=submit]:hover {
   background-color: #0274f9;
+  background-size: 32px 32px;
+  background-position: -10% 22%;
 }
 
 .visionary .membership-icon {
@@ -291,15 +304,19 @@ h5 {
 }
 
 #menu-options {
-  min-width: 120px;
+  min-width: 140px;
   display: none;
   position: absolute;
-  right: 5px;
-  margin: 37px 38px 0 0;
+  top: -4px;
+  right: 43px;
   border-radius: 5px;
   border: 1px solid #ffffff;
   box-shadow: 0 0 15px #00000050;
   text-align: left;
+}
+
+.authenticated {
+  top: 10px !important
 }
 
 #menu-options button:first-of-type {
@@ -332,11 +349,15 @@ h5 {
 #login,
 #logout {
   border-radius: 0;
-  min-width: 120px;
+  width: 100%;
   border: 0;
   padding: 10px;
   background: #ffffff;
   text-align: left;
+}
+
+#logout {
+  display: none;
 }
 
 #login span {
@@ -526,9 +547,9 @@ footer {
   filter: grayscale(1);
 }
 
-.unapproved {
+/* .unapproved {
   background-color: #ff464650;
-}
+} */
 
 .post-voted {
   opacity: 0.69;
@@ -791,13 +812,13 @@ footer {
 
 .tags {
   padding: 10px 10px 10px 0;
-  word-wrap: break-word;
   line-height: 1.4;
 }
 
 .tag {
   margin: 0 6px 0 0;
   text-decoration: none;
+  display: inline-block
 }
 
 .tag:hover {
@@ -864,6 +885,7 @@ footer {
 
 .voting {
   position: relative;
+  margin-top: 23px;
   width: 230px;
   min-width: 230px;
   height: 230px;
@@ -1039,6 +1061,10 @@ canvas {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .first-paragraph i {
+    max-width: 100%
+  }
+
   #posts {
     margin-top: 23px;
     padding: 0 10px;
@@ -1075,7 +1101,6 @@ canvas {
 
   .post h2 {
     font-size: 14px;
-    margin-top: 8px;
     line-height: 1.4;
   }
 

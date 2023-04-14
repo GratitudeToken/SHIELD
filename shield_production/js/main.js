@@ -17,8 +17,9 @@ const urlSearch = new URLSearchParams(urlString);
 let queryURL = {}
 
 
-if (urlSearch.get('title') !== null) {
+if (urlSearch.get('title') && urlSearch.get('id')) {
     queryURL.type = 'title';
+    queryURL.id = urlSearch.get('id');
     queryURL.string = urlSearch.get('title');
     // generate post page
     postActions(queryURL, true, true, true, true, true, true, true, false);

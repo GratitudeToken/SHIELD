@@ -30,8 +30,10 @@ export const submitPost = () => {
             $$('.voteInput').forEach((option) =>
                 formData.append("options[]", option.value)
             )
-
-            formData.append("tags", $('#tags-input').value)
+            const tags = $('#tags-input').value.trimEnd()
+            const punctuationless = tags.replace(/[.,\/#!$%\^&\*;:{}=\`~()]/g, "")
+            const finalTagsString = punctuationless.replace(/\s{2,}/g, " ")
+            formData.append("tags", finalTagsString)
             formData.append("type", $('input[name="type"]:checked').value);
             (votes || []).forEach((option) =>
                 formData.append("votes[]", parseInt(option))

@@ -13,7 +13,7 @@ export class HTML {
             actions = `<button id="delete-${data.id}" class="action-button delete" title="Delete this post"></button>`
         }
 
-        !data.approved ? actions += `<button id="approve-${data.id}" class="action-button approve" title="Approve this post"></button>` : null
+        //!data.approved ? actions += `<button id="approve-${data.id}" class="action-button approve" title="Approve this post"></button>` : null
 
         let pollHTML = ''
         const options = data.options

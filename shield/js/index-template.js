@@ -5,13 +5,13 @@ import { countdown } from '/js/countdown.js'
 // HTML post display template that is used when getPosts is called
 export class indexHTML {
     insertHTML(data) {
-        let approved
-        !data.approved ? approved = 'unapproved' : approved = ''
+        // let approved
+        // !data.approved ? approved = 'unapproved' : approved = ''
 
         // title
         let linkTitle = ''
         if (data && data.title) {
-            linkTitle = '?title=' + data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
+            linkTitle = '?id=' + data.id + '&title=' + data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
         }
         let voted
         let closedStatus = ''
@@ -32,12 +32,13 @@ export class indexHTML {
         } else { imageSRC = '/img/love-technology.jpg' }
 
         return `
-            <article class="post ${closedStatus} ${approved}" id="post-${data.id}">
+            <article class="post ${closedStatus}" id="post-${data.id}">
                 <a href="${linkTitle}" class="flex indexPost" title="${data.user}">
                     <div class="main-image avatar"><img class="image" src="/avatars/${data.user}.webp" alt="${data.user} avatar" /></div>
 
                     <div class="content">
                         <div class="flex-space-vertical">
+                            <div class="title ${data.type}"><h2>${data.title}</h2></div>
                             <div class="user_info flex">
                                 <span class="${data.type} post-type">${data.type}</span>
                                 <img class="calendar" src="/svgs/calendar.svg" alt="calendar date posted icon" />
@@ -45,7 +46,6 @@ export class indexHTML {
                                 <img class="hourglass" src="/svgs/hourglass.svg" alt="hourglass time left icon" />
                                 <span class="countdown" title="Time left (Days : Hours : Minutes)"></span>
                             </div>
-                            <div class="title ${data.type}"><h2>${data.title}</h2></div>
                         </div>
                     </div>
                 </a>

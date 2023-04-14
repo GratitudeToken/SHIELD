@@ -7,7 +7,7 @@ const Post = require('./methods/posts') // class / constructor
 const { Vote, userInfo } = require('./methods/posts') // functions ?  variables
 
 
-global.admins = ["lucianape3", "fatzuca", "barbuvlad21"]
+global.admins = ["lucianape3", "fatzuca", "barbuvlad21", "maki1", "abubfc", "dagrine", "jibon23"]
 
 // const { JsonRpc } = require("@proton/hyperion")
 // const fetch = require("isomorphic-fetch")
@@ -98,21 +98,23 @@ app.get('/getposts', (req, res) => {
   //let comments
 
   // filter posts and votes object based on: if the user requesting is an admin or regular user
-  if (req.query.user && admins.includes(req.query.user)) {
-  } else {
-    // if the user is not present or is not an admin
-    const filteredPosts = readPosts.filter(post => post.approved)
-    const filteredVotes = readVotes.filter(vote => {
-      const post = filteredPosts.find(p => p.id === vote.id)
-      return post && post.approved
-    })
+  // if (req.query.user) {
+  // } else {
+  //   // if the user is not present or is not an admin
+  //   const filteredPosts = readPosts.filter(post => post.approved)
+  //   const filteredVotes = readVotes.filter(vote => {
+  //     const post = filteredPosts.find(p => p.id === vote.id)
+  //     return post && post.approved
+  //   })
 
-    readPosts = filteredPosts
-    readVotes = filteredVotes
-  }
+  //   readPosts = filteredPosts
+  //   readVotes = filteredVotes
+  // }
 
-  if (req.query.title) {
-    let posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title)
+  if (req.query.id) {
+    //let posts = readPosts.filter(title => title.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === req.query.title)
+    let posts = readPosts.filter(id => id.id == req.query.id)
+
     let votes
     let comments = {}
     if (posts[0]) {
@@ -144,27 +146,38 @@ app.get('/getposts', (req, res) => {
   }
 
   else if (req.query.search) {
+
     const s = req.query.search
     let votes = []
     let posts = []
 
     const searchStringInJSON = (str, json) => {
+      const string = str.toLowerCase()
       json.forEach(object => {
 
         for (var key in object) {
-          if (key === 'title' && object[key].includes(str)) {
+          if (key === 'title' && object[key].toLowerCase().includes(string)) {
             posts.push(object)
             votes.push(readVotes.filter(vote => vote.id === object.id)[0])
             break
           }
-          if (key === 'tags' && object[key].includes(str)) {
+          if (key === 'tags' && object[key].toLowerCase().includes(string)) {
             posts.push(object)
             votes.push(readVotes.filter(vote => vote.id === object.id)[0])
             break
           }
           if (key === 'options') {
             const stringifiedOptions = JSON.stringify(object.options).toLowerCase().replace(/ /g, '').replace(/[^\w-]+/g, ',')
-            if (stringifiedOptions.includes(str)) {
+            if (stringifiedOptions.includes(string)) {
+              posts.push(object)
+              votes.push(readVotes.filter(vote => vote.id === object.id)[0])
+              break
+            }
+          }
+          if (key === 'description') {
+            const stringifiedOptions = JSON.stringify(object.description).toLowerCase()
+
+            if (stringifiedOptions.includes(string)) {
               posts.push(object)
               votes.push(readVotes.filter(vote => vote.id === object.id)[0])
               break
@@ -177,6 +190,7 @@ app.get('/getposts', (req, res) => {
     }
 
     posts = searchStringInJSON(s, readPosts)
+
     res.send({ posts, votes })
   }
 
@@ -188,23 +202,23 @@ app.get('/getposts', (req, res) => {
 
 })
 
-app.post('/approve', (req, res) => {
+// app.post('/approve', (req, res) => {
 
-  if (admins.includes(req.body.user)) {
-    const posts = JSON.parse(fs.readFileSync('data/posts.json'))
+//   if (admins.includes(req.body.user)) {
+//     const posts = JSON.parse(fs.readFileSync('data/posts.json'))
 
-    const updatedPosts = posts.map(post => {
-      if (post.id === req.body.id) {
-        return { ...post, approved: true }
-      }
-      return post;
-    })
+//     const updatedPosts = posts.map(post => {
+//       if (post.id === req.body.id) {
+//         return { ...post, approved: true }
+//       }
+//       return post;
+//     })
 
-    fs.writeFileSync(`data/posts.json`, JSON.stringify(updatedPosts))
+//     fs.writeFileSync(`data/posts.json`, JSON.stringify(updatedPosts))
 
-    res.send({ "status": 200 })
-  }
-})
+//     res.send({ "status": 200 })
+//   }
+// })
 
 // POST to the posts.json file
 app.post('/post', upload.single("image"), (req, res) => {
