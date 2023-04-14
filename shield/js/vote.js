@@ -41,6 +41,8 @@ export const voteBTN = () => {
 
                                 let queryURL = {}
                                 queryURL.type = 'title';
+                                console.log(obj.id)
+                                queryURL.id = obj.id;
                                 queryURL.string = $('#post-' + obj.id + ' .title').innerText.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
                                 // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
                                 // queryURL, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem

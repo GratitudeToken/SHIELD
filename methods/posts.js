@@ -16,7 +16,7 @@ module.exports = class Post {
     this.id = 0
     this.type = postData.type
     this.user = postData.user
-    this.approved = false
+    //    this.approved = true
     this.title = postData.title
     this.image = `${postData.filename || ''}`
     this.description = postData.description
@@ -39,8 +39,14 @@ module.exports = class Post {
       if (!err) {
         newVotes = JSON.parse(fileContent)
       }
-      newID = parseInt(newVotes.length + 1)
 
+      let maxId = 0;
+      for (let i = 0; i < newVotes.length; i++) {
+        if (newVotes[i].id > maxId) {
+          maxId = newVotes[i].id;
+        }
+      }
+      let newID = maxId + 1
       this.id = newID
 
       let newPostData = {}

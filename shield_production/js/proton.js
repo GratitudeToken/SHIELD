@@ -5,7 +5,7 @@ let session = undefined
 
 
 export let user
-export const admins = ["lucianape3", "fatzuca", "barbuvlad21"]
+export const admins = ["lucianape3", "fatzuca", "barbuvlad21", "maki1", "abubfc", "dagrine", "jibon23"]
 export let minBalance = 0 // 5 GRAT tokens
 export let membership = true // default should be false
 export let accountStatus
@@ -88,7 +88,8 @@ export const userInfo = (user, authenticating) => {
         if (user) {
             $('#user-menu .avatar').src = `/shield/avatars/${user}.webp`
             $('#balance b').innerHTML = data.balance + ' GRAT'
-            $('#login span').textContent = 'Switch'
+            $('#login span').textContent = 'Switch wallet'
+            $('#logout').style.display = 'block'
         } else {
             $('#user-menu .avatar').src = `/shield/svgs/user.svg`
         }
@@ -138,7 +139,7 @@ const login = async (restoreSession) => {
         user = localSession.auth.actor
         avatarName.textContent = user
         $('#add').style.display = 'block'
-        loginButton.classList.add('authenticated')
+        $('#menu-options').classList.add('authenticated')
 
         restoreSession ? userInfo(user, false) : userInfo(user, true)
     }

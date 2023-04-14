@@ -30,7 +30,7 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
 
     if (typeof queryURL === 'object') {
         queryURL.type === 'search' ? newURL = url + '/getposts?user=' + user + '&search=' + queryURL.string : null
-        queryURL.type === 'title' ? newURL = url + '/getposts?user=' + user + '&title=' + queryURL.string : null
+        queryURL.type === 'title' ? newURL = url + '/getposts?user=' + user + '&id=' + queryURL.id + '&title=' + queryURL.string : null
         queryURL.type === 'tag' ? newURL = url + '/getposts?user=' + user + '&tag=' + queryURL.string : null
     } else {
         $('.features').style.display = 'block'
@@ -47,6 +47,7 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                 return response.json()
             })
             .then(data => {
+                console.log(data)
                 // let's filter the data by user selecte post type
                 if (filter !== 'all') {
                     data.posts.forEach((el, i) => {
@@ -84,30 +85,30 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                         indexPage === false ? commentEvents(filteredData.posts[0].id) : null
                     }
 
-                    const approve = $('.approve')
+                    // const approve = $('.approve')
 
-                    approve && approve.addEventListener('click', (event) => {
-                        // get the id (title) of the clicked post
-                        const arr = event.target.id.split('-')
-                        const id = arr.at(-1)
-                        const approvePost = { "id": parseInt(id), "user": user }
+                    // approve && approve.addEventListener('click', (event) => {
+                    //     // get the id (title) of the clicked post
+                    //     const arr = event.target.id.split('-')
+                    //     const id = arr.at(-1)
+                    //     const approvePost = { "id": parseInt(id), "user": user }
 
-                        fetch(url + '/approve', {
-                            method: "POST",
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(approvePost)
-                        }).then(response => {
-                            return response.json()
-                        }).then(data => {
-                            if (data.status === 200) {
-                                $('.shortMessage').innerHTML = '<div class="quickText"><h2 style="color: green">APPROVED</h2></div>'
-                                $('.approve').remove()
-                            }
-                        })
-                    })
+                    //     fetch(url + '/approve', {
+                    //         method: "POST",
+                    //         headers: {
+                    //             'Accept': 'application/json',
+                    //             'Content-Type': 'application/json'
+                    //         },
+                    //         body: JSON.stringify(approvePost)
+                    //     }).then(response => {
+                    //         return response.json()
+                    //     }).then(data => {
+                    //         if (data.status === 200) {
+                    //             $('.shortMessage').innerHTML = '<div class="quickText"><h2 style="color: green">APPROVED</h2></div>'
+                    //             $('.approve').remove()
+                    //         }
+                    //     })
+                    // })
 
 
                     // remake all charts functiony
