@@ -8,6 +8,13 @@ v1.0 (ALPHA) SPECS:
 DEMO LIVE - MainNet ALPHA Version:
 https://gratitudetoken.world/shield
 
+Commands after cloning and opening in Visual Studio Code:
+
+`
+npm i
+npm start
+`
+
 GNU GPL 3.0 License - ALL THE CODE IN THIS REPOSITORY IS LICENSED UNDER GNU GPL 3.0 License.
 
 GETTING STARTED AND FULL DOCUMENTATION - IN PROGRESS
