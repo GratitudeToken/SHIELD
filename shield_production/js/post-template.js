@@ -83,6 +83,7 @@ export class HTML {
                     <div class="content">
                         <div class="user_info flex">
                             <span class="${data.type} post-type">${data.type}</span>
+                            <b class="${data.type}">#${data.id}</b>
                             <img class="calendar" src="/shield/svgs/calendar.svg" alt="calendar date posted icon" />
                             <span class="date" title="Date posted">` + formatDate(data.date) + `</span>
                             <img class="hourglass" src="/shield/svgs/hourglass.svg" alt="hourglass time left icon" />

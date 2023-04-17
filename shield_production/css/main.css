@@ -173,11 +173,13 @@ h5 {
   color: #ffffff;
   border-radius: 5px;
   margin-left: -27px;
-  transition: 0.23s background-color
+  transition: 0.23s all
 }
 
 #subheader input[type=submit]:hover {
   background-color: #0274f9;
+  background-size: 32px 32px;
+  background-position: -8% 23%;
 }
 
 .visionary .membership-icon {
@@ -647,8 +649,15 @@ footer img {
 }
 
 .post h2 {
-  font-size: 15px;
-  padding: 0 0 1px 0
+  font-size: 16px;
+  margin: -5px 0 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: initial;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  line-height: 1.5;
 }
 
 .index-post {
@@ -691,6 +700,10 @@ footer img {
   justify-content: space-between;
 }
 
+.flex-space-vertical-middle {
+  justify-content: center;
+}
+
 .indexPost .main-image {
   display: block;
   width: 64px;
@@ -702,7 +715,7 @@ footer img {
 .main-image {
   display: block;
   width: 230px;
-  border-radius: 6px;
+  border-radius: 51%;
 }
 
 .indexPost .main-image img {
@@ -870,7 +883,6 @@ footer img {
 
 .content {
   width: 100%;
-  *max-width: calc(100% - 230px);
   text-align: left;
   padding-left: 15px;
 }
@@ -922,9 +934,15 @@ footer img {
   background-size: 23px 23px;
 }
 
+.index-user {
+  opacity: 0.777;
+  text-transform: lowercase;
+  font-size: 14px
+}
+
 .user {
   font-family: 'Dosis', Arial, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   margin: -4px 4px 0 6px;
 }
@@ -1171,17 +1189,17 @@ canvas {
     width: calc(100% - 74px)
   }
 
-  .indexPost .content .flex-space-vertical {
-    height: auto !important
-  }
-
   .post h2 {
-    font-size: 14px;
     line-height: 1.4;
+    margin-top: 0
   }
 
   .indexPost .user_info * {
-    font-size: 10px
+    font-size: 11px
+  }
+
+  .indexPost .index-user {
+    font-size: 16px;
   }
 
   .tag {

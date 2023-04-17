@@ -1,7 +1,12 @@
 import { $, $$ } from '/shield/js/selectors.js'
 import { url, user } from '/shield/js/proton.js';
+import { countdown } from '/shield/js/countdown.js'
 
 export const commentTemplate = (data) => {
+
+    const counter = new countdown
+    const closed = counter.count(data.id, data.expires, false)
+
     // COMMENTS
     let commentTemplate = ''
 
@@ -87,11 +92,13 @@ export const commentEvents = (postID) => {
 
     $('.main-comment-form').addEventListener("submit", (e) => {
         e.preventDefault()
-        commentData.postid = postID
-        commentData.commentid = parseInt(lastCommentID)
-        commentData.type = 'comment'
-        commentData.comment = e.currentTarget.querySelector('textarea').value
-        postComment(commentData)
+        if (closed === 'Closed') {
+            commentData.postid = postID
+            commentData.commentid = parseInt(lastCommentID)
+            commentData.type = 'comment'
+            commentData.comment = e.currentTarget.querySelector('textarea').value
+            postComment(commentData)
+        } else { alert('Comments are only available when the post expires.') }
     })
 
     $$('comment').forEach((item, index) => {

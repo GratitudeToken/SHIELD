@@ -37,10 +37,10 @@ export class indexHTML {
                     <div class="main-image avatar"><img class="image" src="/shield/avatars/${data.user}.webp" alt="${data.user} avatar" /></div>
 
                     <div class="content">
-                        <div class="flex-space-vertical">
+                        <div class="flex-space-vertical flex-space-vertical-middle">
                             <div class="title ${data.type}"><h2>${data.title}</h2></div>
                             <div class="user_info flex">
-                                <span class="${data.type} post-type">${data.type}</span>
+                                <span class="index-user ${data.type}">@${data.user}</span>
                                 <img class="calendar" src="/shield/svgs/calendar.svg" alt="calendar date posted icon" />
                                 <span class="date" title="Date posted">` + formatDate(data.date) + `</span>
                                 <img class="hourglass" src="/shield/svgs/hourglass.svg" alt="hourglass time left icon" />
