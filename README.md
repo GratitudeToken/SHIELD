@@ -12,6 +12,8 @@ Commands after cloning and opening in Visual Studio Code:
 
 `
 npm i
+`
+`
 npm start
 `
 
