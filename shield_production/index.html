@@ -36,14 +36,11 @@
     <meta name="twitter:site" content="@Gratitude_World">
     <meta name="twitter:creator" content="@Lucian_Apetrei">
 
-    <title>SHIELD | GratitudeToken.world</title>
+    <title>SHIELD</title>
 
     <!-- Style -->
-    <style>
-        :root {
-            --logo: url(/shield/svgs/SHIELD-logo.svg) no-repeat 50% 50%;
-        }
-    </style>
+    <script type="module" src="/shield/js/theme.js"></script>
+    <link class="themeCSS" rel="stylesheet" href="/shield/css/default-theme.css">
     <link rel="stylesheet" href="/shield/css/main.css">
     <link rel="stylesheet" href="/shield/css/post.css">
     <link rel="stylesheet" href="/shield/css/forms.css">
@@ -75,9 +72,13 @@
     </header>
     <div id="subheader" class="flex">
         <form id="search">
-            <input type="text" minlength="3" maxlength="99" placeholder="Search in all posts" required /><input
-                type="submit" value=" " title="Search" />
+            <input type="text" minlength="3" maxlength="99" placeholder="Search ..." required /><input type="submit"
+                value=" " title="Search" />
         </form>
+        <label class="switch" title="Light / Dark">
+            <input id="themeSwitch" type="checkbox">
+            <span class="slider"></span>
+        </label>
         <div id="stats" class="flex">
             <div id="balance" class="flex" title="Balance"> <img src="/shield/svgs/gratitude-token-logo.svg"
                     alt="grat logo" /><b>0.00 GRAT</b>
@@ -89,14 +90,16 @@
 
     <div id="main">
         <div class="features">
+            <img id="close-features" src="/shield/svgs/close.svg" alt="close icon" />
             <p class="first-paragraph">
                 <b style="font-size: 18px">Get the pulse of your community with SHIELD</b><br><br><i>Allow unique human
                     beings to Submit and Vote on important Polls, Proposals and Issues for your project, protecting the
                     sustainability of your business or organisation with advanced blockchain voting technology.</i>
             </p>
             <div class="grid-6">
-                <div><img src="/shield/svgs/vote.svg" alt="Vote on Polls, Proposals & Issues" /><b>DAO
-                        voting platform</b><br>Vote on important
+                <div><img src="/shield/svgs/vote.svg" alt="Vote on Polls, Proposals & Issues" /><b>DAO voting
+                        platform</b><br>Vote on
+                    important
                     Polls, Proposals and raised Issues.</div>
                 <div><img src="/shield/svgs/submit.svg" alt="Submit your post" /><b>Submit Your Post</b><br>Have an idea
                     for a
@@ -121,18 +124,24 @@
                     Wisdom of Crowds by J. Surowiecki.</div>
             </div>
             <h1>Sustainable Holistic Intelligent Enterprise & Leaderless Development</h1>
-            <p><b style="color: green"><img class="medium-icon" style="margin: -2px 6px 0 0" src="/svgs/exclamation.svg"
-                        alt="Info Announcement Notification" />During the alpha public test all proton accounts are
+            <p><b style="color: green"><img class="medium-icon" style="margin: -2px 6px 0 0"
+                        src="/shield/svgs/exclamation.svg" alt="Info Announcement Notification" />During the alpha
+                    public test all proton accounts are
                     accepted. You don't need to own 5 GRAT tokens or to have KYC passed.</b></p>
         </div>
-        <div id="filters">
-            <img src="/shield/svgs/filter.svg" alt="filter icon" /> Filter:
-            <select id="select-type">
-                <option value="all" selected>All</option>
-                <option value="proposal">Proposals</option>
-                <option value="poll">Polls</option>
-                <option value="issue">Issues</option>
-            </select>
+        <div id="filters" class="flex">
+            <div>
+                <a href="/" title="Homepage"><img class="small-icon" alt="Home Icon" src="/shield/svgs/home.svg" /></a>
+            </div>
+            <div>
+                <img src="/shield/svgs/filter.svg" alt="filter icon" /> Filter:
+                <select id="select-type">
+                    <option value="all" selected>All</option>
+                    <option value="proposal">Proposals</option>
+                    <option value="poll">Polls</option>
+                    <option value="issue">Issues</option>
+                </select>
+            </div>
         </div>
         <div id="posts" class="grid"></div>
 

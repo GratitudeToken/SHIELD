@@ -2,7 +2,7 @@ import { $, $$ } from '/shield/js/selectors.js'
 
 let link = undefined
 let session = undefined
-
+export let features = localStorage.getItem('features') || null
 
 export let user
 export const admins = ["lucianape3", "fatzuca", "barbuvlad21", "maki1", "abubfc", "dagrine", "jibon23"]
@@ -66,7 +66,7 @@ const PROTON_TESTNET_EP = [
 const MAINET_CHAINID = "384da888112027f0321850a169f737c33e53b388aad48b5adace4bab97f437e0"
 const TESTNET_CHAINID = "71ee83bcf52142d61019d95f9cc5427ba6a0d7ff8accd9e2088ae2abeaf3d3dd"
 
-const appIdentifier = "SHIELD"
+const appIdentifier = "shieldvault"
 const chainId = MAINET_CHAINID
 const endpoints = PROTON_MAINNET_EPS
 
@@ -75,7 +75,6 @@ const avatarName = $('#avatar-name')
 const logoutButton = $('#logout')
 
 // for checking and saving membership and balance and other info
-
 export const userInfo = (user, authenticating) => {
     fetch(url + '/userinfo?user=' + user + '&login=' + authenticating, {
     }).then(response => {
@@ -96,6 +95,10 @@ export const userInfo = (user, authenticating) => {
     })
 }
 
+$('#close-features').addEventListener("click", e => {
+    localStorage.setItem('features', 'hidden')
+    $('.features').style.display = 'none'
+})
 
 
 // Login in function that is called when the login button is clicked

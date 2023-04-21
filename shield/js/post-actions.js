@@ -1,5 +1,5 @@
 import { $, $$ } from '/js/selectors.js'
-import { url, user } from '/js/proton.js'
+import { url, user, features } from '/js/proton.js'
 import { indexHTML } from '/js/index-template.js'
 import { HTML } from '/js/post-template.js'
 import { makeChart } from '/js/chart.js'
@@ -33,8 +33,8 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
         queryURL.type === 'title' ? newURL = url + '/getposts?user=' + user + '&id=' + queryURL.id + '&title=' + queryURL.string : null
         queryURL.type === 'tag' ? newURL = url + '/getposts?user=' + user + '&tag=' + queryURL.string : null
     } else {
-        $('.features').style.display = 'block'
-        $('#filters').style.display = 'block'
+        $('#filters').style.display = 'flex'
+        features === 'hidden' ? $('.features').style.display = 'none' : $('.features').style.display = 'block'
     }
 
     let filteredData = {}
