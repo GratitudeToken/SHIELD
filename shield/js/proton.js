@@ -2,7 +2,7 @@ import { $, $$ } from '/js/selectors.js'
 
 let link = undefined
 let session = undefined
-
+export let features = localStorage.getItem('features') || null
 
 export let user
 export const admins = ["lucianape3", "fatzuca", "barbuvlad21", "maki1", "abubfc", "dagrine", "jibon23"]
@@ -75,7 +75,6 @@ const avatarName = $('#avatar-name')
 const logoutButton = $('#logout')
 
 // for checking and saving membership and balance and other info
-
 export const userInfo = (user, authenticating) => {
     fetch(url + '/userinfo?user=' + user + '&login=' + authenticating, {
     }).then(response => {
@@ -95,6 +94,11 @@ export const userInfo = (user, authenticating) => {
         }
     })
 }
+
+$('#close-features').addEventListener("click", e => {
+    localStorage.setItem('features', 'hidden')
+    $('.features').style.display = 'none'
+})
 
 
 

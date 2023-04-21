@@ -38,8 +38,26 @@
 
 .main-image .user {
     letter-spacing: 0.5px;
-    color: #ffffff;
-    text-shadow: 0 0 6px #000000;
+    color: var(--image-user);
+    text-shadow: 0 0 6px var(--image-user-shadow);
+}
+
+.postAvatar {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 51%;
+    position: relative;
+    overflow: hidden;
+    box-sizing: content-box;
+    box-shadow: 0 0 6px var(--image-user-shadow);
+}
+
+.postAvatar img {
+    width: 32px;
+    position: absolute;
+    top: 0;
+    left: 0
 }
 
 .postPage .main-image img {
@@ -76,7 +94,9 @@
     display: block;
     padding: 6px 12px;
     border-radius: 5px;
-    min-height: 69px
+    min-height: 69px;
+    background: var(--comments-textarea-bg);
+    color: var(--comments-textarea-color)
 }
 
 .submit-comment {
@@ -102,7 +122,7 @@ comment {
 }
 
 comment:hover {
-    background-color: #e0eeff
+    background-color: var(--sub-header-bg)
 }
 
 reply {
@@ -118,11 +138,6 @@ comment replies {
     display: block;
     padding: 6px 0 0 12px;
     margin-left: 23px;
-    *border-width: 1px solid #e0eeff;
-    *border-top: 1px solid #e0eeff;
-    border-width: 1px;
-    border-style: solid;
-    border-image: linear-gradient(to right, #e0eeff, transparent) 1 0 1 1;
 }
 
 comment header {
@@ -163,7 +178,7 @@ comment p {
     animation-fill-mode: both;
     height: 10px;
     width: 10px;
-    background: #3b5998;
+    background: var(--ink-blue);
     position: absolute;
     left: 0;
     top: 0;
