@@ -1,5 +1,5 @@
 import { $, $$ } from '/js/selectors.js';
-import { url, user, membership, accountStatus, minBalance } from '/js/proton.js';
+import { url, user, membership, accountStatus, minBalance, login } from '/js/proton.js';
 import { postActions } from '/js/post-actions.js';
 
 export const voteBTN = () => {
@@ -7,7 +7,7 @@ export const voteBTN = () => {
     $$('.vote-btn').forEach(el => {
         el.addEventListener('click', (e) => {
             if (!user) {
-                alert("You are not connected.")
+                login(false)
             } else {
                 if (membership) {
                     let obj = {}
@@ -19,10 +19,9 @@ export const voteBTN = () => {
 
                     if (checkedRadio) {
                         obj.vote = parseInt(checkedRadio.value);
-
                         const stringifiedObj = JSON.stringify(obj);
 
-                        fetch(url + '/vote', {
+                        fetch(url + 'vote', {
                             method: "POST",
                             headers: {
                                 'Accept': 'application/json',
@@ -32,7 +31,6 @@ export const voteBTN = () => {
                         }).then(response => {
                             return response.json();
                         }).then(data => {
-                            console.log(data)
                             snd.play();
                             if (!snd.paused) {
                                 el.disabled = true;
@@ -41,7 +39,6 @@ export const voteBTN = () => {
 
                                 let queryURL = {}
                                 queryURL.type = 'title';
-                                console.log(obj.id)
                                 queryURL.id = obj.id;
                                 queryURL.string = $('#post-' + obj.id + ' .title').innerText.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
                                 // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:

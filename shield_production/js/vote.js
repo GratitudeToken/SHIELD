@@ -1,5 +1,5 @@
 import { $, $$ } from '/shield/js/selectors.js';
-import { url, user, membership, accountStatus, minBalance } from '/shield/js/proton.js';
+import { url, user, membership, accountStatus, minBalance, login } from '/shield/js/proton.js';
 import { postActions } from '/shield/js/post-actions.js';
 
 export const voteBTN = () => {
@@ -7,7 +7,7 @@ export const voteBTN = () => {
     $$('.vote-btn').forEach(el => {
         el.addEventListener('click', (e) => {
             if (!user) {
-                alert("You are not connected.")
+                login(false)
             } else {
                 if (membership) {
                     let obj = {}
@@ -22,7 +22,7 @@ export const voteBTN = () => {
 
                         const stringifiedObj = JSON.stringify(obj);
 
-                        fetch(url + '/vote', {
+                        fetch(url + 'vote', {
                             method: "POST",
                             headers: {
                                 'Accept': 'application/json',
@@ -32,7 +32,6 @@ export const voteBTN = () => {
                         }).then(response => {
                             return response.json();
                         }).then(data => {
-                            console.log(data)
                             snd.play();
                             if (!snd.paused) {
                                 el.disabled = true;

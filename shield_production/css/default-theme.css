@@ -8,6 +8,7 @@
     --second-contrast: #000000;
     --second-contrast-50: #00000050;
     --second-contrast-69: #00000069;
+    --second-contrast-99: #00000099;
     --second-contrast-09: #00000009;
     --menu-options-bg: #ffffff;
     --menu-options-border: #ffffff;
@@ -32,11 +33,19 @@
     --image-user: #ffffff;
     --image-user-shadow: #000000;
 
+    --invert: invert(0);
     --contrast-filter: contrast(1);
     --brightness: brightness(1);
 
     --comments-textarea-bg: #ffffff;
     --comments-textarea-color: #000000;
+
+    --notification-bg: #00ff0008;
+    --notification-border: 1px solid green;
+
+    --code-bg: #daecff;
+    --code-border: 1px dashed #9fccff;
+    --code-color: #012453;
 
     --proposal-color: #288cff;
     --issue-color: #ff5c5c;
@@ -61,5 +70,9 @@
     --option-color-7: #63ff96;
     --option-color-8: #ee63ff;
     --option-color-9: #63f6ff;
+}
 
+html,
+body {
+    background-color: var(--main-bg-color);
 }

@@ -24,15 +24,20 @@ export const submitPost = () => {
 
             formData.append("user", user)
             formData.append("title", $("#title").value)
+            formData.append("duration", $("#duration").value)
+
             imageSelected && imageValid ? formData.append("image", $("#image").files[0]) : null;
             formData.append("description", $("#description").value)
 
             $$('.voteInput').forEach((option) =>
                 formData.append("options[]", option.value)
             )
-            const tags = $('#tags-input').value.trimEnd()
-            const punctuationless = tags.replace(/[.,\/#!$%\^&\*;:{}=\`~()]/g, "")
-            const finalTagsString = punctuationless.replace(/\s{2,}/g, " ")
+
+            let tags = $('#tags-input').value
+
+            let punctuationless = tags.replace(/[.,\/#!$%\^&\*;:{}=\`~()]/g, "").trimStart().trimEnd()
+            let finalTagsString = punctuationless.replace(/\s{2,}/g, " ")
+
             formData.append("tags", finalTagsString)
             formData.append("type", $('input[name="type"]:checked').value);
             (votes || []).forEach((option) =>
@@ -40,7 +45,7 @@ export const submitPost = () => {
             )
 
             // Sends post request to /post with all input information
-            fetch(url + '/post', {
+            fetch(url + 'post', {
                 method: "POST",
                 body: formData
             }).then(response => {

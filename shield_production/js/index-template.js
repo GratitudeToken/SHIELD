@@ -32,9 +32,9 @@ export class indexHTML {
         } else { imageSRC = '/shield/img/love-technology.jpg' }
 
         return `
-            <article class="post ${closedStatus}" id="post-${data.id}">
-                <a href="${linkTitle}" class="flex indexPost" title="${data.user}">
-                    <div class="main-image avatar"><img class="image" src="/shield/avatars/${data.user}.webp" alt="${data.user} avatar" /></div>
+            <article class="post ${data.type} ${closedStatus}" id="post-${data.id}">
+                <a href="${linkTitle}" class="flex indexPost" title="${data.title}">
+                    <div class="main-image"><img class="image" src="${imageSRC}" alt="${data.tags}" /></div>
 
                     <div class="content">
                         <div class="flex-space-vertical flex-space-vertical-middle">
