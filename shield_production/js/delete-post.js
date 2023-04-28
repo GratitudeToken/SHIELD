@@ -7,7 +7,7 @@ export const deletePost = (id, user) => {
     if (promptString != null && promptString === 'YES') {
         //const correctPost = fetchedPosts.find(post => post.title === postTitle);
         let deleteID = JSON.stringify({ "id": id, "user": user });
-        fetch(url + '/delete', {
+        fetch(url + 'delete', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

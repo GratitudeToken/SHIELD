@@ -26,13 +26,21 @@ export class HTML {
         const counter = new countdown
         const closed = counter.count(data.id, data.expires, false)
 
+        let voteBtnText = 'VOTE'
         let closedClass = ''
-        closed === 'Closed' ? closedClass = closed : closedClass = ''
 
-        let voted
-        data.voted === false ? voted = false : voted = data.voted.includes(user)
+        if (closed === 'Closed') {
+            closedClass = closed
+            voteBtnText = 'CLOSED'
+        } else {
+            closedClass = ''
+        }
 
-        if (closed === 'Closed' || voted === true) {
+        if (data.voted && data.voted.includes(user)) {
+            voteBtnText = 'VOTED'
+        }
+
+        if (closed === 'Closed' || voteBtnText === 'VOTED') {
             checked = 'disabled'
             disabledColor = 'style="color: gray"'
             votingDisabled = 'disabled'
@@ -68,6 +76,9 @@ export class HTML {
         // comments
         const postComments = commentTemplate(data) || ''
 
+        let description = data.description
+        description = description.replace(/<script[^>]*>/g, '<code>').replace(/<\/script>/g, '</code>');
+
         return `
         <article class="post ${closedClass}" id="post-${data.id}">
             <div class="flex">
@@ -92,7 +103,7 @@ export class HTML {
                         </div>
                         <h1 class="title ${data.type}">${data.title}</h1>
                         <div class="tags ${data.type}">${tagsString}</div>
-                        <div class="description"><p>${data.description}</p> ${pollHTML}</div>
+                        <div class="description"><p>${description}</p> ${pollHTML}</div>
                         <div class="comments-section">
                             <h2>Comments</h2>
                             <form id="post-${data.id}-comment" class="submit-comment main-comment-form">
@@ -103,7 +114,7 @@ export class HTML {
                         </div>
                     </div>
                 </div>
-                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${votingDisabled} ${deleteBtnTitle}></button><canvas class="myChart"></canvas></div>
+                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${votingDisabled} ${deleteBtnTitle}></button><span>${voteBtnText}</span><canvas class="myChart"></canvas><br><a class="back" href="javascript:history.back()" title="Back"><img class="small-icon invert" alt="back icon" src="/svgs/back.svg" /></a></div>
             </div>
         </article>
         `

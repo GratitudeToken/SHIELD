@@ -11,7 +11,7 @@ export let membership = true // default should be false
 export let accountStatus
 
 export const simpleURL = 'https://gratitudetoken.world/shield/'
-export const url = 'https://gratitudetoken.world:9632'
+export const url = 'https://gratitudetoken.world:9632/'
 
 export let avatarbase64
 
@@ -76,7 +76,8 @@ const logoutButton = $('#logout')
 
 // for checking and saving membership and balance and other info
 export const userInfo = (user, authenticating) => {
-    fetch(url + '/userinfo?user=' + user + '&login=' + authenticating, {
+
+    fetch(url + 'userinfo?user=' + user + '&login=' + authenticating, {
     }).then(response => {
         return response.json()
     }).then(data => {
@@ -102,7 +103,7 @@ $('#close-features').addEventListener("click", e => {
 
 
 // Login in function that is called when the login button is clicked
-const login = async (restoreSession) => {
+export const login = async (restoreSession) => {
 
     const { link: localLink, session: localSession } = await ProtonWebSDK({
         // linkOptions is a required part of logging in with the protonWebSDK(), within
@@ -144,7 +145,7 @@ const login = async (restoreSession) => {
         $('#add').style.display = 'block'
         $('#menu-options').classList.add('authenticated')
 
-        restoreSession ? userInfo(user, false) : userInfo(user, true)
+        restoreSession ? userInfo(user, false) : location.reload()
     }
 }
 

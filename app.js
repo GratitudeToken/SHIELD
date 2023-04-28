@@ -19,7 +19,7 @@ global.admins = ["lucianape3", "fatzuca", "barbuvlad21", "maki1", "abubfc", "dag
 // configuration for multer
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'shield/uploads/')
+    cb(null, './shield/uploads/')
   },
   filename: function (req, file, cb) {
     let extArray = file.mimetype.split("/")
@@ -93,8 +93,8 @@ app.use(express.static(path.join(__dirname, 'shield')))
 // GETs all data from posts.json file 
 app.get('/getposts', (req, res) => {
 
-  let readPosts = JSON.parse(fs.readFileSync('data/posts.json'))
-  let readVotes = JSON.parse(fs.readFileSync('data/votes.json'))
+  let readPosts = JSON.parse(fs.readFileSync('./data/posts.json'))
+  let readVotes = JSON.parse(fs.readFileSync('./data/votes.json'))
   //let comments
 
   // filter posts and votes object based on: if the user requesting is an admin or regular user
@@ -118,8 +118,8 @@ app.get('/getposts', (req, res) => {
     let votes
     let comments = {}
     if (posts[0]) {
-      if (fs.existsSync(`data/comments/#${posts[0].id}.json`)) {
-        comments.comments = JSON.parse(fs.readFileSync('data/comments/#' + posts[0].id + '.json'))
+      if (fs.existsSync(`./data/comments/#${posts[0].id}.json`)) {
+        comments.comments = JSON.parse(fs.readFileSync('./data/comments/#' + posts[0].id + '.json'))
       } else { comments = null }
     }
     if (posts.length > 0) {
@@ -205,7 +205,7 @@ app.get('/getposts', (req, res) => {
 // app.post('/approve', (req, res) => {
 
 //   if (admins.includes(req.body.user)) {
-//     const posts = JSON.parse(fs.readFileSync('data/posts.json'))
+//     const posts = JSON.parse(fs.readFileSync('./data/posts.json'))
 
 //     const updatedPosts = posts.map(post => {
 //       if (post.id === req.body.id) {
@@ -214,7 +214,7 @@ app.get('/getposts', (req, res) => {
 //       return post;
 //     })
 
-//     fs.writeFileSync(`data/posts.json`, JSON.stringify(updatedPosts))
+//     fs.writeFileSync(`./data/posts.json`, JSON.stringify(updatedPosts))
 
 //     res.send({ "status": 200 })
 //   }
@@ -228,6 +228,7 @@ app.post('/post', upload.single("image"), (req, res) => {
   const schema = {
     user: Joi.string().max(23).required(),
     title: Joi.string().max(124).required(),
+    duration: Joi.number().integer().min(1).max(30).required(),
     description: Joi.string().max(1025).required(), // apparently you need to add 1 extra character because it does not match front-end otherwise
     options: Joi.array().max(1025).required(),
     tags: Joi.string().max(124).required(),
@@ -270,8 +271,8 @@ app.post('/vote', (req, res) => {
 
 app.put('/delete', (req, res) => {
   try {
-    const posts = JSON.parse(fs.readFileSync(`data/posts.json`))
-    const votes = JSON.parse(fs.readFileSync(`data/votes.json`))
+    const posts = JSON.parse(fs.readFileSync(`./data/posts.json`))
+    const votes = JSON.parse(fs.readFileSync(`./data/votes.json`))
     const imageToDelete = posts.filter(post => post.id === parseInt(req.body.id))
     const filteredPosts = posts.filter(post => post.id !== parseInt(req.body.id))
     const filteredVotes = votes.filter(vote => vote.id !== parseInt(req.body.id))
@@ -280,11 +281,11 @@ app.put('/delete', (req, res) => {
     imageToDelete[0].image !== '' ? fs.unlinkSync('shield/uploads/' + imageToDelete[0].image) : null
 
     // delete the comments file
-    fs.unlinkSync('data/comments/#' + req.body.id + '.json')
+    fs.unlinkSync('./data/comments/#' + req.body.id + '.json')
 
 
-    fs.writeFileSync(`data/posts.json`, JSON.stringify(filteredPosts))
-    fs.writeFileSync(`data/votes.json`, JSON.stringify(filteredVotes))
+    fs.writeFileSync(`./data/posts.json`, JSON.stringify(filteredPosts))
+    fs.writeFileSync(`./data/votes.json`, JSON.stringify(filteredVotes))
 
     res.send({ "status": 200 })
   } catch (err) {
@@ -321,8 +322,8 @@ app.post('/comment', (req, res) => {
     res.status(401).send(error.details[0].message)
     return
   } else {
-    if (fs.existsSync(`data/comments/#${req.body.postid}.json`)) {
-      commentsFile = JSON.parse(fs.readFileSync(`data/comments/#${req.body.postid}.json`))
+    if (fs.existsSync(`./data/comments/#${req.body.postid}.json`)) {
+      commentsFile = JSON.parse(fs.readFileSync(`./data/comments/#${req.body.postid}.json`))
     } else { commentsFile = [] }
 
     let count = 1
@@ -352,7 +353,7 @@ app.post('/comment', (req, res) => {
       comment.replies.push(commentData)
     }
 
-    fs.writeFileSync(`data/comments/#${req.body.postid}.json`, JSON.stringify(commentsFile))
+    fs.writeFileSync(`./data/comments/#${req.body.postid}.json`, JSON.stringify(commentsFile))
 
     res.send({ "status": 200 })
   }

@@ -14,26 +14,27 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
     filter = localStorage.getItem('filter') || 'all'
 
     if (filter !== null) {
-        $('#select-type').value = filter
+        $('#select-type select').value = filter
     } else {
-        $('#select-type').value = 'all'
+        $('#select-type select').value = 'all'
         localStorage.removeItem('filter')
     }
 
-    $('#select-type').addEventListener('change', (e) => {
-        localStorage.setItem('filter', $('#select-type').value)
+    $('#select-type select').addEventListener('change', (e) => {
+        localStorage.setItem('filter', $('#select-type select').value)
         location.reload()
     })
 
-
-    let newURL = url + '/getposts?user=' + user
+    let newURL = url + 'getposts?user=' + user
 
     if (typeof queryURL === 'object') {
-        queryURL.type === 'search' ? newURL = url + '/getposts?user=' + user + '&search=' + queryURL.string : null
-        queryURL.type === 'title' ? newURL = url + '/getposts?user=' + user + '&id=' + queryURL.id + '&title=' + queryURL.string : null
-        queryURL.type === 'tag' ? newURL = url + '/getposts?user=' + user + '&tag=' + queryURL.string : null
+        queryURL.type === 'search' ? newURL = url + 'getposts?user=' + user + '&search=' + queryURL.string : null
+        queryURL.type === 'title' ? newURL = url + 'getposts?user=' + user + '&id=' + queryURL.id + '&title=' + queryURL.string : null
+        queryURL.type === 'tag' ? newURL = url + 'getposts?user=' + user + '&tag=' + queryURL.string : null
+        $('.easyNav').classList.add('showEasyNav')
+        $('#select-type').style.display = 'none'
     } else {
-        $('#filters').style.display = 'flex'
+        $('#select-type').style.display = 'block'
         features === 'hidden' ? $('.features').style.display = 'none' : $('.features').style.display = 'block'
     }
 
@@ -92,7 +93,7 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                     //     const id = arr.at(-1)
                     //     const approvePost = { "id": parseInt(id), "user": user }
 
-                    //     fetch(url + '/approve', {
+                    //     fetch(url + 'approve', {
                     //         method: "POST",
                     //         headers: {
                     //             'Accept': 'application/json',
@@ -137,9 +138,15 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                     })
                 }
 
+                let postsNode = $('#posts')
                 let finalQuery
-                typeof queryURL === 'string' ? finalQuery = 'Your query' : finalQuery = queryURL.string
-                filteredData.posts.length == 0 ? $('#posts').innerHTML = `<div style="text-align: left; padding: 10px"><b>${finalQuery}</b> - returned no results.</div>` : null
+                if (queryURL.type === 'search' || queryURL.type === 'tag') {
+                    finalQuery = queryURL.string
+                    postsNode.innerHTML = `<div class="query-results"><b>${finalQuery}</b> - returned ${filteredData.posts.length} results.</div>` + postsNode.innerHTML
+                }
+
+                filteredData.posts.length == 0 ? postsNode.innerHTML = `<div class="query-results"><b>${finalQuery}</b> - returned no results.</div>` : null
+
             })
     }
     // clear all items

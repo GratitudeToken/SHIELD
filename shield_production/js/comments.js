@@ -70,7 +70,7 @@ export const commentEvents = (postID) => {
     const postComment = (data) => {
         commentData.user = user
 
-        fetch(url + '/comment', {
+        fetch(url + 'comment', {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -98,7 +98,7 @@ export const commentEvents = (postID) => {
             commentData.type = 'comment'
             commentData.comment = e.currentTarget.querySelector('textarea').value
             postComment(commentData)
-        } else { alert('Comments are only available when the post expires.') }
+        } else { alert('Comments are only available when the voting period expires.') }
     })
 
     $$('comment').forEach((item, index) => {

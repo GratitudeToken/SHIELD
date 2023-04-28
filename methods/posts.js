@@ -18,6 +18,7 @@ module.exports = class Post {
     this.user = postData.user
     //    this.approved = true
     this.title = postData.title
+    this.duration = postData.duration
     this.image = `${postData.filename || ''}`
     this.description = postData.description
     this.options = postData.options
@@ -53,7 +54,10 @@ module.exports = class Post {
 
       newPostData.id = newID
       newPostData.user = this.user
-      newPostData.expires = addHoursToUTC(this.date, 720)
+
+      const postDuration = parseInt(this.duration) * 24
+
+      newPostData.expires = addHoursToUTC(this.date, postDuration)
       newPostData.votes = this.votes
       newPostData.voted = false
 
@@ -102,8 +106,12 @@ module.exports.Vote = async function (obj) {
       if (el.id === obj.id) {
         votesFile[i].votes[obj.vote] += 1
         let votingUsers = []
-        votingUsers.push(obj.user)
-        votesFile[i].voted = votingUsers
+        if (votesFile[i].voted === false) {
+          votingUsers.push(obj.user)
+          votesFile[i].voted = votingUsers
+        } else {
+          votesFile[i].voted.push(obj.user)
+        }
       }
     })
 

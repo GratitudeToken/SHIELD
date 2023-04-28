@@ -112,8 +112,18 @@
     margin-top: 23px !important
 }
 
+#image-label img {
+    cursor: pointer;
+    margin: 0 23px 0 0
+}
+
+#image,
 #add-remove-inputs {
-    display: none
+    display: none !important
+}
+
+#duration {
+    width: 100%
 }
 
 #add_option,
