@@ -178,7 +178,7 @@ app.post('/post', upload.single("image"), (req, res) => {
     user: Joi.string().max(23).required(),
     title: Joi.string().max(124).required(),
     duration: Joi.number().integer().min(1).max(30).required(),
-    description: Joi.string().max(1025).required(), // apparently you need to add 1 extra character because it does not match front-end otherwise
+    description: Joi.string().max(10001).required(), // apparently you need to add 1 extra character because it does not match front-end otherwise
     options: Joi.array().max(1025).required(),
     tags: Joi.string().max(124).required(),
     type: Joi.string().max(13).required(),

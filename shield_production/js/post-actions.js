@@ -140,14 +140,14 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                     })
                 }
 
-                let postsNode = $('#posts')
+                let queryText = $('.query-text')
                 let finalQuery
                 if (queryURL.type === 'search' || queryURL.type === 'tag') {
                     finalQuery = queryURL.string
-                    postsNode.innerHTML = `<div class="query-results"><b>${finalQuery}</b> - returned ${filteredData.posts.length} results.</div>` + postsNode.innerHTML
+                    queryText.innerHTML = `<b>${finalQuery}</b> - returned ${filteredData.posts.length} results.`
                 }
 
-                filteredData.posts.length == 0 ? postsNode.innerHTML = `<div class="query-results"><b>${finalQuery}</b> - returned no results.</div>` : null
+                filteredData.posts.length == 0 ? queryText.innerHTML = `<b>${finalQuery}</b> - returned no results.` : null
             })
     }
     // clear all items

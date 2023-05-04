@@ -114,12 +114,16 @@
 
 #image-label img {
     cursor: pointer;
-    margin: 0 23px 0 0
+    margin: 0 23px 0 0;
+    height: 64px
 }
 
-#image,
 #add-remove-inputs {
-    display: none !important
+    display: none
+}
+
+.featured-image #image {
+    display: none !important;
 }
 
 #expiration-date {
