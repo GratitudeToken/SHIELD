@@ -888,7 +888,7 @@ footer img {
   height: 64px;
   overflow: hidden;
   position: relative;
-  box-shadow: inset 0 0 10px var(--gray-69);
+  box-shadow: inset 0 0 10px var(--second-contrast-32);
 }
 
 .main-image {
@@ -934,7 +934,6 @@ footer img {
 .description {
   word-wrap: break-word;
   overflow: hidden;
-  white-space: pre-wrap
 }
 
 .description ol {
@@ -953,6 +952,7 @@ footer img {
 
 .description p {
   font-size: 14px;
+  padding-right: 10px;
 }
 
 .description ol label {
@@ -1065,8 +1065,11 @@ footer img {
 }
 
 .tags {
-  padding: 10px 10px 10px 0;
   line-height: 1.4;
+  padding: 23px 0;
+  margin: 0 10px 23px 0;
+  border-top: 1px dashed var(--second-contrast-32);
+  border-bottom: 1px dashed var(--second-contrast-32)
 }
 
 .tag {
@@ -1400,8 +1403,16 @@ canvas {
     font-size: 16px;
   }
 
+  .tags {
+    margin: 0 0 23px 0;
+  }
+
   .tag {
     font-size: 18px;
+  }
+
+  .description p {
+    padding-right: 0;
   }
 
   .post-type {

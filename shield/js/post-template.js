@@ -102,8 +102,21 @@ export class HTML {
                             <span class="actions">${actions}</span>
                         </div>
                         <h1 class="title ${data.type}">${data.title}</h1>
-                        <div class="tags ${data.type}">${tagsString}</div>
-                        <div class="description"><p>${description}</p> ${pollHTML}</div>
+                        <div class="description">
+                            <p>${description}</p>
+                            <div class="tags">
+                                <b>TAGS:</b>
+                                <span class="${data.type}">
+                                    ${tagsString}
+                                </span>
+                            </div>
+                            <div>
+                                <b>VOTING OPTIONS:</b>
+                                <span>
+                                    ${pollHTML}
+                                </span>
+                            </div>
+                        </div>
                         <div class="comments-section">
                             <h2>Comments</h2>
                             <form id="post-${data.id}-comment" class="submit-comment main-comment-form">

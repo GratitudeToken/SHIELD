@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "nodemon app.js --ignore data/",
     "start-server": "node app.js",
     "svgo": "npx svgo --multipass shield/svgs/clock.svg"
   },
@@ -13,6 +13,11 @@
   "license": "GPL 3.0",
   "devDependencies": {
     "nodemon": "^2.0.20"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "data/*"
+    ]
   },
   "dependencies": {
     "@proton/api": "^27.3.7",

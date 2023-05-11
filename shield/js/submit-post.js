@@ -35,7 +35,7 @@ export const submitPost = () => {
 
             let tags = $('#tags-input').value
 
-            let punctuationless = tags.replace(/[.,\/#!$%\^&\*;:{}=\`~()]/g, "").trimStart().trimEnd()
+            let punctuationless = tags.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ').trimStart().trimEnd()
             let finalTagsString = punctuationless.replace(/\s{2,}/g, " ")
 
             formData.append("tags", finalTagsString)
@@ -51,10 +51,16 @@ export const submitPost = () => {
             }).then(response => {
                 return response.json()
             }).then(returnedData => {
+                console.log(returnedData)
                 if (returnedData.status === 200) {
                     $('#post-form-container').style.display = 'none'
                     $('body').style.overflow = ''
                     $('.shortMessage').innerHTML = '<div class="quickText"><h2 style="color: green">POST SENT</h2></div>'
+
+                    // const posts = $('#posts')
+                    // posts.style = 'display: block !important'
+                    // const newPostUrl = url + '?id='
+                    // posts.innerHTML = `<h3 style="color: green">POST SENT</h2><br><br><a href="${}" style="text-decoration: none"><img src="/svgs/SHIELD-logo.svg" class="small-icon"> <b>${$("#title").value}<b></a>`
                 }
             })
         } else {

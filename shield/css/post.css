@@ -75,8 +75,8 @@
 .comments-section {
     text-align: left;
     padding: 23px 0;
-    margin-top: 23px;
-    border-top: 1px solid rgb(230, 230, 230)
+    margin-top: 12px;
+    border-top: 1px dashed var(--second-contrast-32)
 }
 
 .Closed .comments-section {

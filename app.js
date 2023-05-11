@@ -244,7 +244,8 @@ app.post('/post', upload.single("image"), (req, res) => {
   } else {
     const post = new Post({ ...req.body, ...req.file })
     post.save()
-    res.send({ "status": 200 })
+
+    res.send({ "status": 200, "id": 0 })
   }
 })
 

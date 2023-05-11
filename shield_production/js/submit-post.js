@@ -35,7 +35,7 @@ export const submitPost = () => {
 
             let tags = $('#tags-input').value
 
-            let punctuationless = tags.replace(/[.,\/#!$%\^&\*;:{}=\`~()]/g, "").trimStart().trimEnd()
+            let punctuationless = tags.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ').trimStart().trimEnd()
             let finalTagsString = punctuationless.replace(/\s{2,}/g, " ")
 
             formData.append("tags", finalTagsString)

@@ -13,6 +13,12 @@ export const closeBTN = () => {
         $('#post-form-container').style.display = 'none';
         $('body').style.overflow = '';
     });
+    document.addEventListener('keydown', evt => {
+        if (evt.key === 'Escape') {
+            $('#post-form-container').style.display = 'none';
+            $('body').style.overflow = '';
+        }
+    });
 }
 
 export const addOption = () => {

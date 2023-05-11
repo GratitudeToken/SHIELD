@@ -145,7 +145,12 @@ export const login = async (restoreSession) => {
         $('#add').style.display = 'block'
         $('#menu-options').classList.add('authenticated')
 
-        restoreSession ? userInfo(user, false) : location.reload()
+        if (restoreSession) {
+            userInfo(user, false)
+        } else {
+            userInfo(user, true)
+            location.reload()
+        }
     }
 }
 

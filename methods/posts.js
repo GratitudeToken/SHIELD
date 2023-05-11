@@ -47,7 +47,7 @@ module.exports = class Post {
           maxId = newVotes[i].id;
         }
       }
-      let newID = maxId + 1
+      newID = maxId + 1
       this.id = newID
 
       let newPostData = {}
