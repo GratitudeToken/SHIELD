@@ -2,10 +2,11 @@ import { $, $$ } from '/js/selectors.js'
 import { url, user } from '/js/proton.js';
 import { countdown } from '/js/countdown.js'
 
+let closed;
 export const commentTemplate = (data) => {
 
     const counter = new countdown
-    const closed = counter.count(data.id, data.expires, false)
+    closed = counter.count(data.id, data.expires, false)
 
     // COMMENTS
     let commentTemplate = ''
