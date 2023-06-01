@@ -147,6 +147,7 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
 
                 filteredData.posts.length == 0 ? queryText.innerHTML = `<b>${finalQuery}</b> - returned no results.` : null
 
+                $('#loader').style.display = 'none'
             })
     }
     // clear all items
