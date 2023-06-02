@@ -1,8 +1,8 @@
 import { $, $$ } from '/js/selectors.js'
-import { url, user } from '/js/proton.js';
+import { url, user, login } from '/js/proton.js';
 import { countdown } from '/js/countdown.js'
 
-let closed;
+let closed
 export const commentTemplate = (data) => {
 
     const counter = new countdown
@@ -69,24 +69,28 @@ export const commentEvents = (postID) => {
 
     // post comment
     const postComment = (data) => {
-        commentData.user = user
+        if (!user) {
+            login(false)
+        } else {
+            commentData.user = user
 
-        fetch(url + 'comment', {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(commentData)
-        }).then(response => {
-            return response.json()
-        }).then(returnedData => {
-            console.log(returnedData)
-            window.location.reload()
-        }).catch(function (error) {
-            console.log(error)
-            ///if status code 401...
-        });
+            fetch(url + 'comment', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(commentData)
+            }).then(response => {
+                return response.json()
+            }).then(returnedData => {
+                console.log(returnedData)
+                window.location.reload()
+            }).catch(function (error) {
+                console.log(error)
+                ///if status code 401...
+            });
+        }
     }
 
     let lastCommentID = 0
