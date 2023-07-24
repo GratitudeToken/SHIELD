@@ -34,8 +34,7 @@ export class indexHTML {
         return `
             <article class="post ${data.type} ${closedStatus}" id="post-${data.id}">
                 <a href="${linkTitle}" class="flex indexPost" title="${data.title}">
-                    <div class="main-image"><img class="image" src="${imageSRC}" alt="${data.tags}" /></div>
-
+                    <div class="main-image" style='background: url(${imageSRC}) no-repeat 50% 50%; background-size: cover'></div>
                     <div class="content">
                         <div class="flex-space-vertical flex-space-vertical-middle">
                             <div class="title ${data.type}"><h2>${data.title}</h2></div>

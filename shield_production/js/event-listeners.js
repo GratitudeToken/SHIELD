@@ -24,9 +24,26 @@ export const closeBTN = () => {
 export const addOption = () => {
     $('#add_option').addEventListener('click', (event) => {
         event.preventDefault();
+        let placeholder
+        $('input[name="type"]:checked').value === 'poll' ? placeholder = 'Option' : placeholder = 'Candidate'
         if ($$('.voteInput').length < 23) {
-            $('.options').innerHTML += '<input class="voteInput" type="text" maxlength="96" placeholder="Option" required />';
+
+            // Create the new input element
+            const newInputElement = document.createElement('input');
+
+            // Set the attributes for the new input element
+            newInputElement.setAttribute('class', 'voteInput');
+            newInputElement.setAttribute('type', 'text');
+            newInputElement.setAttribute('maxlength', '96');
+            newInputElement.setAttribute('placeholder', placeholder)
+            newInputElement.required = true;
+
+            $('.options').appendChild(newInputElement);
             $('#remove_option').style = 'display: inline-block !important';
+
+            $$('.voteInput').forEach((el) => {
+                el.setAttribute('placeholder', placeholder)
+            })
         } else { alert('Maximum number of options is 23.') }
     });
 }

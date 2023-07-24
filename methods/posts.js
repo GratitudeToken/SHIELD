@@ -23,7 +23,7 @@ module.exports = class Post {
     this.description = postData.description
     this.options = postData.options
     postData.type === 'proposal' ? this.options = ['For', 'Against'] : null
-    postData.type === 'issue' ? this.options = ['Valid', 'Invalid'] : null
+    postData.type === 'issue' ? this.options = ['Resolved', 'Unresolved'] : null
     this.date = new Date()
     this.tags = postData.tags
     this.votes = postData.votes?.map((vote) => parseInt(vote))
@@ -190,5 +190,6 @@ module.exports.userInfo = async function (user, authenticating) {
       console.error(e)
     }
   }
+
   return { "balance": parseInt(balance).toFixed(2), "kyc": kyc }
 }

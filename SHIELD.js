@@ -45,6 +45,7 @@ app.get('/getposts', (req, res) => {
 
   let readPosts = JSON.parse(fs.readFileSync('data/posts.json'))
   let readVotes = JSON.parse(fs.readFileSync('data/votes.json'))
+  let members = JSON.parse(fs.readFileSync(`./data/members.json`))
   //let comments
 
   // filter posts and votes object based on: if the user requesting is an admin or regular user
@@ -77,7 +78,7 @@ app.get('/getposts', (req, res) => {
     } else {
       posts, votes, comments = null
     }
-    res.send({ posts, votes, comments })
+    res.send({ posts, votes, comments, members })
   }
 
   else if (req.query.tag) {
@@ -92,7 +93,7 @@ app.get('/getposts', (req, res) => {
     } else {
       posts, votes = null
     }
-    res.send({ posts, votes })
+    res.send({ posts, votes, members })
   }
 
   else if (req.query.search) {
@@ -140,13 +141,13 @@ app.get('/getposts', (req, res) => {
     }
 
     posts = searchStringInJSON(s, readPosts)
-    res.send({ posts, votes })
+    res.send({ posts, votes, members })
   }
 
   else {
     const posts = readPosts
     const votes = readVotes
-    res.send({ posts, votes })
+    res.send({ posts, votes, members })
   }
 
 })

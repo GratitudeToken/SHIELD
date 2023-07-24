@@ -5,7 +5,7 @@ let session = undefined
 export let features = localStorage.getItem('features') || null
 
 export let user
-export const admins = ["lucianape3", "fatzuca", "barbuvlad21", "maki1", "abubfc", "dagrine", "jibon23"]
+export const admins = ["lucianape3", "fatzuca", "barbuvlad21", "abubfc"]
 export let minBalance = 0 // 5 GRAT tokens
 export let membership = true // default should be false
 export let accountStatus
@@ -81,6 +81,7 @@ export const userInfo = (user, authenticating) => {
         return response.json()
     }).then(data => {
         accountStatus = data
+
         if (data.balance >= minBalance && data.kyc === true) {
             membership = true
         }
@@ -92,6 +93,8 @@ export const userInfo = (user, authenticating) => {
         } else {
             $('#user-menu .avatar').src = `/svgs/user.svg`
         }
+
+        return accountStatus.members
     })
 }
 

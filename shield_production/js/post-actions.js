@@ -82,7 +82,7 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                             indexPage = false
                         }
 
-                        $('#posts').innerHTML += html.insertHTML({ ...item, ...latestVotes[index], ...filteredData.comments })
+                        $('#posts').innerHTML += html.insertHTML({ ...item, ...latestVotes[index], ...filteredData.comments, "members": data.members })
 
                         indexPage === false ? commentEvents(filteredData.posts[0].id) : null
                     }
@@ -148,8 +148,7 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                 }
 
                 filteredData.posts.length == 0 ? queryText.innerHTML = `<b>${finalQuery}</b> - returned no results.` : null
-
-                $('#loader').style.display = 'none'
+                $('#loader').style.setProperty('display', 'none')
             })
     }
     // clear all items

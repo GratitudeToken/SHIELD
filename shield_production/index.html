@@ -105,8 +105,9 @@
                 <select>
                     <option value="all" selected>All</option>
                     <option value="proposal">Proposals</option>
-                    <option value="poll">Polls</option>
                     <option value="issue">Issues</option>
+                    <option value="poll">Polls</option>
+                    <option value="election">Elections</option>
                 </select>
             </div>
         </div>
@@ -117,6 +118,13 @@
     <div id="main">
         <div class="features">
             <img id="close-features" src="/shield/svgs/close.svg" alt="close icon" />
+            <img style="width: 120px" title="SHIELD" alt="SHIELD" src="/shield/svgs/SHIELD-logo.svg" />
+            <h1 style="font-size: 16px;">S<b style="color: var(--second-contrast-69)">ustainable</b> H<b
+                    style="color: var(--second-contrast-69)">olistic</b> I<b
+                    style="color: var(--second-contrast-69)">ntelligent</b> E<b
+                    style="color: var(--second-contrast-69)">nterprise &</b> L<b
+                    style="color: var(--second-contrast-69)">eaderless</b> D<b
+                    style="color: var(--second-contrast-69)">evelopment</b></h1>
             <p class="first-paragraph">
                 <b style="font-size: 18px">Stay in the loop while getting the pulse of a community with
                     SHIELD</b><br><br><i>Allow unique human
@@ -136,17 +144,16 @@
                 <div><img class="invert" src="/shield/svgs/kyc.svg" alt="KYC level 1" /><b>KYC Accounts</b><br>Level 1
                     KYC
                     verified accounts ensures all votes are unique. Selfies and ID cards are verified.</div>
-                <div><img src="/shield/svgs/gratitude-token-logo.svg" alt="gratitude token logo" /><b><i
-                            title="Powered">⚡</i>
-                        by Gratitude
-                        Token</b><br>Hold 5 GRAT tokens until your post voting period expires to remain a
-                    member or get a ban.</div>
+                <div><img src="/shield/svgs/gratitude-token-logo.svg" alt="gratitude token logo" /><b>NPPoS (Non Profit
+                        Proof of Stake)</b><br>Must have a 5 GRAT minimum balance to be able to post or vote on any
+                    post.
+                </div>
                 <div><img class="invert" src="/shield/svgs/pulse.svg"
                         alt="Collective Intelligence - The wisdom of Crowds by James Surowiecki" /><b>Collective
                         Intelligence</b><br>Inspired by: Wisdom of Crowds by J. Surowiecki - self-made billionaires top
                     5 book.</div>
             </div>
-            <h1>Sustainable Holistic Intelligent Enterprise & Leaderless Development</h1>
+
             <p class="notification"><b style="color: green"><img class="medium-icon" style="margin: -2px 6px 0 0"
                         src="/shield/svgs/exclamation.svg" alt="Info Announcement Notification" />During the alpha
                     public test all proton accounts are
@@ -158,13 +165,13 @@
         <div id="post-form-container">
             <img id="close" src="/shield/svgs/close.svg" alt="close icon" />
             <form id="post-form" class="post-form edit-post">
-                <label for="title">Title</label>
+                <label for="title">Title:</label>
                 <input type="text" name="title" id="title" maxlength="123" required>
 
                 <div class="flex">
                     <div class="featured-image">
-                        <label id="image-label" for="image"><img class="" alt="image camera icon" title="Select image"
-                                src="/shield/svgs/photo.svg" /></label>
+                        <label id="image-label" for="image"><img style="vertical-align: middle;" alt="image camera icon"
+                                title="Select image" src="/shield/svgs/photo.svg" /><span>Choose image</span></label>
                         <input name="image" id="image" type="file" accept="image/*" />
                     </div>
                     <div class="duration">
@@ -174,7 +181,7 @@
                 </div>
 
                 <div id="types" class="radios">
-                    <span class="label">Post type </span>
+                    <span class="label">Type: </span>
                     <input name="type" id="proposal" type="radio" value="proposal" checked />
                     <label for="proposal">Proposal</label>
 
@@ -183,10 +190,13 @@
 
                     <input name="type" id="poll" type="radio" value="poll" />
                     <label for="poll">Poll</label>
+
+                    <input name="type" id="election" type="radio" value="election" />
+                    <label for="election">Election</label>
                 </div>
 
                 <div id="description-container">
-                    <label for="description">Description</label>
+                    <label for="description">Description:</label>
                     <textarea id="description" type="text" maxlength="10000" required></textarea>
                 </div>
 
@@ -203,7 +213,7 @@
                 </div>
 
                 <div id="tags-container">
-                    <label for="tags-input">Tags (separated by space)</label>
+                    <label for="tags-input">Tags (separated by space):</label>
                     <input id="tags-input" type="text" placeholder="tag1 tag2 tag3" maxlength="123" required />
                 </div>
                 <div id="error"></div>
@@ -227,9 +237,10 @@
                         href="https://t.me/gratitude_token" target="_blank">Telegram</a><a
                         href="https://gratitudetoken.substack.com/" target="_blank">SubStack</a><a
                         href="https://www.reddit.com/r/gratitudetoken/" target="_blank">Reddit</a><a
+                        href="https://medium.com/@gratitude-token" target="_blank">Medium</a><a
                         href="/media-release-kit">Media Release Kit</a>
                 </div>
-                <div><strong>'Social' Media</strong><a href="https://twitter.com/Gratitude_World"
+                <div><strong>Web 2 Media</strong><a href="https://twitter.com/Gratitude_World"
                         target="_blank">Twitter</a><a href="https://tiktok.com/@gratitude_token"
                         target="_blank">TikTok</a><a href="https://instagram.com/gratitudetoken.world"
                         target="_blank">Instagram</a><a href="https://www.youtube.com/@gratitudetokenworld "

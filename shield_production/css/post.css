@@ -53,11 +53,24 @@
     box-shadow: 0 0 6px var(--image-user-shadow);
 }
 
+.postAvatar {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 51%;
+    position: relative;
+    overflow: hidden;
+    box-sizing: content-box;
+    box-shadow: 0 0 6px var(--image-user-shadow);
+    background: url(/shield/img/love-technology.jpg) no-repeat;
+    background-size: cover;
+}
+
 .postAvatar img {
     width: 32px;
     position: absolute;
     top: 0;
-    left: 0
+    left: 0;
 }
 
 .postPage .main-image img {

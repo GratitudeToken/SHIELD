@@ -78,12 +78,15 @@ export const submitPost = () => {
         $$('.voteInput').forEach((el, i) => {
             pollOptions.push(el.value)
         })
-        if ($('input[name="type"]:checked').value === 'poll') {
+
+        const election = $('input[name="type"]:checked').value === 'election'
+
+        if ($('input[name="type"]:checked').value === 'poll' || $('input[name="type"]:checked').value === 'election') {
             $('.options').style = ''
             $('#add-remove-inputs').style = 'display: block'
             $$('.voteInput').forEach((el, i) => {
                 el.required = true
-                el.placeholder = 'Option'
+                election ? el.placeholder = 'Candidate' : el.placeholder = 'Option'
             })
         } else {
             $('.options').style = 'display: none'

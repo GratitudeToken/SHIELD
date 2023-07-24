@@ -7,6 +7,7 @@ import { commentTemplate } from '/js/comments.js'
 // HTML post display template that is used when getPosts is called
 export class HTML {
     insertHTML(data) {
+        console.log(data)
         // define some actions, like delete
         let actions = ''
         if (user === data.user || admins.includes(user)) {
@@ -37,10 +38,10 @@ export class HTML {
         }
 
         if (data.voted && data.voted.includes(user)) {
-            voteBtnText = 'VOTED'
+            voteBtnText = 'YOU VOTED'
         }
 
-        if (closed === 'Closed' || voteBtnText === 'VOTED') {
+        if (closed === 'Closed' || voteBtnText === 'YOU VOTED') {
             checked = 'disabled'
             disabledColor = 'style="color: gray"'
             votingDisabled = 'disabled'
@@ -78,6 +79,8 @@ export class HTML {
 
         let description = data.description
         description = description.replace(/<script[^>]*>/g, '<code>').replace(/<\/script>/g, '</code>');
+
+        const totalMembers = '<b>' + Object.keys(data.members).length + '</b> total users'
 
         return `
         <article class="post ${closedClass}" id="post-${data.id}">
@@ -127,7 +130,7 @@ export class HTML {
                         </div>
                     </div>
                 </div>
-                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${votingDisabled} ${deleteBtnTitle}></button><span>${voteBtnText}</span><canvas class="myChart"></canvas><br><a class="back" href="javascript:history.back()" title="Back"><img class="small-icon invert" alt="back icon" src="/svgs/back.svg" /></a></div>
+                <div class="voting" id="voting"><button data-id="${data.id}" class="vote-btn ${data.type}-bg" ${votingDisabled} ${deleteBtnTitle}></button><span>${voteBtnText}</span><canvas class="myChart"></canvas><br><span id="total-users">${totalMembers}</span><br><br><a class="back" href="javascript:history.back()" title="Back"><img class="small-icon invert" alt="back icon" src="/svgs/back.svg" /></a></div>
             </div>
         </article>
         `

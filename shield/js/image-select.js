@@ -19,7 +19,7 @@ export const checkFileProperties = (theFile) => {
         if (theFile.size > 2355200) {
             imageValidation = '<b>Error:</b> ' + (theFile.size / 1024).toFixed(2) + ' KB - File size is too big. Max file size is: 500 KB';
             $('#error').innerHTML = imageValidation;
-            $("#image-label").innerHTML = "";
+            //$("#image-label").innerHTML = "";
             $('#image').value = "";
             return false;
         } else { imageValid = true; }

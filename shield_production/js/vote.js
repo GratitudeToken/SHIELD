@@ -1,5 +1,5 @@
 import { $, $$ } from '/shield/js/selectors.js';
-import { url, user, membership, accountStatus, minBalance, login } from '/shield/js/proton.js';
+import { url, user, userInfo, membership, accountStatus, minBalance, login } from '/shield/js/proton.js';
 import { postActions } from '/shield/js/post-actions.js';
 
 export const voteBTN = () => {
@@ -45,6 +45,7 @@ export const voteBTN = () => {
                                 // Boolean arguments are to call or not call functions inside postActions() - names of sub-functions below:
                                 // queryURL, clearItems, fetchy, looper, populatePosts, charts, voteBTNlisteners, deleteBTNs, removeLastItem
                                 postActions(queryURL, true, true, true, true, true, true, true, false);
+                                userInfo()
                             }
                         }).catch(err => {
                             console.log(err)
