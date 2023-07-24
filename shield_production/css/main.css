@@ -324,16 +324,6 @@ code:before {
   transform: translateX(23px);
 }
 
-
-
-.visionary .membership-icon {
-  content: url(/shield/svgs/eye.svg)
-}
-
-.guardian .membership-icon {
-  content: url(/shield/svgs/SHIELD-logo.svg)
-}
-
 .logo,
 .logo:visited {
   text-align: left;
