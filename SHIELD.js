@@ -32,8 +32,8 @@ app.use(express.static(path.join(__dirname, 'shield')))
 app.use(cors());
 
 https.createServer({
-  key: fs.readFileSync("server.key"),
-  cert: fs.readFileSync("server.crt"),
+  key: fs.readFileSync("../server.key"),
+  cert: fs.readFileSync("../server.crt"),
 }, app)
   .listen(9632, () => {
     console.log("Server is running at port 9632");

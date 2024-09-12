@@ -39,3 +39,8 @@ else {
 $('#bugs').addEventListener('click', (event) => {
     alert('Send bugs or feedback at:\rEmail: support' + '@' + 'gratitudetoken' + '.world' + '\rTelegram: https://t.me/gratitude_token\rDiscord: https://discord.gg/Rq6tZcSKgS')
 })
+
+$('#select-type select').addEventListener('change', (e) => {
+    localStorage.setItem('filter', $('#select-type select').value)
+    location.reload()
+})

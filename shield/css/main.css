@@ -264,7 +264,7 @@ code:before {
 #subheader input[type=submit]:hover {
   background-color: var(--main-color);
   background-size: 32px 32px;
-  background-position: -10% 22%;
+  background-position: -1px 22%;
 }
 
 .switch {

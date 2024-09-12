@@ -20,11 +20,6 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
         localStorage.removeItem('filter')
     }
 
-    $('#select-type select').addEventListener('change', (e) => {
-        localStorage.setItem('filter', $('#select-type select').value)
-        location.reload()
-    })
-
     let newURL = url + 'getposts?user=' + user
 
     if (typeof queryURL === 'object') {
@@ -133,6 +128,8 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                     counter.count(item.id, latestVotes[index].expires, true)
                 }
 
+                $('#loader').style.setProperty('display', 'none')
+
                 if (looper === true) {
                     latestPosts.forEach((post, i) => {
                         postFunctions(post, i)
@@ -147,7 +144,7 @@ export const postActions = (queryURL, clearItems, fetchy, looper, populatePosts,
                 }
 
                 filteredData.posts.length == 0 ? queryText.innerHTML = `<b>${finalQuery}</b> - returned no results.` : null
-                $('#loader').style.setProperty('display', 'none')
+
             })
     }
     // clear all items
